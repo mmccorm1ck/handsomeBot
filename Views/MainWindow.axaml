@@ -28,11 +28,10 @@
         <Grid ShowGridLines="False" Margin="5"
             ColumnDefinitions="120, 100"
             RowDefinitions="Auto, Auto, Auto">
-            <Button Grid.Row="0" Grid.Column="0" Margin="10">Add New Team</Button>
             <TextBox Grid.Row="0" Grid.Column="1" Margin="0 5" Text="Pokepaste Link"/>
             <Label Grid.Row="1" Grid.Column="0" Margin="10">Choose Existing Team</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" Text="Dropdown will go here"/>
-            <Button Grid.Row="2" Grid.Column="1" Margin="0 5">Use This Team</Button>
+            <Button Grid.Row="2" Grid.Column="1" Margin="0 5" Click="ButtonClicked">Use This Team</Button>
         </Grid>
     </StackPanel>
 

@@ -17,8 +17,8 @@ build_property.ProjectDir = S:\Documents\Projects\Programming\HandsomeBot\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
-[S:/Documents/Projects/Programming/HandsomeBot/App.axaml]
+[s:/Documents/Projects/Programming/HandsomeBot/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[S:/Documents/Projects/Programming/HandsomeBot/Views/MainWindow.axaml]
+[s:/Documents/Projects/Programming/HandsomeBot/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
