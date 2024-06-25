@@ -26,12 +26,91 @@
             </TextBlock>
         </Border>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="120, 100"
-            RowDefinitions="Auto, Auto, Auto">
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0 5" Text="Pokepaste Link"/>
-            <Label Grid.Row="1" Grid.Column="0" Margin="10">Choose Existing Team</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" Text="Dropdown will go here"/>
-            <Button Grid.Row="2" Grid.Column="1" Margin="0 5" Click="ButtonClicked">Use This Team</Button>
+            ColumnDefinitions="200, 400, 200, 400"
+            RowDefinitions="Auto, Auto, Auto, Auto"
+            HorizontalAlignment="Center">
+            <TextBox Grid.Row="0" Grid.Column="0" Margin="10" Text="Pokepaste Link"/>
+            <Button Grid.Row="0" Grid.Column="1" Margin="0 5" Click="LoadPaste">Load PokePaste</Button>
+            <Button Grid.Row="0" Grid.Column="2" Margin="10" Click="LoadPrevious">Load Previous Team</Button>
+            <Button Grid.Row="0" Grid.Column="3" Margin="0 5" Click="ConfirmTeam">Use This Team</Button>
+            <Label Grid.Row="1" Grid.Column="0" Margin="10">Image</Label>
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 5">
+                <Label>Pokemon1(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
+            <Label Grid.Row="1" Grid.Column="2" Margin="10">Image</Label>
+            <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
+                <Label>Pokemon2(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
+            <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 5">
+                <Label>Pokemon3(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
+            <Label Grid.Row="2" Grid.Column="2" Margin="10">Image</Label>
+            <StackPanel Grid.Row="2" Grid.Column="3" Margin="0 5">
+                <Label>Pokemon4(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
+            <Label Grid.Row="3" Grid.Column="0" Margin="10">Image</Label>
+            <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 5">
+                <Label>Pokemon5(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
+            <Label Grid.Row="3" Grid.Column="2" Margin="10">Image</Label>
+            <StackPanel Grid.Row="3" Grid.Column="3" Margin="0 5">
+                <Label>Pokemon6(Gender)@Item</Label>
+                <Label>Ability</Label>
+                <Label>Level</Label>
+                <Label>Tera Type</Label>
+                <Label>EVs / IVs</Label>
+                <Label>Nature</Label>
+                <Label>Move1</Label>
+                <Label>Move2</Label>
+                <Label>Move3</Label>
+                <Label>Move4</Label>
+            </StackPanel>
         </Grid>
     </StackPanel>
 
