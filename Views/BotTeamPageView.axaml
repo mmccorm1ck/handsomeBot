@@ -102,7 +102,6 @@
                 <Label>Move4</Label>
             </StackPanel>
         </Grid>
-        <Button HorizontalAlignment="Center" Click="ConfirmTeam">Use This Team</Button>
     </StackPanel>
 
 </UserControl>
