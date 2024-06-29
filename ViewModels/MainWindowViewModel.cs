@@ -1,8 +1,27 @@
-﻿namespace HandsomeBot.ViewModels;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class MainWindowViewModel : ViewModelBase
+namespace HandsomeBot.ViewModels;
+
+public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
-#pragma warning disable CA1822 // Mark members as static
-    public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private ViewModelBase _currentPage = new BotTeamPageViewModel();
+
+    public ViewModelBase currentPage
+    {
+        get => _currentPage;
+        set
+        {
+            _currentPage = value;
+            OnPropertyChanged();
+        }
+    }
 }
