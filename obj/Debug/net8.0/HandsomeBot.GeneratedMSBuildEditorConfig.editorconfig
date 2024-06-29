@@ -20,5 +20,8 @@ build_property.EnableGeneratedComInterfaceComImportInterop =
 [S:/Documents/Projects/Programming/HandsomeBot/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[S:/Documents/Projects/Programming/HandsomeBot/Views/BotTeamPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [S:/Documents/Projects/Programming/HandsomeBot/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
