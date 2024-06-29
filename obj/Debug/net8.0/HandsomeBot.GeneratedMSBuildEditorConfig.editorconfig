@@ -25,3 +25,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [S:/Documents/Projects/Programming/HandsomeBot/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[S:/Documents/Projects/Programming/HandsomeBot/Views/OppTeamPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

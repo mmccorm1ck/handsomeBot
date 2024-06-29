@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+        x:Class="HandsomeBot.Views.OppTeamPageView">
+
+    <StackPanel>
+        <Border Margin="5" 
+            CornerRadius="10"
+            Background="LightBlue">
+            <TextBlock Margin="5"
+                FontSize="24" 
+                HorizontalAlignment="Center"
+                Text="Select Opponent Team">
+            </TextBlock>
+        </Border>
+        <Grid ShowGridLines="False" Margin="5"
+            ColumnDefinitions="400, 400"
+            RowDefinitions="400, Auto, 400, Auto, 400, Auto, Auto"
+            HorizontalAlignment="Center">
+            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon1"/>
+            <Label Grid.Row="0" Grid.Column="1" Margin="0 5">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" Text="Pokemon2"/>
+            <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
+            <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Text="Pokemon3"/>
+            <Label Grid.Row="2" Grid.Column="1" Margin="0 5">Image</Label>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="0 5" Text="Pokemon4"/>
+            <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
+            <TextBox Grid.Row="5" Grid.Column="0" Margin="10" Text="Pokemon5"/>
+            <Label Grid.Row="4" Grid.Column="1" Margin="0 5">Image</Label>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="0 5" Text="Pokemon6"/>
+            <Button Grid.Row="6" Grid.Column="0" Margin="10" Click="ConfirmTeam">Use Previous Team</Button>
+            <Button Grid.Row="6" Grid.Column="1" Margin="0 5" Click="LoadPrevious">Use This Team</Button>
+        </Grid>
+    </StackPanel>
+
+</UserControl>
