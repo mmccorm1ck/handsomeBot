@@ -17,6 +17,6 @@
     </Design.DataContext>
     <StackPanel>
         <TransitioningContentControl Content="{Binding currentPage}" />
-        <Button HorizontalAlignment="Center" Command="{Binding NextPage}">Next</Button>
+        <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
     </StackPanel>
 </Window>

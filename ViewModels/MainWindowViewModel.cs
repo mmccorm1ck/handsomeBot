@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reflection.Emit;
 using System.Runtime;
 using System.Runtime.CompilerServices;
 using ReactiveUI;
@@ -19,7 +20,9 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private ViewModelBase _currentPage = new BotTeamPageViewModel();
 
-    private int currentPageNumber = 0;
+    private int nextPageNumber = 1;
+
+    private string _currentButtonLabel = "Confirm Team";
 
     public ViewModelBase currentPage
     {
@@ -31,32 +34,51 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public string currentButtonLabel
+    {
+        get => _currentButtonLabel;
+        set
+        {
+            _currentButtonLabel = value;
+            OnPropertyChanged();
+        }
+    }
+
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new()
     {
-        new PageNumberTemplate(typeof(BotTeamPageViewModel), 0),
-        new PageNumberTemplate(typeof(OppTeamPageViewModel), 1)
+        new PageNumberTemplate(typeof(BotTeamPageViewModel), 0, "Confirm Team"),
+        new PageNumberTemplate(typeof(OppTeamPageViewModel), 1, "Confirm Team"),
+        new PageNumberTemplate(typeof(BattlePageViewModel), 2, "Reset")
     };
 
     public class PageNumberTemplate
     {
-        public PageNumberTemplate(Type type, int pgNum)
+        public PageNumberTemplate(Type type, int pgNum, string lab)
         {
             ModelType = type;
-            pageNumber = pgNum; 
+            PageNumber = pgNum;
+            ButtonLabel = lab; 
         }
 
-        public int pageNumber { get; }
+        public int PageNumber { get; }
+        public string ButtonLabel { get; }
         public Type ModelType { get; }
     }
 
     public void NextPage()
     {
-        PageNumberTemplate targetPage = PageNumberList[currentPageNumber+1];
+        PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
         var instance = Activator.CreateInstance(targetPage.ModelType);
         if (instance is null) return;
         currentPage = (ViewModelBase)instance;
-        currentPageNumber++;
+        currentButtonLabel = targetPage.ButtonLabel;
+        if (nextPageNumber == 2)
+        {
+            nextPageNumber = 0;
+            return;
+        }
+        nextPageNumber++;
     }
 
 }
