@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
-        x:Class="HandsomeBot.Views.OppTeamPageView">
+        x:Class="HandsomeBot.Views.BattlePageView">
 
     <StackPanel>
         <Border Margin="5" 
@@ -12,7 +12,7 @@
             <TextBlock Margin="5"
                 FontSize="24" 
                 HorizontalAlignment="Center"
-                Text="Select Opponent Team">
+                Text="Battle">
             </TextBlock>
         </Border>
         <Grid ShowGridLines="False" Margin="5"
