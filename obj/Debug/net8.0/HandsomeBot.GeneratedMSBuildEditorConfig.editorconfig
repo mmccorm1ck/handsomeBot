@@ -26,8 +26,17 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [S:/Documents/Projects/Programming/HandsomeBot/Views/BotTeamPageView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[S:/Documents/Projects/Programming/HandsomeBot/Views/ConfirmResetView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [S:/Documents/Projects/Programming/HandsomeBot/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[S:/Documents/Projects/Programming/HandsomeBot/Views/OpenerView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [S:/Documents/Projects/Programming/HandsomeBot/Views/OppTeamPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[S:/Documents/Projects/Programming/HandsomeBot/Views/ValidationView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

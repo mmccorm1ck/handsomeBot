@@ -65,8 +65,28 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         public Type ModelType { get; }
     }
 
+
+    public ObservableCollection<PopupTemplate> PopupList { get; } = new()
+    {
+        new PopupTemplate(typeof(ValidationViewModel), 0),
+        new PopupTemplate(typeof(OpenerViewModel), 1),
+        new PopupTemplate(typeof(ConfirmResetViewModel), 2)
+    };
+
+    public class PopupTemplate
+    {
+        public PopupTemplate(Type type, int pgNum)
+        {
+            ModelType = type;
+            PageNumber = pgNum;
+        }
+
+        public int PageNumber { get; }
+        public Type ModelType { get; }
+    }
     public void NextPage()
     {
+
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
         var instance = Activator.CreateInstance(targetPage.ModelType);
