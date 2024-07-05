@@ -73,6 +73,10 @@
             "Avalonia.Themes.Fluent": {
               "target": "Package",
               "version": "[11.0.10, )"
+            },
+            "DialogHost.Avalonia": {
+              "target": "Package",
+              "version": "[0.7.9, )"
             }
           },
           "imports": [
