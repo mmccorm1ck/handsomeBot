@@ -11,4 +11,4 @@ The program learns the opponent's team as the game goes on, using https://github
 UI is built using the Avalonia framework for linux compatibility - https://avaloniaui.net/
 
 Dependencies:
-- [DailogHost](https://github.com/AvaloniaUtils/DialogHost.Avalonia/tree/main)
+- [DialogHost](https://github.com/AvaloniaUtils/DialogHost.Avalonia/tree/main)
