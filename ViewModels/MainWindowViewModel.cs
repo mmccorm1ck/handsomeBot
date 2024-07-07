@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Reflection.Emit;
 using System.Runtime;
 using System.Runtime.CompilerServices;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using DialogHostAvalonia;
 using ReactiveUI;
 
 namespace HandsomeBot.ViewModels;
@@ -24,6 +27,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private string _currentButtonLabel = "Confirm Team";
 
+    private bool _isPopupOpen = false;
+
     public ViewModelBase currentPage
     {
         get => _currentPage;
@@ -40,6 +45,16 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _currentButtonLabel = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool isPopupOpen
+    {
+        get => _isPopupOpen;
+        set
+        {
+            _isPopupOpen = value;
             OnPropertyChanged();
         }
     }
@@ -82,9 +97,13 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
         public Type ModelType { get; }
     }
-    public void NextPage()
+
+    public async void NextPage()
     {
-        
+        if (nextPageNumber == 0) {
+            var popupResponse = await DialogHost.Show("resetConfirm");
+            return;
+        }
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
         var instance = Activator.CreateInstance(targetPage.ModelType);

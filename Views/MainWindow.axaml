@@ -3,20 +3,28 @@
         xmlns:vm="using:HandsomeBot.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
         Width="1250" Height="1250"
         x:Class="HandsomeBot.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="HandsomeBot">
-
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <StackPanel>
-        <TransitioningContentControl Content="{Binding currentPage}" />
-        <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
-    </StackPanel>
+    <dialogHost:DialogHost Name="resetConfirm" CloseOnClickAway="True">
+        <dialogHost:DialogHost.DialogContent>
+            <StackPanel>
+                <TextBlock TextAlignment="Center">Dialog</TextBlock>
+            </StackPanel>
+        </dialogHost:DialogHost.DialogContent>
+        
+        <StackPanel>
+            <TransitioningContentControl Content="{Binding currentPage}" />
+            <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
+        </StackPanel>
+    </dialogHost:DialogHost>
 </Window>
