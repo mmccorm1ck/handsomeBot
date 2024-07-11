@@ -78,7 +78,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         public Type ModelType { get; }
     }
 
-    public async void NextPage()
+    public void NextPage()
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
