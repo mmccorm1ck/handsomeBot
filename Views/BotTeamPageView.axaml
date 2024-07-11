@@ -16,7 +16,8 @@
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
-            Background="LightBlue">
+            Background="DarkGreen"
+            BoxShadow="0 0 10 0 Green">
             <TextBlock Margin="5"
                 FontSize="24" 
                 HorizontalAlignment="Center"

@@ -8,7 +8,8 @@
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
-            Background="LightBlue">
+            Background="DarkBlue"
+            BoxShadow="0 0 10 0 Blue">
             <TextBlock Margin="5"
                 FontSize="24" 
                 HorizontalAlignment="Center"

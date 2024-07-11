@@ -9,14 +9,18 @@
         x:Class="HandsomeBot.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="HandsomeBot">
+        Title="HandsomeBot"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True">
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     <StackPanel>
-        <TransitioningContentControl Content="{Binding currentPage}" />
+
+        <TransitioningContentControl Margin="0,30,0,0" Content="{Binding currentPage}" />
         <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
     </StackPanel>
 </Window>
