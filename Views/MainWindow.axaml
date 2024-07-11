@@ -15,16 +15,8 @@
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <dialogHost:DialogHost Name="resetConfirm" CloseOnClickAway="True">
-        <dialogHost:DialogHost.DialogContent>
-            <StackPanel>
-                <TextBlock TextAlignment="Center">Dialog</TextBlock>
-            </StackPanel>
-        </dialogHost:DialogHost.DialogContent>
-        
-        <StackPanel>
-            <TransitioningContentControl Content="{Binding currentPage}" />
-            <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
-        </StackPanel>
-    </dialogHost:DialogHost>
+    <StackPanel>
+        <TransitioningContentControl Content="{Binding currentPage}" />
+        <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
+    </StackPanel>
 </Window>
