@@ -67,17 +67,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         public Type ModelType { get; }
     }
 
-
-    public class PopupTemplate
-    {
-        public PopupTemplate(Type type)
-        {
-            ModelType = type;
-        }
-
-        public Type ModelType { get; }
-    }
-
     public void NextPage()
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
