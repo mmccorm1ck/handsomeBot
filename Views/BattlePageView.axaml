@@ -2,9 +2,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
         x:Class="HandsomeBot.Views.BattlePageView">
-
+    <dialogHost:DialogHost Identifier="OpenerDialogHost">
+        <!--<dialogHost:DialogHost.DataTemplates>
+            <DataTemplate >
+                <Grid ShowGridLines="False"
+                    ColumnDefinitions="Auto, Auto"
+                    RowDefinitions="150, Auto, 150, 150, Auto, 150"
+                    HorizontalAlignment="Center" >
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="10">Opener 1</Label>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="10">Opener 2</Label>
+                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">Image</Label> 
+                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">Image</Label> 
+                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="10">Pokemon1</Label>
+                    <Label Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Margin="10">Pokemon2</Label>
+                    <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="10">Opener 3</Label>
+                    <Label Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Margin="10">Opener 4</Label>
+                    <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">Image</Label> 
+                    <Label Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">Image</Label> 
+                    <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Margin="10">Pokemon3</Label>
+                    <Label Grid.Column="1" Grid.Row="5" HorizontalAlignment="Center" Margin="10">Pokemon4</Label>
+                </Grid>
+            </DataTemplate>
+        </dialogHost:DialogHost.DataTemplates> -->
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
@@ -72,7 +94,7 @@
             <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Move1</Label>
             <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Move2</Label>
         </Grid>
-        <Button HorizontalAlignment="Center" Margin="50">Enter Results</Button>
+        <Button HorizontalAlignment="Center" Margin="50" Click="openerDialog">Enter Results</Button>
     </StackPanel>
-
+    </dialogHost:DialogHost>
 </UserControl>
