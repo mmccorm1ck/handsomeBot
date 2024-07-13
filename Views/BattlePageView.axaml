@@ -15,22 +15,22 @@
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto">
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Pokemon</Label>
                     <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event</Label>
-                    <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0" MaxDropDownHeight="100">
-                        <ComboBoxItem>Pokemon1</ComboBoxItem>
+                    <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding availablePokemon}"/>
+                        <!-- <ComboBoxItem>Pokemon1</ComboBoxItem>
                         <ComboBoxItem>Pokemon2</ComboBoxItem>
-                        <ComboBoxItem>Pokemon3</ComboBoxItem>
-                        <ComboBoxItem>Pokemon4</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0" MaxDropDownHeight="100">
-                        <ComboBoxItem>Ability Activation</ComboBoxItem>
+                        <ComboBoxItem>PokemonA</ComboBoxItem>
+                        <ComboBoxItem>PokemonB</ComboBoxItem> -->
+                    <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding availableEvents}"/>
+                        <!-- <ComboBoxItem>Ability Activation</ComboBoxItem>
                         <ComboBoxItem>Switch</ComboBoxItem>
                         <ComboBoxItem>Move</ComboBoxItem>
                         <ComboBoxItem>Terastallize</ComboBoxItem>
                         <ComboBoxItem>Mega Evolution</ComboBoxItem>
                         <ComboBoxItem>Dynamax</ComboBoxItem>
                         <ComboBoxItem>Gigantamax</ComboBoxItem>
-                        <ComboBoxItem>Z-Move</ComboBoxItem>
-                    </ComboBox>
+                        <ComboBoxItem>Z-Move</ComboBoxItem> -->
                 </Grid>
             </StackPanel>
         </dialogHost:DialogHost.DialogContent>

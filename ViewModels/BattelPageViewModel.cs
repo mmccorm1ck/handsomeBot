@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.ViewModels;
@@ -11,15 +13,52 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    private string _eventNumber = "Event 1";
+    private int _eventNumber = 1;
 
     public string eventNumber
     {
-        get => _eventNumber;
+    get => String.Format("Event #{0}",_eventNumber);
         set
         {
-            _eventNumber = value;
+            _eventNumber = Int32.Parse(value.Split('#')[1]);
             OnPropertyChanged();
         }
     }
+
+    private string[] _availablePokemon = [
+        "Pokemon 1",
+        "Pokemon 2",
+        "Pokemon A",
+        "Pokemon B",
+    ];
+    private string[] _availableEvents = [
+        "Move",
+        "Switch",
+        "Ability Activation",
+        "Item Activation",
+        "Terastallize",
+        "Mega Evolution",
+        "Dynamax",
+        "Gigantamax",
+        "Z-Move"
+    ];
+    public string[] availablePokemon
+    {
+    get => _availablePokemon;
+        set
+        {
+            _availablePokemon = value;
+            OnPropertyChanged();
+        }
+    }
+    public string[] availableEvents
+    {
+    get => _availableEvents;
+        set
+        {
+            _availableEvents = value;
+            OnPropertyChanged();
+        }
+    }
+    
 }
