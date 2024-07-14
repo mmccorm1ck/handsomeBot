@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:HandsomeBot.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+        x:Class="HandsomeBot.Views.OpenerPageView"
+        x:DataType="vm:OpenerPageViewModel">
+
+    <StackPanel>
+        <Border Margin="5" 
+            CornerRadius="10"
+            Background="Yellow"
+            BoxShadow="0 0 10 0 Yellow">
+            <TextBlock Margin="5"
+                FontSize="24" 
+                HorizontalAlignment="Center"
+                Text="Select Starting Pokemon">
+            </TextBlock>
+        </Border>
+        <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Opening Pokemon</Label>
+        <Grid ShowGridLines="False" Margin="5"
+            ColumnDefinitions="300, 300"
+            RowDefinitions="300, Auto"
+            HorizontalAlignment="Center">
+            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon1"/>
+            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Text="Pokemon2"/>
+        </Grid>
+        <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Pokemon in Reserve</Label>
+        <Grid ShowGridLines="False" Margin="5"
+            ColumnDefinitions="300, 300"
+            RowDefinitions="300, Auto"
+            HorizontalAlignment="Center">
+            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon3"/>
+            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Text="Pokemon4"/>
+        </Grid>
+        <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Enter Opponent's Opening Pokemon</Label>
+        <Grid ShowGridLines="False" Margin="5"
+            ColumnDefinitions="300, 300"
+            RowDefinitions="300, Auto"
+            HorizontalAlignment="Center">
+            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
+                MaxDropDownHeight="200" HorizontalAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+            <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
+                MaxDropDownHeight="200" HorizontalAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+        </Grid>
+    </StackPanel>
+
+</UserControl>

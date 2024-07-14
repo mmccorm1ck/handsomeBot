@@ -50,7 +50,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         new PageNumberTemplate(typeof(BotTeamPageViewModel), 0, "Confirm Team"),
         new PageNumberTemplate(typeof(OppTeamPageViewModel), 1, "Confirm Team"),
-        new PageNumberTemplate(typeof(BattlePageViewModel), 2, "Reset")
+        new PageNumberTemplate(typeof(OpenerPageViewModel), 2, "Begin Battle!"),
+        new PageNumberTemplate(typeof(BattlePageViewModel), 3, "Reset")
     };
 
     public class PageNumberTemplate
@@ -75,7 +76,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         if (instance is null) return;
         currentPage = (ViewModelBase)instance;
         currentButtonLabel = targetPage.ButtonLabel;
-        if (nextPageNumber == 2)
+        if (nextPageNumber == 3)
         {
             nextPageNumber = 0;
             return;
