@@ -20,28 +20,28 @@
         </Border>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Opening Pokemon</Label>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="300, 300"
-            RowDefinitions="300, Auto"
+            ColumnDefinitions="200, 200"
+            RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon1"/>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Pokemon1</Label>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Text="Pokemon2"/>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10">Pokemon2</Label>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Pokemon in Reserve</Label>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="300, 300"
-            RowDefinitions="300, Auto"
+            ColumnDefinitions="200, 200"
+            RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon3"/>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Pokemon3</Label>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Text="Pokemon4"/>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10">Pokemon4</Label>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Enter Opponent's Opening Pokemon</Label>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="300, 300"
-            RowDefinitions="300, Auto"
+            ColumnDefinitions="200, 200"
+            RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding OpponentsPokemon}"

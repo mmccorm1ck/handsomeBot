@@ -18,8 +18,8 @@
         </Border>
         <Button HorizontalAlignment="Center" Click="LoadPrevious">Use Previous Team</Button>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="300, 300"
-            RowDefinitions="300, Auto, 300, Auto, 300, Auto"
+            ColumnDefinitions="200, 200"
+            RowDefinitions="200, Auto, 200, Auto, 200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
             <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Text="Pokemon1"/>

@@ -5,22 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
-        Width="1250" Height="1250"
+        Width="1250" Height="1000"
         x:Class="HandsomeBot.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="HandsomeBot"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        Background="Transparent">
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <StackPanel>
-
-        <TransitioningContentControl Margin="0,30,0,0" Content="{Binding currentPage}" />
-        <Button HorizontalAlignment="Center" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel>
+            <TransitioningContentControl Margin="0,30,0,0" Content="{Binding currentPage}" />
+            <Button HorizontalAlignment="Center" Margin="0,0,0,30" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
+        </StackPanel>
+    </ScrollViewer>
 </Window>
