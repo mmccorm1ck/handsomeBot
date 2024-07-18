@@ -10,8 +10,8 @@
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
-            Background="Yellow"
-            BoxShadow="0 0 10 0 Yellow">
+            Background="DarkMagenta"
+            BoxShadow="0 0 10 0 Magenta">
             <TextBlock Margin="5"
                 FontSize="24" 
                 HorizontalAlignment="Center"
@@ -45,10 +45,10 @@
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
-                MaxDropDownHeight="200" HorizontalAlignment="Center"/>
+                MaxDropDownHeight="500" HorizontalAlignment="Center"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
-                MaxDropDownHeight="200" HorizontalAlignment="Center"/>
+                MaxDropDownHeight="500" HorizontalAlignment="Center"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
         </Grid>
     </StackPanel>
