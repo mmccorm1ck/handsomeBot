@@ -52,5 +52,4 @@
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
         </Grid>
     </StackPanel>
-
 </UserControl>
