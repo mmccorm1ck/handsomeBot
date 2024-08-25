@@ -3,10 +3,38 @@
         xmlns:vm="using:HandsomeBot.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
         x:Class="HandsomeBot.Views.OpenerPageView"
         x:DataType="vm:OpenerPageViewModel">
 
+    <dialogHost:DialogHost Identifier="OpenerDialogHost">
+        <dialogHost:DialogHost.DialogContent>
+            <StackPanel HorizontalAlignment="Center">
+                <Label HorizontalAlignment="Center" FontSize="18" Content="{Binding eventNumber}" />
+                <Grid HorizontalAlignment="Center" ShowGridLines="False"
+                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto">
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Pokemon</Label>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event</Label>
+                    <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding availablePokemon}"/>
+                        <!-- <ComboBoxItem>Pokemon1</ComboBoxItem>
+                        <ComboBoxItem>Pokemon2</ComboBoxItem>
+                        <ComboBoxItem>PokemonA</ComboBoxItem>
+                        <ComboBoxItem>PokemonB</ComboBoxItem> -->
+                    <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding availableEvents}"/>
+                        <!-- <ComboBoxItem>Ability Activation</ComboBoxItem>
+                        <ComboBoxItem>Switch</ComboBoxItem>
+                        <ComboBoxItem>Move</ComboBoxItem>
+                        <ComboBoxItem>Terastallize</ComboBoxItem>
+                        <ComboBoxItem>Mega Evolution</ComboBoxItem>
+                        <ComboBoxItem>Dynamax</ComboBoxItem>
+                        <ComboBoxItem>Gigantamax</ComboBoxItem>
+                        <ComboBoxItem>Z-Move</ComboBoxItem> -->
+                </Grid>
+            </StackPanel>
+        </dialogHost:DialogHost.DialogContent>
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
@@ -51,5 +79,7 @@
                 MaxDropDownHeight="500" HorizontalAlignment="Center"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
         </Grid>
+        <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Results</Button>
     </StackPanel>
+    </dialogHost:DialogHost>
 </UserControl>

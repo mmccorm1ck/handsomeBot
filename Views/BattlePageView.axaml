@@ -7,6 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
         x:Class="HandsomeBot.Views.BattlePageView"
         x:DataType="vm:BattlePageViewModel">
+
     <dialogHost:DialogHost Identifier="OpenerDialogHost">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
