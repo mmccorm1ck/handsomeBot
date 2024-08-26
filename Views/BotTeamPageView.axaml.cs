@@ -26,6 +26,9 @@ public partial class BotTeamPageView : UserControl
         string httpLink = pasteLink.Text;
         Task task = Task.Run(async () => await LoadPasteHtml(httpLink));
     }
+
+    public Dictionary<string, string>[] botTeamDict;
+
     public async Task LoadPasteHtml(string httpLink)
     {
         HttpClient client = new HttpClient();
@@ -48,11 +51,11 @@ public partial class BotTeamPageView : UserControl
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) {
-                = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
+                botTeamDict[currPokemon]["image"] = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 continue;
             }
             if (responses[i].Contains("Nature")) {
-                = responses[i].Split(' ')[0];
+                botTeamDict[currPokemon]["nature"]= responses[i].Split(' ')[0];
                 currMove = 0;
                 continue;
             }
@@ -65,11 +68,11 @@ public partial class BotTeamPageView : UserControl
                 if (responses[i].Contains("IVs")) {
                     responses[i] = responses[i][0..^7];
                     idx = responses[i].LastIndexOf('>') + 1;
-                    = responses[i][idx..];
+                    botTeamDict[currPokemon]["IVs"] = responses[i][idx..];
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                = responses[i][idx..].TrimStart([' ','-']);
+                botTeamDict[currPokemon]["move"+currMove.ToString()] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++;
                 if (currMove > 3) {
                     currMove = -1;
@@ -81,18 +84,18 @@ public partial class BotTeamPageView : UserControl
             }
             if (responses[i].Contains("Ability")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                = responses[i][idx..];
+                botTeamDict[currPokemon]["ability"] = responses[i][idx..];
                 continue;
             }
             if (responses[i].Contains("Level")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                = responses[i][idx..];
+                botTeamDict[currPokemon]["level"] = responses[i][idx..];
                 continue;
             }
             if (responses[i].Contains("Tera Type")) {
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
-                = responses[i][idx..];
+                botTeamDict[currPokemon]["tera"] = responses[i][idx..];
                 continue;
             }
             if (responses[i].Contains("EVs")) {
@@ -100,12 +103,12 @@ public partial class BotTeamPageView : UserControl
                 for (int j = 0; j < temp.Length; j++) {
                     temp[j] = temp[j][0..^7];
                     int idx = temp[j].LastIndexOf('>') + 1;
-                    = temp[j][idx..]; 
+                    botTeamDict[currPokemon]["EVs"+j.ToString()] = temp[j][idx..]; 
                 }
             }
 
         }
-        Debug.WriteLine(response);
+        Debug.WriteLine(botTeamDict);
     }
 
     public void LoadPrevious(object source, RoutedEventArgs args)
