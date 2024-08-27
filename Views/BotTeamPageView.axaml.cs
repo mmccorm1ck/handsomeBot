@@ -27,19 +27,23 @@ public partial class BotTeamPageView : UserControl
         Task task = Task.Run(async () => await LoadPasteHtml(httpLink));
     }
 
-    public Dictionary<string, string>[] botTeamDict;
 
     public async Task LoadPasteHtml(string httpLink)
     {
         HttpClient client = new HttpClient();
         string response = await client.GetStringAsync(httpLink);
         string[] responses = response.Split('\n');
+        for(int i = 0; i < responses.Length; i++) {
+            Debug.WriteLine(i.ToString()+responses[i]);
+        }
+        Dictionary<string, string>[] botTeamDict = new Dictionary<string, string>[6];
         int currPokemon = -1;
         int currMove = -1;
-        string format;
-        for (int i = 0; i < responses.Length; i ++) {
-            responses[i] = responses[i].TrimStart(' ');
-            if (responses[i] == "<article>") {
+        string format = "";
+        for (int i = 0; i < responses.Length-1; i++) {
+            responses[i] = responses[i].TrimStart(' ','\t');
+            Debug.WriteLine(i.ToString()+responses[i]);
+            if (responses[i].Contains("<article>")) {
                 currPokemon++;
                 continue;
             }
@@ -48,15 +52,18 @@ public partial class BotTeamPageView : UserControl
             }
             if (responses[i].Contains("Format")) {
                 format = responses[i].Split(' ')[1][0..^4];
+                Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) {
                 botTeamDict[currPokemon]["image"] = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
+                Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature")) {
                 botTeamDict[currPokemon]["nature"]= responses[i].Split(' ')[0];
                 currMove = 0;
+                Debug.WriteLine(i);
                 continue;
             }
             if (currMove != -1) {
@@ -69,11 +76,13 @@ public partial class BotTeamPageView : UserControl
                     responses[i] = responses[i][0..^7];
                     idx = responses[i].LastIndexOf('>') + 1;
                     botTeamDict[currPokemon]["IVs"] = responses[i][idx..];
+                    Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
                 botTeamDict[currPokemon]["move"+currMove.ToString()] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++;
+                Debug.WriteLine(i);
                 if (currMove > 3) {
                     currMove = -1;
                 }
@@ -85,17 +94,20 @@ public partial class BotTeamPageView : UserControl
             if (responses[i].Contains("Ability")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
                 botTeamDict[currPokemon]["ability"] = responses[i][idx..];
+                Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
                 botTeamDict[currPokemon]["level"] = responses[i][idx..];
+                Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type")) {
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
                 botTeamDict[currPokemon]["tera"] = responses[i][idx..];
+                Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("EVs")) {
@@ -105,10 +117,15 @@ public partial class BotTeamPageView : UserControl
                     int idx = temp[j].LastIndexOf('>') + 1;
                     botTeamDict[currPokemon]["EVs"+j.ToString()] = temp[j][idx..]; 
                 }
+                Debug.WriteLine(i);
+                continue;
             }
 
         }
-        Debug.WriteLine(botTeamDict);
+        Debug.WriteLine(format);
+        for (int i = 0; i < 6; i++) {
+            Debug.WriteLine(botTeamDict[i]);
+        }
     }
 
     public void LoadPrevious(object source, RoutedEventArgs args)
