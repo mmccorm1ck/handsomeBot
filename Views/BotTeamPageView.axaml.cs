@@ -36,7 +36,15 @@ public partial class BotTeamPageView : UserControl
         for(int i = 0; i < responses.Length; i++) {
             Debug.WriteLine(i.ToString()+responses[i]);
         }
-        Dictionary<string, string>[] botTeamDict = new Dictionary<string, string>[6];
+        Dictionary<string, string>[] botTeamDict = new Dictionary<string, string>[]
+        {
+            new Dictionary<string,string>(),
+            new Dictionary<string,string>(),
+            new Dictionary<string,string>(),
+            new Dictionary<string,string>(),
+            new Dictionary<string,string>(),
+            new Dictionary<string,string>()
+        };
         int currPokemon = -1;
         int currMove = -1;
         string format = "";
@@ -56,12 +64,12 @@ public partial class BotTeamPageView : UserControl
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) {
-                botTeamDict[currPokemon]["image"] = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
+                botTeamDict[currPokemon].Add("image", "https://pokepast.es" + responses[i].Split(' ')[2][5..^2]);
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature")) {
-                botTeamDict[currPokemon]["nature"]= responses[i].Split(' ')[0];
+                botTeamDict[currPokemon].Add("nature", responses[i].Split(' ')[0]);
                 currMove = 0;
                 Debug.WriteLine(i);
                 continue;
@@ -75,12 +83,12 @@ public partial class BotTeamPageView : UserControl
                 if (responses[i].Contains("IVs")) {
                     responses[i] = responses[i][0..^7];
                     idx = responses[i].LastIndexOf('>') + 1;
-                    botTeamDict[currPokemon]["IVs"] = responses[i][idx..];
+                    botTeamDict[currPokemon].Add("IVs", responses[i][idx..]);
                     Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon]["move"+currMove.ToString()] = responses[i][idx..].TrimStart([' ','-']);
+                botTeamDict[currPokemon].Add("move"+currMove.ToString(), responses[i][idx..].TrimStart([' ','-']));
                 currMove++;
                 Debug.WriteLine(i);
                 if (currMove > 3) {
@@ -93,20 +101,20 @@ public partial class BotTeamPageView : UserControl
             }
             if (responses[i].Contains("Ability")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon]["ability"] = responses[i][idx..];
+                botTeamDict[currPokemon].Add("ability", responses[i][idx..]);
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon]["level"] = responses[i][idx..];
+                botTeamDict[currPokemon].Add("level", responses[i][idx..]);
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type")) {
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon]["tera"] = responses[i][idx..];
+                botTeamDict[currPokemon].Add("tera", responses[i][idx..]);
                 Debug.WriteLine(i);
                 continue;
             }
@@ -115,7 +123,7 @@ public partial class BotTeamPageView : UserControl
                 for (int j = 0; j < temp.Length; j++) {
                     temp[j] = temp[j][0..^7];
                     int idx = temp[j].LastIndexOf('>') + 1;
-                    botTeamDict[currPokemon]["EVs"+j.ToString()] = temp[j][idx..]; 
+                    botTeamDict[currPokemon].Add("EVs"+j.ToString(), temp[j][idx..]); 
                 }
                 Debug.WriteLine(i);
                 continue;
@@ -124,7 +132,7 @@ public partial class BotTeamPageView : UserControl
         }
         Debug.WriteLine(format);
         for (int i = 0; i < 6; i++) {
-            Debug.WriteLine(botTeamDict[i]);
+            Debug.WriteLine(botTeamDict[i]["ability"]);
         }
     }
 
