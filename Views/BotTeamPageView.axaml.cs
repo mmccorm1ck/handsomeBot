@@ -99,6 +99,25 @@ public partial class BotTeamPageView : UserControl
             if (!responses[i].Contains("<span")) {
                 continue;
             }
+            if (responses[i].Contains("<pre>")) {
+                int idx = responses[i].LastIndexOf('@') + 2;
+                if (idx != 1) {
+                    string item = responses[i][idx..];
+                    if (item.Contains("<span")) {
+                        item = item[0..^7];
+                        int idxtemp = item.LastIndexOf('>');
+                        item = item[idxtemp..];
+                    }
+                    botTeamDict[currPokemon].Add("item", item);
+                }
+                if (responses[i].Contains("gender")) {
+                    idx = responses[i].LastIndexOf("gender")+10;
+                    botTeamDict[currPokemon].Add("Gender",responses[i][idx].ToString());
+                }
+                responses[i] = responses[i].Split("</span>")[0];
+                idx = responses[i].LastIndexOf(">") + 1;
+                botTeamDict[currPokemon].Add("name", responses[i][idx..]);
+            }
             if (responses[i].Contains("Ability")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
                 botTeamDict[currPokemon].Add("ability", responses[i][idx..]);
@@ -132,7 +151,7 @@ public partial class BotTeamPageView : UserControl
         }
         Debug.WriteLine(format);
         for (int i = 0; i < 6; i++) {
-            Debug.WriteLine(botTeamDict[i]["ability"]);
+            Debug.WriteLine(botTeamDict[i]["name"]);
         }
     }
 
