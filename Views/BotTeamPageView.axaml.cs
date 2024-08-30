@@ -16,7 +16,7 @@ public partial class BotTeamPageView : UserControl
     {
         InitializeComponent();
     }
-
+/*
     public void LoadPaste(object source, RoutedEventArgs args)
     {
         if (pasteLink.Text is null)
@@ -154,7 +154,7 @@ public partial class BotTeamPageView : UserControl
             Debug.WriteLine(botTeamDict[i]["name"]);
         }
     }
-
+*/
     public void LoadPrevious(object source, RoutedEventArgs args)
     {
         Debug.WriteLine("Clack!");
