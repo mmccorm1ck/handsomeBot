@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Avalonia.Controls;
+using Avalonia.Collections;
+using ReactiveUI;
 
 
 namespace HandsomeBot.ViewModels;
@@ -19,15 +21,15 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    private Dictionary<string, string>[] _botTeamDict = {
-        new Dictionary<string, string>(),
-        new Dictionary<string, string>(),
-        new Dictionary<string, string>(),
-        new Dictionary<string, string>(),
-        new Dictionary<string, string>(),
-        new Dictionary<string, string>()
+    private AvaloniaDictionary<string, string>[] _botTeamDict = {
+        new AvaloniaDictionary<string, string>(),
+        new AvaloniaDictionary<string, string>(),
+        new AvaloniaDictionary<string, string>(),
+        new AvaloniaDictionary<string, string>(),
+        new AvaloniaDictionary<string, string>(),
+        new AvaloniaDictionary<string, string>()
     };
-    public Dictionary<string, string>[] botTeamDict
+    public AvaloniaDictionary<string, string>[] botTeamDict
     {
         get => _botTeamDict;
         set
