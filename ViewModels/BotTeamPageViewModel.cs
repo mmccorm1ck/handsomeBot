@@ -9,6 +9,8 @@ using Avalonia.Interactivity;
 using Avalonia.Controls;
 using Avalonia.Collections;
 using ReactiveUI;
+using System.Net.Mail;
+using System.Collections.ObjectModel;
 
 
 namespace HandsomeBot.ViewModels;
@@ -21,7 +23,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    private AvaloniaDictionary<string, string>[] _botTeamDict = {
+    /*private AvaloniaDictionary<string, string>[] _botTeamDict = {
         new AvaloniaDictionary<string, string>(),
         new AvaloniaDictionary<string, string>(),
         new AvaloniaDictionary<string, string>(),
@@ -37,7 +39,55 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             _botTeamDict = value;
             OnPropertyChanged();
         }
+    }*/
+
+    public ObservableCollection<pokemonInfoTemplate> BotTeamInfo {get;} = new()
+    {
+        new pokemonInfoTemplate("Pokemon 1", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
+        new pokemonInfoTemplate("Pokemon 2", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
+        new pokemonInfoTemplate("Pokemon 3", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
+        new pokemonInfoTemplate("Pokemon 4", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
+        new pokemonInfoTemplate("Pokemon 5", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
+        new pokemonInfoTemplate("Pokemon 6", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
+                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None")
+    };
+
+    public class pokemonInfoTemplate
+    {
+        public pokemonInfoTemplate(string name, char gender, string item, int level, string ability, 
+                                    string nature, int[] ev, int[] iv, string tera, string[] moves, string image)
+        {
+            Name = name;
+            Gender = gender;
+            Item = item;
+            Level = level;
+            Ability = ability;
+            Nature = nature;
+            EV = ev;
+            IV = iv;
+            Tera = tera;
+            Moves = moves;
+            PokeImage = image;
+        }
+        public string Name {get;set;}
+        public char Gender {get;set;}
+        public string Item {get;set;}
+        public int Level {get;set;}
+        public string Ability {get;set;}
+        public string Nature {get;set;}
+        public int[] EV {get;set;}
+        public int[] IV {get;set;}
+        public string Tera {get;set;}
+        public string[] Moves {get;set;}
+        public string PokeImage {get;set;}
+
     }
+
     private string _format = "";
     public string format
     {
@@ -94,12 +144,12 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) {
-                botTeamDict[currPokemon].Add("image", "https://pokepast.es" + responses[i].Split(' ')[2][5..^2]);
+                BotTeamInfo[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature")) {
-                botTeamDict[currPokemon].Add("nature", responses[i].Split(' ')[0]);
+                BotTeamInfo[currPokemon].Nature = responses[i].Split(' ')[0];
                 currMove = 0;
                 Debug.WriteLine(i);
                 continue;
@@ -113,12 +163,12 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 if (responses[i].Contains("IVs")) {
                     responses[i] = responses[i][0..^7];
                     idx = responses[i].LastIndexOf('>') + 1;
-                    botTeamDict[currPokemon].Add("IVs", responses[i][idx..]);
+                    //BotTeamInfo[currPokemon].IV = responses[i][idx..];
                     Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon].Add("move"+currMove.ToString(), responses[i][idx..].TrimStart([' ','-']));
+                BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++;
                 Debug.WriteLine(i);
                 if (currMove > 3) {
@@ -138,32 +188,32 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         int idxtemp = item.LastIndexOf('>');
                         item = item[idxtemp..];
                     }
-                    botTeamDict[currPokemon].Add("item", item);
+                    BotTeamInfo[currPokemon].Item = item;
                 }
                 if (responses[i].Contains("gender")) {
                     idx = responses[i].LastIndexOf("gender")+10;
-                    botTeamDict[currPokemon].Add("Gender",responses[i][idx].ToString());
+                    BotTeamInfo[currPokemon].Gender = responses[i][idx];
                 }
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
-                botTeamDict[currPokemon].Add("name", responses[i][idx..]);
+                BotTeamInfo[currPokemon].Name = responses[i][idx..];
             }
             if (responses[i].Contains("Ability")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon].Add("ability", responses[i][idx..]);
+                BotTeamInfo[currPokemon].Ability = responses[i][idx..];
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level")) {
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon].Add("level", responses[i][idx..]);
+                BotTeamInfo[currPokemon].Level = Int32.Parse(responses[i][idx..]);
                 Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type")) {
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
-                botTeamDict[currPokemon].Add("tera", responses[i][idx..]);
+                BotTeamInfo[currPokemon].Tera = responses[i][idx..];
                 Debug.WriteLine(i);
                 continue;
             }
@@ -172,7 +222,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 for (int j = 0; j < temp.Length; j++) {
                     temp[j] = temp[j][0..^7];
                     int idx = temp[j].LastIndexOf('>') + 1;
-                    botTeamDict[currPokemon].Add("EVs"+j.ToString(), temp[j][idx..]); 
+                    //BotTeamInfo[currPokemon].EV = temp[j][idx..]; 
                 }
                 Debug.WriteLine(i);
                 continue;
@@ -181,7 +231,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         Debug.WriteLine(format);
         for (int i = 0; i < 6; i++) {
-            Debug.WriteLine(botTeamDict[i]["name"]);
+            Debug.WriteLine(BotTeamInfo[i].Name);
         }
     }
 }
