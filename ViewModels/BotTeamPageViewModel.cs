@@ -47,37 +47,37 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
             EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
-            PokeImage = "None"
+            PokeImage = ""
         }
 
     };
@@ -153,7 +153,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         int currPokemon = -1;
         int currMove = -1;
         for (int i = 0; i < responses.Length-1; i++) {
-            responses[i] = responses[i].TrimStart(' ','\t');
+            responses[i] = responses[i].Trim(' ','\t');
             Debug.WriteLine(i.ToString()+responses[i]);
             if (responses[i].Contains("<article>")) {
                 currPokemon++;
@@ -192,7 +192,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
+                //BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++;
                 Debug.WriteLine(i);
                 if (currMove > 3) {
@@ -256,6 +256,9 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         Debug.WriteLine(format);
         for (int i = 0; i < 6; i++) {
             Debug.WriteLine(BotTeamInfo[i].Name);
+            for (int j = 0; j<4; j++) {
+                Debug.WriteLine(BotTeamInfo[i].Moves[j]);
+            }
         }
         
     }
