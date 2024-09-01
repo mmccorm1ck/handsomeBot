@@ -36,12 +36,11 @@
             <TextBox Name="format" Grid.Row="0" Grid.Column="3" Margin="0 5" Watermark="Format"/>
             <Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Validate Team</Button>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Image</Label>
-            <ListBox ItemsSource="{Binding botTeamDict[0]}">
+            <!--<ListBox ItemsSource="{Binding BotTeamInfo[0]}">
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate> -->
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 5">
-                <Label>Pokemon1(Gender)@Item</Label>
-                <TextBlock Text="{Binding ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[0].Name} ({Binding BotTeamInfo[0].Gender}) @ {Binding BotTeamInfo[0].Item}"/>
                 <Label>Ability</Label>
                 <Label>Level</Label>
                 <Label>Tera Type</Label>
@@ -52,9 +51,9 @@
                 <Label>Move3</Label>
                 <Label>Move4</Label>
             </StackPanel>
-            </DataTemplate>
+            <!--</DataTemplate>
             </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10">Image</Label>
             <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
                 <Label>Pokemon2(Gender)@Item</Label>

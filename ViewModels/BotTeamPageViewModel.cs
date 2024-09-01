@@ -41,23 +41,48 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }*/
 
-    public ObservableCollection<pokemonInfoTemplate> BotTeamInfo {get;} = new()
+    public ObservableCollection<TeamModel> BotTeamInfo{get;set;} = new()
     {
-        new pokemonInfoTemplate("Pokemon 1", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
-        new pokemonInfoTemplate("Pokemon 2", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
-        new pokemonInfoTemplate("Pokemon 3", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
-        new pokemonInfoTemplate("Pokemon 4", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
-        new pokemonInfoTemplate("Pokemon 5", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None"),
-        new pokemonInfoTemplate("Pokemon 6", 'R', "None", 50, "None", "Bashful", [0,0,0,0,0,0], 
-                                [31,31,31,31,31,31], "Normal", ["None","None","None","None"], "None")
+        new TeamModel
+        {
+            Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        },
+        new TeamModel
+        {
+            Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        },
+        new TeamModel
+        {
+            Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        },
+        new TeamModel
+        {
+            Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        },
+        new TeamModel
+        {
+            Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        },
+        new TeamModel
+        {
+            Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
+            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            PokeImage = "None"
+        }
+
     };
 
-    public class pokemonInfoTemplate
+    /*public class pokemonInfoTemplate
     {
         public pokemonInfoTemplate(string name, char gender, string item, int level, string ability, 
                                     string nature, int[] ev, int[] iv, string tera, string[] moves, string image)
@@ -74,7 +99,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             Moves = moves;
             PokeImage = image;
         }
-        public string Name {get;set;}
+        public string Name{get;set;}
         public char Gender {get;set;}
         public string Item {get;set;}
         public int Level {get;set;}
@@ -85,8 +110,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         public string Tera {get;set;}
         public string[] Moves {get;set;}
         public string PokeImage {get;set;}
-
-    }
+    }*/
 
     private string _format = "";
     public string format
@@ -233,5 +257,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         for (int i = 0; i < 6; i++) {
             Debug.WriteLine(BotTeamInfo[i].Name);
         }
+        
     }
 }
