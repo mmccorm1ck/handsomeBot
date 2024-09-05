@@ -13,18 +13,18 @@ namespace HandsomeBot.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private ViewModelBase _currentPage = new BotTeamPageViewModel();
+    private ViewModelBase _currentPage = new BotTeamPageViewModel(); // Current app page to display
 
-    private int nextPageNumber = 1;
+    private int nextPageNumber = 1; // Page number to display next
 
-    private string _currentButtonLabel = "Confirm Team";
+    private string _currentButtonLabel = "Confirm Team"; // Label to display on the change page button
 
     public ViewModelBase currentPage
     {
@@ -46,7 +46,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new()
+    public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {
         new PageNumberTemplate(typeof(BotTeamPageViewModel), 0, "Confirm Team"),
         new PageNumberTemplate(typeof(OppTeamPageViewModel), 1, "Confirm Team"),
@@ -54,7 +54,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         new PageNumberTemplate(typeof(BattlePageViewModel), 3, "Reset")
     };
 
-    public class PageNumberTemplate
+    public class PageNumberTemplate // Template for pages containing page info
     {
         public PageNumberTemplate(Type type, int pgNum, string lab)
         {
@@ -68,7 +68,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         public Type ModelType { get; }
     }
 
-    public void NextPage()
+    public void NextPage() // Page changing function called when button is pressed
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;

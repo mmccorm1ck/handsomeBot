@@ -17,9 +17,9 @@ namespace HandsomeBot.ViewModels;
 
 public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
@@ -41,7 +41,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }*/
 
-    public ObservableCollection<TeamModel> BotTeamInfo{get;set;} = new()
+    public ObservableCollection<TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new TeamModel
         {
@@ -112,7 +112,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         public string PokeImage {get;set;}
     }*/
 
-    private string _format = "";
+    private string _format = ""; // Format of the battle
     public string format
     {
         get => _format;
@@ -122,7 +122,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private string _pasteLink = "";
+    private string _pasteLink = ""; // Pokepaste URL to fetch team info from
     public string pasteLink
     {
         get => _pasteLink;
@@ -132,7 +132,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public void LoadPaste()
+    public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
     {
         if (pasteLink == "")
         {
@@ -142,7 +142,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         Task task = Task.Run(async () => await LoadPasteHtml(pasteLink));
     }
     
-    public async Task LoadPasteHtml(string httpLink)
+    public async Task LoadPasteHtml(string httpLink) // Parses HTML from pokepaste link and stores info in BotTeamInfo
     {
         HttpClient client = new HttpClient();
         string response = await client.GetStringAsync(httpLink);
@@ -155,36 +155,36 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         for (int i = 0; i < responses.Length-1; i++) {
             responses[i] = responses[i].Trim(' ','\t');
             Debug.WriteLine(i.ToString()+responses[i]);
-            if (responses[i].Contains("<article>")) {
+            if (responses[i].Contains("<article>")) { // Detects splits between each pokemon
                 currPokemon++;
                 continue;
             }
-            if (currPokemon < 0) {
+            if (currPokemon < 0) { // If not yet reached pokemon info in pokepaste
                 continue;
             }
-            if (responses[i].Contains("Format")) {
+            if (responses[i].Contains("Format")) { // Saves format of pokepaste
                 format = responses[i].Split(' ')[1][0..^4];
                 Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("img-pokemon")) {
+            if (responses[i].Contains("img-pokemon")) { // Saves URL of pokemon image
                 BotTeamInfo[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Nature")) {
+            if (responses[i].Contains("Nature")) { // Saves pokemon's nature
                 BotTeamInfo[currPokemon].Nature = responses[i].Split(' ')[0];
-                currMove = 0;
+                currMove = 0; // Prepares to load moves
                 Debug.WriteLine(i);
                 continue;
             }
-            if (currMove != -1) {
-                if (responses[i] == "") {
+            if (currMove != -1) { // If loading moves
+                if (responses[i] == "") { // If last move has been read
                     currMove = -1;
                     continue;
                 }
                 int idx;
-                if (responses[i].Contains("IVs")) {
+                if (responses[i].Contains("IVs")) { // If there are IVs to be read
                     responses[i] = responses[i][0..^7];
                     idx = responses[i].LastIndexOf('>') + 1;
                     //BotTeamInfo[currPokemon].IV = responses[i][idx..];
@@ -193,19 +193,19 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
                 //BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
-                currMove++;
+                currMove++; // Increments to next move
                 Debug.WriteLine(i);
-                if (currMove > 3) {
+                if (currMove > 3) { // If all 4 moves have been loaded
                     currMove = -1;
                 }
                 continue;
             }
-            if (!responses[i].Contains("<span")) {
+            if (!responses[i].Contains("<span")) { // If line has no relevent info
                 continue;
             }
-            if (responses[i].Contains("<pre>")) {
+            if (responses[i].Contains("<pre>")) { // Detects line that contains pokemon name, gender and item
                 int idx = responses[i].LastIndexOf('@') + 2;
-                if (idx != 1) {
+                if (idx != 1) { // If there is an item
                     string item = responses[i][idx..];
                     if (item.Contains("<span")) {
                         item = item[0..^7];
@@ -214,7 +214,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     }
                     BotTeamInfo[currPokemon].Item = item;
                 }
-                if (responses[i].Contains("gender")) {
+                if (responses[i].Contains("gender")) { // If there is a specified gender
                     idx = responses[i].LastIndexOf("gender")+10;
                     BotTeamInfo[currPokemon].Gender = responses[i][idx];
                 }
@@ -222,26 +222,26 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 idx = responses[i].LastIndexOf(">") + 1;
                 BotTeamInfo[currPokemon].Name = responses[i][idx..];
             }
-            if (responses[i].Contains("Ability")) {
+            if (responses[i].Contains("Ability")) { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Ability = responses[i][idx..];
                 Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Level")) {
+            if (responses[i].Contains("Level")) { // Saves pokemon's level
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Level = Int32.Parse(responses[i][idx..]);
                 Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Tera Type")) {
+            if (responses[i].Contains("Tera Type")) { // Saves pokemon's tera type
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Tera = responses[i][idx..];
                 Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("EVs")) {
+            if (responses[i].Contains("EVs")) { // Saves pokemon's EVs
                 string[] temp = responses[i].Split(" / ");
                 for (int j = 0; j < temp.Length; j++) {
                     temp[j] = temp[j][0..^7];
