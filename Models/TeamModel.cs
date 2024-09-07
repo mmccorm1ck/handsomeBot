@@ -58,7 +58,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public int[] EV
+    public EVIVModel EV
     {
         get => _ev;
         set
@@ -67,7 +67,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public int[] IV
+    public EVIVModel IV
     {
         get => _iv;
         set
@@ -85,12 +85,39 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public string[] Moves
+    public string Move1
     {
-        get => _moves;
+        get => _move1;
         set
         {
-            _moves = value;
+            _move1 = value;
+            OnPropertyChanged();
+        }
+    }
+    public string Move2
+    {
+        get => _move2;
+        set
+        {
+            _move2 = value;
+            OnPropertyChanged();
+        }
+    }
+    public string Move3
+    {
+        get => _move3;
+        set
+        {
+            _move3 = value;
+            OnPropertyChanged();
+        }
+    }
+    public string Move4
+    {
+        get => _move4;
+        set
+        {
+            _move4 = value;
             OnPropertyChanged();
         }
     }
@@ -110,10 +137,13 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _level; // Pokemon's level
     private string _ability; // Pokemon's ability
     private string _nature; // Pokemon's nature
-    private int[] _ev; // Array of pokemon's EVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
-    private int[] _iv; // Array of pokemon's IVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
+    private EVIVModel _ev; // Array of pokemon's EVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
+    private EVIVModel _iv; // Array of pokemon's IVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
     private string _tera; // Pokemon's tera type
-    private string[] _moves; // Array of pokemon's moves
+    private string _move1; // Array of pokemon's moves
+    private string _move2; // Array of pokemon's moves
+    private string _move3; // Array of pokemon's moves
+    private string _move4; // Array of pokemon's moves
     private string _image; // URL of pokemon's image
     public event PropertyChangedEventHandler PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler

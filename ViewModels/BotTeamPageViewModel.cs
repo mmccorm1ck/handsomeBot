@@ -47,37 +47,37 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         new TeamModel
         {
             Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = [0,0,0,0,0,0], IV = [31,31,31,31,31,31], Tera = "Normal", Moves = ["None","None","None","None"],
+            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
             PokeImage = ""
         }
 
@@ -134,14 +134,23 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Dictionary<string, int> statMap = new Dictionary<string, int>()
+    public static EVIVModel evInit = new EVIVModel()
     {
-        {"HP", 0},
-        {"Atk", 1},
-        {"Def", 2},
-        {"SpA", 3},
-        {"SpD", 4},
-        {"Spe", 5}
+        HP = 0,
+        Atk = 0,
+        Def = 0,
+        SpA = 0,
+        SpD = 0,
+        Spe = 0
+    };
+    public static EVIVModel ivInit = new EVIVModel()
+    {
+        HP = 31,
+        Atk = 31,
+        Def = 31,
+        SpA = 31,
+        SpD = 31,
+        Spe = 31
     };
 
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
@@ -204,20 +213,51 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         string[] temp = temps[j].Split(" ");
                         idx = temp[0].LastIndexOf('>') + 1;
                         temp[0] = temp[0][idx..];
-                        Debug.WriteLine(temp[0]);
-                        Debug.WriteLine(temp[1]);
-                        BotTeamInfo[currPokemon].IV[statMap[temp[1]]] = Int32.Parse(temp[0]);
+                        switch(temp[1])
+                        {
+                            case "HP":
+                                BotTeamInfo[currPokemon].IV.HP = Int32.Parse(temp[0]);
+                                break;
+                            case "Atk":
+                                BotTeamInfo[currPokemon].IV.Atk = Int32.Parse(temp[0]);
+                                break;
+                            case "Def":
+                                BotTeamInfo[currPokemon].IV.Def = Int32.Parse(temp[0]);
+                                break;
+                            case "SpA":
+                                BotTeamInfo[currPokemon].IV.SpA = Int32.Parse(temp[0]);
+                                break;
+                            case "SpD":
+                                BotTeamInfo[currPokemon].IV.SpD = Int32.Parse(temp[0]);
+                                break;
+                            case "Spe":
+                                BotTeamInfo[currPokemon].IV.Spe = Int32.Parse(temp[0]);
+                                break;
+                        }
                     }
                     Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
+                //BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++; // Increments to next move
-                Debug.WriteLine(i);
-                if (currMove > 3) { // If all 4 moves have been loaded
-                    currMove = -1;
+                switch(currMove)
+                {
+                    case 1:
+                        BotTeamInfo[currPokemon].Move1 = responses[i][idx..].TrimStart([' ','-']);
+                        break;
+                    case 2:
+                        BotTeamInfo[currPokemon].Move2 = responses[i][idx..].TrimStart([' ','-']);
+                        break;
+                    case 3:
+                        BotTeamInfo[currPokemon].Move3 = responses[i][idx..].TrimStart([' ','-']);
+                        break;
+                    case 4:
+                        BotTeamInfo[currPokemon].Move4 = responses[i][idx..].TrimStart([' ','-']);
+                        currMove = -1;
+                        break;
                 }
+                Debug.WriteLine(i);
                 continue;
             }
             if (!responses[i].Contains("<span")) { // If line has no relevent info
@@ -269,7 +309,29 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     string[] temp = temps[j].Split(" ");
                     int idx = temp[0].LastIndexOf('>') + 1;
                     temp[0] = temp[0][idx..];
-                    BotTeamInfo[currPokemon].EV[statMap[temp[1]]] = Int32.Parse(temp[0]);
+                    Debug.WriteLine(temp[0]);
+                    Debug.WriteLine(temp[1]);
+                    switch(temp[1])
+                    {
+                        case "HP":
+                            BotTeamInfo[currPokemon].EV.HP = Int32.Parse(temp[0]);
+                            break;
+                        case "Atk":
+                            BotTeamInfo[currPokemon].EV.Atk = Int32.Parse(temp[0]);
+                            break;
+                        case "Def":
+                            BotTeamInfo[currPokemon].EV.Def = Int32.Parse(temp[0]);
+                            break;
+                        case "SpA":
+                            BotTeamInfo[currPokemon].EV.SpA = Int32.Parse(temp[0]);
+                            break;
+                        case "SpD":
+                            BotTeamInfo[currPokemon].EV.SpD = Int32.Parse(temp[0]);
+                            break;
+                        case "Spe":
+                            BotTeamInfo[currPokemon].EV.Spe = Int32.Parse(temp[0]);
+                            break;
+                    }
                 }
                 Debug.WriteLine(i);
                 continue;
@@ -278,12 +340,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         OnPropertyChanged();
         Debug.WriteLine(format);
-        for (int i = 0; i < 6; i++) {
-            Debug.WriteLine(BotTeamInfo[i].Name);
-            for (int j = 0; j<6; j++) {
-                Debug.WriteLine(BotTeamInfo[i].IV[j]);
-            }
-        }
         
     }
 }

@@ -49,37 +49,37 @@
                 <TextBlock Text="{Binding BotTeamInfo[0].Tera}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="EVs: "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[0]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.HP}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[1]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.Atk}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[2]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.Def}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[3]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.SpA}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[4]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.SpD}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].EV[5]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].EV.Spe}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="IVs: "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[0]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.HP}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[1]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.Atk}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[2]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.Def}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[3]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.SpA}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[4]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.SpD}"/>
                     <TextBlock Text=" "/>
-                    <TextBlock Text="{Binding BotTeamInfo[0].IV[5]}"/>
+                    <TextBlock Text="{Binding BotTeamInfo[0].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding BotTeamInfo[0].Nature}"/>
-                <TextBlock Text="{Binding BotTeamInfo[0].Moves[0]}"/>
-                <TextBlock Text="{Binding BotTeamInfo[0].Moves[1]}"/>
-                <TextBlock Text="{Binding BotTeamInfo[0].Moves[2]}"/>
-                <TextBlock Text="{Binding BotTeamInfo[0].Moves[3]}"/>
+                <TextBlock Text="{Binding BotTeamInfo[0].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[0].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[0].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[0].Move4}"/>
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10">Image</Label>
             <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
