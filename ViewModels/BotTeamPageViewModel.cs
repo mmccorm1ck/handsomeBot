@@ -24,94 +24,40 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    /*private AvaloniaDictionary<string, string>[] _botTeamDict = {
-        new AvaloniaDictionary<string, string>(),
-        new AvaloniaDictionary<string, string>(),
-        new AvaloniaDictionary<string, string>(),
-        new AvaloniaDictionary<string, string>(),
-        new AvaloniaDictionary<string, string>(),
-        new AvaloniaDictionary<string, string>()
-    };
-    public AvaloniaDictionary<string, string>[] botTeamDict
-    {
-        get => _botTeamDict;
-        set
-        {
-            _botTeamDict = value;
-            OnPropertyChanged();
-        }
-    }*/
-
     public ObservableCollection<TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new TeamModel
         {
             Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
             Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            EV = evInit, IV = ivInit, Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None",
-            PokeImage = ""
+            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         }
 
     };
-
-    /*public class pokemonInfoTemplate
-    {
-        public pokemonInfoTemplate(string name, char gender, string item, int level, string ability, 
-                                    string nature, int[] ev, int[] iv, string tera, string[] moves, string image)
-        {
-            Name = name;
-            Gender = gender;
-            Item = item;
-            Level = level;
-            Ability = ability;
-            Nature = nature;
-            EV = ev;
-            IV = iv;
-            Tera = tera;
-            Moves = moves;
-            PokeImage = image;
-        }
-        public string Name{get;set;}
-        public char Gender {get;set;}
-        public string Item {get;set;}
-        public int Level {get;set;}
-        public string Ability {get;set;}
-        public string Nature {get;set;}
-        public int[] EV {get;set;}
-        public int[] IV {get;set;}
-        public string Tera {get;set;}
-        public string[] Moves {get;set;}
-        public string PokeImage {get;set;}
-    }*/
 
     private string _format = ""; // Format of the battle
     public string format
@@ -133,26 +79,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    public static EVIVModel evInit = new EVIVModel()
-    {
-        HP = 0,
-        Atk = 0,
-        Def = 0,
-        SpA = 0,
-        SpD = 0,
-        Spe = 0
-    };
-    public static EVIVModel ivInit = new EVIVModel()
-    {
-        HP = 31,
-        Atk = 31,
-        Def = 31,
-        SpA = 31,
-        SpD = 31,
-        Spe = 31
-    };
-
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
     {
         if (pasteLink == "")
@@ -168,14 +94,11 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         HttpClient client = new HttpClient();
         string response = await client.GetStringAsync(httpLink);
         string[] responses = response.Split('\n');
-        for(int i = 0; i < responses.Length; i++) {
-            Debug.WriteLine(i.ToString()+responses[i]);
-        }
         int currPokemon = -1;
         int currMove = -1;
         for (int i = 0; i < responses.Length-1; i++) {
             responses[i] = responses[i].Trim(' ','\t');
-            Debug.WriteLine(i.ToString()+responses[i]);
+            //Debug.WriteLine(i.ToString()+responses[i]);
             if (responses[i].Contains("<article>")) { // Detects splits between each pokemon
                 currPokemon++;
                 continue;
@@ -185,18 +108,18 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
             if (responses[i].Contains("Format")) { // Saves format of pokepaste
                 format = responses[i].Split(' ')[1][0..^4];
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) { // Saves URL of pokemon image
                 BotTeamInfo[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature")) { // Saves pokemon's nature
                 BotTeamInfo[currPokemon].Nature = responses[i].Split(' ')[0];
                 currMove = 0; // Prepares to load moves
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (currMove > -1) { // If loading moves
@@ -235,11 +158,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                                 break;
                         }
                     }
-                    Debug.WriteLine(i);
+                    //Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                //BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++; // Increments to next move
                 switch(currMove)
                 {
@@ -257,7 +179,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         currMove = -1;
                         break;
                 }
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (!responses[i].Contains("<span")) { // If line has no relevent info
@@ -285,20 +207,20 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (responses[i].Contains("Ability")) { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Ability = responses[i][idx..];
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level")) { // Saves pokemon's level
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Level = Int32.Parse(responses[i][idx..]);
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type")) { // Saves pokemon's tera type
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
                 BotTeamInfo[currPokemon].Tera = responses[i][idx..];
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("EVs")) { // Saves pokemon's EVs
@@ -309,8 +231,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     string[] temp = temps[j].Split(" ");
                     int idx = temp[0].LastIndexOf('>') + 1;
                     temp[0] = temp[0][idx..];
-                    Debug.WriteLine(temp[0]);
-                    Debug.WriteLine(temp[1]);
                     switch(temp[1])
                     {
                         case "HP":
@@ -333,13 +253,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                             break;
                     }
                 }
-                Debug.WriteLine(i);
+                //Debug.WriteLine(i);
                 continue;
             }
 
         }
-        OnPropertyChanged();
-        Debug.WriteLine(format);
-        
     }
 }
