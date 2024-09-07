@@ -11,6 +11,7 @@ using Avalonia.Collections;
 using ReactiveUI;
 using System.Net.Mail;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 
 namespace HandsomeBot.ViewModels;
@@ -132,6 +133,17 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public Dictionary<string, int> statMap = new Dictionary<string, int>()
+    {
+        {"HP", 0},
+        {"Atk", 1},
+        {"Def", 2},
+        {"SpA", 3},
+        {"SpD", 4},
+        {"Spe", 5}
+    };
+
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
     {
         if (pasteLink == "")
@@ -178,21 +190,29 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 Debug.WriteLine(i);
                 continue;
             }
-            if (currMove != -1) { // If loading moves
+            if (currMove > -1) { // If loading moves
                 if (responses[i] == "") { // If last move has been read
                     currMove = -1;
                     continue;
                 }
                 int idx;
                 if (responses[i].Contains("IVs")) { // If there are IVs to be read
-                    responses[i] = responses[i][0..^7];
-                    idx = responses[i].LastIndexOf('>') + 1;
-                    //BotTeamInfo[currPokemon].IV = responses[i][idx..];
+                    string[] temps = responses[i][31..].Split(" / ");
+                    for (int j = 0; j < temps.Length; j++)
+                    {
+                        temps[j] = temps[j][18..^7];
+                        string[] temp = temps[j].Split(" ");
+                        idx = temp[0].LastIndexOf('>') + 1;
+                        temp[0] = temp[0][idx..];
+                        Debug.WriteLine(temp[0]);
+                        Debug.WriteLine(temp[1]);
+                        BotTeamInfo[currPokemon].IV[statMap[temp[1]]] = Int32.Parse(temp[0]);
+                    }
                     Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
-                //BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
+                BotTeamInfo[currPokemon].Moves[currMove] = responses[i][idx..].TrimStart([' ','-']);
                 currMove++; // Increments to next move
                 Debug.WriteLine(i);
                 if (currMove > 3) { // If all 4 moves have been loaded
@@ -242,22 +262,26 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 continue;
             }
             if (responses[i].Contains("EVs")) { // Saves pokemon's EVs
-                string[] temp = responses[i].Split(" / ");
-                for (int j = 0; j < temp.Length; j++) {
-                    temp[j] = temp[j][0..^7];
-                    int idx = temp[j].LastIndexOf('>') + 1;
-                    //BotTeamInfo[currPokemon].EV = temp[j][idx..]; 
+                string[] temps = responses[i][31..].Split(" / ");
+                for (int j = 0; j < temps.Length; j++)
+                {
+                    temps[j] = temps[j][18..^7];
+                    string[] temp = temps[j].Split(" ");
+                    int idx = temp[0].LastIndexOf('>') + 1;
+                    temp[0] = temp[0][idx..];
+                    BotTeamInfo[currPokemon].EV[statMap[temp[1]]] = Int32.Parse(temp[0]);
                 }
                 Debug.WriteLine(i);
                 continue;
             }
 
         }
+        OnPropertyChanged();
         Debug.WriteLine(format);
         for (int i = 0; i < 6; i++) {
             Debug.WriteLine(BotTeamInfo[i].Name);
-            for (int j = 0; j<4; j++) {
-                Debug.WriteLine(BotTeamInfo[i].Moves[j]);
+            for (int j = 0; j<6; j++) {
+                Debug.WriteLine(BotTeamInfo[i].IV[j]);
             }
         }
         
