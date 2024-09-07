@@ -83,68 +83,233 @@
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10">Image</Label>
             <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
-                <Label>Pokemon2(Gender)@Item</Label>
-                <Label>Ability</Label>
-                <Label>Level</Label>
-                <Label>Tera Type</Label>
-                <Label>EVs / IVs</Label>
-                <Label>Nature</Label>
-                <Label>Move1</Label>
-                <Label>Move2</Label>
-                <Label>Move3</Label>
-                <Label>Move4</Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding BotTeamInfo[1].Name}"/>
+                    <TextBlock Text=" ("/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].Gender}"/>
+                    <TextBlock Text=") @ "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].Item}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[1].Ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Level}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Tera}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="EVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].EV.Spe}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[1].IV.Spe}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[1].Nature}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[1].Move4}"/>
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
             <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 5">
-                <Label>Pokemon3(Gender)@Item</Label>
-                <Label>Ability</Label>
-                <Label>Level</Label>
-                <Label>Tera Type</Label>
-                <Label>EVs / IVs</Label>
-                <Label>Nature</Label>
-                <Label>Move1</Label>
-                <Label>Move2</Label>
-                <Label>Move3</Label>
-                <Label>Move4</Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding BotTeamInfo[2].Name}"/>
+                    <TextBlock Text=" ("/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].Gender}"/>
+                    <TextBlock Text=") @ "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].Item}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[2].Ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Level}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Tera}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="EVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].EV.Spe}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[2].IV.Spe}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[2].Nature}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[2].Move4}"/>
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Margin="10">Image</Label>
             <StackPanel Grid.Row="2" Grid.Column="3" Margin="0 5">
-                <Label>Pokemon4(Gender)@Item</Label>
-                <Label>Ability</Label>
-                <Label>Level</Label>
-                <Label>Tera Type</Label>
-                <Label>EVs / IVs</Label>
-                <Label>Nature</Label>
-                <Label>Move1</Label>
-                <Label>Move2</Label>
-                <Label>Move3</Label>
-                <Label>Move4</Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding BotTeamInfo[3].Name}"/>
+                    <TextBlock Text=" ("/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].Gender}"/>
+                    <TextBlock Text=") @ "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].Item}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[3].Ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Level}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Tera}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="EVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].EV.Spe}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[3].IV.Spe}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[3].Nature}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[3].Move4}"/>
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="10">Image</Label>
             <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 5">
-                <Label>Pokemon5(Gender)@Item</Label>
-                <Label>Ability</Label>
-                <Label>Level</Label>
-                <Label>Tera Type</Label>
-                <Label>EVs / IVs</Label>
-                <Label>Nature</Label>
-                <Label>Move1</Label>
-                <Label>Move2</Label>
-                <Label>Move3</Label>
-                <Label>Move4</Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding BotTeamInfo[4].Name}"/>
+                    <TextBlock Text=" ("/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].Gender}"/>
+                    <TextBlock Text=") @ "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].Item}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[4].Ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Level}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Tera}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="EVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].EV.Spe}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[4].IV.Spe}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[4].Nature}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[4].Move4}"/>
             </StackPanel>
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="10">Image</Label>
             <StackPanel Grid.Row="3" Grid.Column="3" Margin="0 5">
-                <Label>Pokemon6(Gender)@Item</Label>
-                <Label>Ability</Label>
-                <Label>Level</Label>
-                <Label>Tera Type</Label>
-                <Label>EVs / IVs</Label>
-                <Label>Nature</Label>
-                <Label>Move1</Label>
-                <Label>Move2</Label>
-                <Label>Move3</Label>
-                <Label>Move4</Label>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding BotTeamInfo[5].Name}"/>
+                    <TextBlock Text=" ("/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].Gender}"/>
+                    <TextBlock Text=") @ "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].Item}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[5].Ability}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Level}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Tera}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="EVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].EV.Spe}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IVs: "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.HP}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.Atk}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.Def}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.SpA}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.SpD}"/>
+                    <TextBlock Text=" "/>
+                    <TextBlock Text="{Binding BotTeamInfo[5].IV.Spe}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BotTeamInfo[5].Nature}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Move1}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Move2}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Move3}"/>
+                <TextBlock Text="{Binding BotTeamInfo[5].Move4}"/>
             </StackPanel>
         </Grid>
     </StackPanel>
