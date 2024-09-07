@@ -4,24 +4,6 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 
 public class TeamModel() : INotifyPropertyChanged // Class to hold info about a pokemon in a team
 {
-    /*private static EVIVModel evInit = new EVIVModel()
-    {
-        HP = 0,
-        Atk = 0,
-        Def = 0,
-        SpA = 0,
-        SpD = 0,
-        Spe = 0
-    };
-    private static EVIVModel ivInit = new EVIVModel()
-    {
-        HP = 31,
-        Atk = 31,
-        Def = 31,
-        SpA = 31,
-        SpD = 31,
-        Spe = 31
-    };*/
     public string Name
     {
         get => _name;
