@@ -29,9 +29,9 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    private string _format;
-    private string _botTeamURL;
-    private string _oppTeamURL;
+    private string _format = "";
+    private string _botTeamURL = "";
+    private string _oppTeamURL = "";
     public event PropertyChangedEventHandler PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

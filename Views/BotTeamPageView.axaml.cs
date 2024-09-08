@@ -154,10 +154,10 @@ public partial class BotTeamPageView : UserControl
             Debug.WriteLine(botTeamDict[i]["name"]);
         }
     }
-*/
+
     public void LoadPrevious(object source, RoutedEventArgs args)
     {
         Debug.WriteLine("Clack!");
-    }
+    }*/
 }
 
