@@ -61,27 +61,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         OppTeamURL = ""
     };
 
-    /*private string _format = ""; // Format of the battle
-    public string format
-    {
-        get => _format;
-        set
-        {
-            _format = value;
-            OnPropertyChanged();
-        }
-    }
-    private string _pasteLink = ""; // Pokepaste URL to fetch team info from
-    public string pasteLink
-    {
-        get => _pasteLink;
-        set
-        {
-            _pasteLink = value;
-            OnPropertyChanged();
-        }
-    }*/
-
     public void SaveTeam() // Saves BotTeamInfo to json file
     {   
         Debug.WriteLine(BotTeamInfo[0].Name);
