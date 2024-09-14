@@ -1,9 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:HandsomeBot.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
-        x:Class="HandsomeBot.Views.OppTeamPageView">
+        x:Class="HandsomeBot.Views.OppTeamPageView"
+        x:DataType="vm:OppTeamPageViewModel">
 
     <StackPanel>
         <Border Margin="5" 
@@ -16,23 +18,23 @@
                 Text="Enter Opponent Team">
             </TextBlock>
         </Border>
-        <Button HorizontalAlignment="Center" Click="LoadPrevious">Use Previous Team</Button>
+        <Button HorizontalAlignment="Center" Command="{Binding LoadTeam}">Use Previous Team</Button>
         <Grid ShowGridLines="False" Margin="5"
             ColumnDefinitions="200, 200"
             RowDefinitions="200, Auto, 200, Auto, 200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Watermark="Pokemon 1"/>
+            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Watermark="Pokemon 1" Text="{Binding OppTeamInfo[0].Name}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Watermark="Pokemon 2"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Watermark="Pokemon 2" Text="{Binding OppTeamInfo[1].Name}"/>
             <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Watermark="Pokemon 3"/>
+            <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Watermark="Pokemon 3" Text="{Binding OppTeamInfo[2].Name}"/>
             <Label Grid.Row="2" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="10" Watermark="Pokemon 4"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="10" Watermark="Pokemon 4" Text="{Binding OppTeamInfo[3].Name}"/>
             <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Margin="10" Watermark="Pokemon 5"/>
+            <TextBox Grid.Row="5" Grid.Column="0" Margin="10" Watermark="Pokemon 5" Text="{Binding OppTeamInfo[4].Name}"/>
             <Label Grid.Row="4" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="5" Grid.Column="1" Margin="10" Watermark="Pokemon 6"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Margin="10" Watermark="Pokemon 6" Text="{Binding OppTeamInfo[5].Name}"/>
         </Grid>
     </StackPanel>
 

@@ -23,35 +23,34 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         new TeamModel
         {
-            Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
-            Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
-            Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
-            Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
-            Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
         new TeamModel
         {
-            Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "Bashful",
-            Tera = "Normal", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
+            Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
+            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         }
-
     };
 
     public GameModel GameInfo{get;set;} = new()
