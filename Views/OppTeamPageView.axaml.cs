@@ -10,14 +10,4 @@ public partial class OppTeamPageView : UserControl
     {
         InitializeComponent();
     }
-
-    public void ConfirmTeam(object source, RoutedEventArgs args)
-    {
-        Debug.WriteLine("Click!");
-    }
-
-    public void LoadPrevious(object source, RoutedEventArgs args)
-    {
-        Debug.WriteLine("Clack!");
-    }
 }

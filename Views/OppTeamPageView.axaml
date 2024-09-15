@@ -18,23 +18,23 @@
                 Text="Enter Opponent Team">
             </TextBlock>
         </Border>
-        <Button HorizontalAlignment="Center" Command="{Binding LoadTeam}">Use Previous Team</Button>
+        <Button HorizontalAlignment="Center" Command="{Binding SaveTeam}">Use Previous Team</Button>
         <Grid ShowGridLines="False" Margin="5"
             ColumnDefinitions="200, 200"
             RowDefinitions="200, Auto, 200, Auto, 200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Margin="10" Watermark="Pokemon 1" Text="{Binding OppTeamInfo[0].Name}"/>
+            <AutoCompleteBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 1" SelectedItem="{Binding PokeNames[0], Mode=TwoWay}" Text="{Binding PokeNames[0]}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="10" Watermark="Pokemon 2" Text="{Binding OppTeamInfo[1].Name}"/>
+            <AutoCompleteBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 2" SelectedItem="{Binding PokeNames[1], Mode=TwoWay}" Text="{Binding PokeNames[1]}"/>
             <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Watermark="Pokemon 3" Text="{Binding OppTeamInfo[2].Name}"/>
+            <AutoCompleteBox Grid.Row="3" Grid.Column="0" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 3" SelectedItem="{Binding PokeNames[2], Mode=TwoWay}" Text="{Binding PokeNames[2]}"/>
             <Label Grid.Row="2" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="10" Watermark="Pokemon 4" Text="{Binding OppTeamInfo[3].Name}"/>
+            <AutoCompleteBox Grid.Row="3" Grid.Column="1" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 4" SelectedItem="{Binding PokeNames[3], Mode=TwoWay}" Text="{Binding PokeNames[3]}"/>
             <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Margin="10" Watermark="Pokemon 5" Text="{Binding OppTeamInfo[4].Name}"/>
+            <AutoCompleteBox Grid.Row="5" Grid.Column="0" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 5" SelectedItem="{Binding PokeNames[4], Mode=TwoWay}" Text="{Binding PokeNames[4]}"/>
             <Label Grid.Row="4" Grid.Column="1" Margin="10">Image</Label>
-            <TextBox Grid.Row="5" Grid.Column="1" Margin="10" Watermark="Pokemon 6" Text="{Binding OppTeamInfo[5].Name}"/>
+            <AutoCompleteBox Grid.Row="5" Grid.Column="1" Margin="10" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 6" SelectedItem="{Binding PokeNames[5], Mode=TwoWay}" Text="{Binding PokeNames[5]}"/>
         </Grid>
     </StackPanel>
 
