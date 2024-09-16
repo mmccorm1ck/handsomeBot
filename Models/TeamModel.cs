@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 
+namespace HandsomeBot.Models;
+
 public class TeamModel() : INotifyPropertyChanged // Class to hold info about a pokemon in a team
 {
     public string Name

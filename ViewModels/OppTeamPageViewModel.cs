@@ -22,34 +22,34 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    public ObservableCollection<TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
+    public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         },
-        new TeamModel
+        new Models.TeamModel
         {
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
@@ -149,7 +149,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        ObservableCollection<TeamModel> OppTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<TeamModel>>(teamJsonString)!;
+        ObservableCollection<Models.TeamModel> OppTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(teamJsonString)!;
         for (int i = 0; i < 6; i++)
         {
             OppTeamInfo[i].Name = OppTeamInfoTemp[i].Name;

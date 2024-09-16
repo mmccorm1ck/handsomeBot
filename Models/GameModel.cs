@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
+namespace HandsomeBot.Models;
 public class GameModel() : INotifyPropertyChanged // Class to hold info about a pokemon in a team
 {
     public string Format

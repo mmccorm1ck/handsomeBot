@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 
+namespace HandsomeBot.Models;
 public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a pokemon in a team
 {
     public int HP
