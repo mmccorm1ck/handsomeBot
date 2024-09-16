@@ -11,6 +11,7 @@ using Avalonia.Controls;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
+using DynamicData;
 
 namespace HandsomeBot.ViewModels;
 
@@ -22,6 +23,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    public string teamFileName = "Data/oppTeam.json";
     public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
@@ -65,59 +67,44 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private string[] _pokeNames = ["One","Two","Three","Four","Five","Six"];
-    public string[] PokeNames
+    private bool _teamEditable = true;
+    public bool TeamEditable
     {
-        get => _pokeNames;
+        get => _teamEditable;
         set
         {
-            _pokeNames = value;
-            OnPropertyChanged();
-            UpdateNames();
-            SaveTeam();
-            Debug.WriteLine("Called");
-        }
-    }
-    public void UpdateNames()
-    {
-        for (int i = 0; i < 6; i++)
-        {
-            if (PokeNames[i] != OppTeamInfo[i].Name)
-            {
-                unloadTeam();
-                OppTeamInfo[i].Name = PokeNames[i];
-            }
-        }
-    }
-    private bool _teamLoaded = false;
-    public bool TeamLoaded
-    {
-        get => _teamLoaded;
-        set
-        {
-            _teamLoaded = value;
+            _teamEditable = value;
             OnPropertyChanged();
         }
     }
-    public void unloadTeam()
+    private bool _teamLoadable = true;
+    public bool TeamLoadable
     {
-        if (TeamLoaded)
+        get => _teamLoadable;
+        set
         {
-            for (int i = 0; i < 6; i++)
-            {
-                OppTeamInfo[i].Gender = 'R';
-                OppTeamInfo[i].Item = "None";
-                OppTeamInfo[i].Level = 50;
-                OppTeamInfo[i].Ability = "None";
-                OppTeamInfo[i].Nature = "None";
-                OppTeamInfo[i].Tera = "None";
-                OppTeamInfo[i].Move1 = "None";
-                OppTeamInfo[i].Move2 = "None";
-                OppTeamInfo[i].Move3 = "None";
-                OppTeamInfo[i].Move4 = "None";
-                OppTeamInfo[i].PokeImage = "";
-            }
-            TeamLoaded = false;
+            _teamLoadable = value;
+            OnPropertyChanged();
+        }
+    }
+    private string _loadButtonLabel = "Load Previous Team";
+    public string LoadButtonLabel
+    {
+        get => _loadButtonLabel;
+        set
+        {
+            _loadButtonLabel = value;
+            OnPropertyChanged();
+        }
+    }
+    private string _saveButtonLabel = "Save Team";
+    public string SaveButtonLabel
+    {
+        get => _saveButtonLabel;
+        set
+        {
+            _saveButtonLabel = value;
+            OnPropertyChanged();
         }
     }
     public void SaveTeam() // Saves BotTeamInfo to json file
@@ -126,7 +113,6 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         if (OppTeamInfo[0].Name == "") {
             return;
         }
-        string teamFileName = "Data/oppTeam.json";
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(teamFileName))
         {
@@ -134,10 +120,33 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             sw.Write(teamJsonString);
             sw.Close();
         }
+        TeamEditable = false;
+        TeamLoadable = false;
+        SaveButtonLabel = "Edit Team";
+    }
+    public void UnsaveTeam()
+    {
+        File.Delete(teamFileName);
+        TeamEditable = true;
+        TeamLoadable = true;
+        SaveButtonLabel = "Save Team";
+    }
+    public void ToggleSave()
+    {
+        if (TeamLoadable)
+        {
+            SaveTeam();
+        } else
+        {
+            UnsaveTeam();
+        }
     }
     public void LoadTeam() // Loads json file into BotTeamInfo
     {
-        string teamFileName = "Data/oppTeam.json";
+        if (!TeamEditable)
+        {
+            return;
+        }
         string teamJsonString = "";
         using (StreamReader sr = File.OpenText(teamFileName))
         {
@@ -167,7 +176,40 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OppTeamInfo[i].Move4 = OppTeamInfoTemp[i].Move4;
             OppTeamInfo[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
         }
-        TeamLoaded = true;
-        SaveTeam();
+        TeamEditable = false;
+        LoadButtonLabel = "Change Team";
+    }
+    public void UnloadTeam()
+    {
+        if (TeamEditable)
+        {
+            return;
+        }
+        for (int i = 0; i < 6; i++)
+        {
+            OppTeamInfo[i].Gender = 'R';
+            OppTeamInfo[i].Item = "None";
+            OppTeamInfo[i].Level = 50;
+            OppTeamInfo[i].Ability = "None";
+            OppTeamInfo[i].Nature = "None";
+            OppTeamInfo[i].Tera = "None";
+            OppTeamInfo[i].Move1 = "None";
+            OppTeamInfo[i].Move2 = "None";
+            OppTeamInfo[i].Move3 = "None";
+            OppTeamInfo[i].Move4 = "None";
+            OppTeamInfo[i].PokeImage = "";
+        }
+        TeamEditable = true;
+        LoadButtonLabel = "Load Previous Team";
+    }
+    public void ToggleLoad()
+    {
+        if (TeamEditable)
+        {
+            LoadTeam();
+        } else
+        {
+            UnloadTeam();
+        }
     }
 }

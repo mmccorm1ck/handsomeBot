@@ -62,7 +62,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void SaveTeam() // Saves BotTeamInfo to json file
     {   
-        Debug.WriteLine(BotTeamInfo[0].Name);
+        //Debug.WriteLine(BotTeamInfo[0].Name);
         if (BotTeamInfo[0].Name == "Pokemon 1") {
             return;
         }
@@ -92,7 +92,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         using (StreamReader sr = File.OpenText(teamFileName))
         {
             teamJsonString = sr.ReadToEnd();
-            Debug.WriteLine(teamJsonString);
+            //Debug.WriteLine(teamJsonString);
             sr.Close();
         }
         if (teamJsonString == "")
@@ -103,7 +103,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         using (StreamReader sr = File.OpenText(infoFileName))
         {
             infoJsonString = sr.ReadToEnd();
-            Debug.WriteLine(infoJsonString);
+            //Debug.WriteLine(infoJsonString);
             sr.Close();
         }
         if (infoJsonString == "")
@@ -139,7 +139,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        Debug.WriteLine(GameInfo.BotTeamURL);
+        //Debug.WriteLine(GameInfo.BotTeamURL);
         Task task = Task.Run(async () => await LoadPasteHtml(GameInfo.BotTeamURL));
     }
     
