@@ -109,10 +109,14 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     }
     public void SaveTeam() // Saves BotTeamInfo to json file
     {   
-        Debug.WriteLine(OppTeamInfo[0].Name);
-        if (OppTeamInfo[0].Name == "") {
-            return;
+        for (int i = 0; i < 6; i++)
+        {
+            if (OppTeamInfo[i].Name == "" || OppTeamInfo[i].Name == null)
+            {
+                return;
+            }
         }
+        Debug.WriteLine(OppTeamInfo[0].Name);
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(teamFileName))
         {

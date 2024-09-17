@@ -27,17 +27,17 @@
             RowDefinitions="200, Auto, 200, Auto, 200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="1" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 1" SelectedItem="{Binding OppTeamInfo[0].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[0].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="1" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 1" SelectedItem="{Binding OppTeamInfo[0].Name, Mode=TwoWay}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="1" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 2" SelectedItem="{Binding OppTeamInfo[1].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[1].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="1" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 2" SelectedItem="{Binding OppTeamInfo[1].Name, Mode=TwoWay}"/> 
             <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="3" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 3" SelectedItem="{Binding OppTeamInfo[2].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[2].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="3" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 3" SelectedItem="{Binding OppTeamInfo[2].Name, Mode=TwoWay}"/>
             <Label Grid.Row="2" Grid.Column="1" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="3" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 4" SelectedItem="{Binding OppTeamInfo[3].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[3].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="3" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 4" SelectedItem="{Binding OppTeamInfo[3].Name, Mode=TwoWay}"/> 
             <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="5" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 5" SelectedItem="{Binding OppTeamInfo[4].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[4].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="5" Grid.Column="0" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 5" SelectedItem="{Binding OppTeamInfo[4].Name, Mode=TwoWay}"/>
             <Label Grid.Row="4" Grid.Column="1" Margin="10">Image</Label>
-            <AutoCompleteBox Grid.Row="5" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 6" SelectedItem="{Binding OppTeamInfo[5].Name, Mode=TwoWay}" Text="{Binding OppTeamInfo[5].Name, Mode=TwoWay}"/>
+            <AutoCompleteBox Grid.Row="5" Grid.Column="1" Margin="10" IsEnabled="{Binding TeamEditable}" ItemsSource="{Binding AllMons}" FilterMode="Contains" Watermark="Pokemon 6" SelectedItem="{Binding OppTeamInfo[5].Name, Mode=TwoWay}"/>
         </Grid>
     </StackPanel>
 
