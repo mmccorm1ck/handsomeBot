@@ -152,11 +152,18 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             return;
         }
         string teamJsonString = "";
-        using (StreamReader sr = File.OpenText(teamFileName))
+        try
         {
-            teamJsonString = sr.ReadToEnd();
-            Debug.WriteLine(teamJsonString);
-            sr.Close();
+            using (StreamReader sr = File.OpenText(teamFileName))
+            {
+                teamJsonString = sr.ReadToEnd();
+                Debug.WriteLine(teamJsonString);
+                sr.Close();
+            }
+        }
+        catch
+        {
+            return;
         }
         if (teamJsonString == "")
         {

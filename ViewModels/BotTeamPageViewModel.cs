@@ -89,11 +89,17 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         string infoFileName = "Data/gameInfo.json";
         string teamJsonString = "";
         string infoJsonString = "";
-        using (StreamReader sr = File.OpenText(teamFileName))
+        try{
+            using (StreamReader sr = File.OpenText(teamFileName))
+            {
+                teamJsonString = sr.ReadToEnd();
+                //Debug.WriteLine(teamJsonString);
+                sr.Close();
+            }
+        }
+        catch
         {
-            teamJsonString = sr.ReadToEnd();
-            //Debug.WriteLine(teamJsonString);
-            sr.Close();
+            return;
         }
         if (teamJsonString == "")
         {
