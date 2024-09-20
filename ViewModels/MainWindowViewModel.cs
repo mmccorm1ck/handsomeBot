@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection.Emit;
 using System.Runtime;
 using System.Runtime.CompilerServices;
@@ -72,6 +73,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
+        if (nextPageNumber == 1 && !File.Exists("Data/botTeam.json")) return;
+        if (nextPageNumber== 2 && !File.Exists("Data/oppTeam.json")) return;
         var instance = Activator.CreateInstance(targetPage.ModelType);
         if (instance is null) return;
         currentPage = (ViewModelBase)instance;
