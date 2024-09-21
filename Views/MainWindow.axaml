@@ -17,10 +17,18 @@
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    <dialogHost:DialogHost IsOpen="{Binding LoadTeamErrorOpen}">
+        <dialogHost:DialogHost.DialogContent>
+            <StackPanel>
+                <TextBlock Text="No Team Loaded" TextAlignment="Center" />
+                <Button HorizontalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">OK</Button>
+            </StackPanel>
+        </dialogHost:DialogHost.DialogContent>
     <ScrollViewer>
         <StackPanel>
             <TransitioningContentControl Margin="0,30,0,0" Content="{Binding currentPage}" />
             <Button HorizontalAlignment="Center" Margin="0,0,0,30" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
         </StackPanel>
     </ScrollViewer>
+</dialogHost:DialogHost>
 </Window>

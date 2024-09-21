@@ -8,6 +8,7 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using DialogHostAvalonia;
 using ReactiveUI;
 
 namespace HandsomeBot.ViewModels;
@@ -46,6 +47,18 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+    
+    private bool _loadTeamErrorOpen = false;
+
+    public bool LoadTeamErrorOpen
+    {
+        get => _loadTeamErrorOpen;
+        set
+        {
+            _loadTeamErrorOpen = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {
@@ -73,8 +86,16 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
-        if (nextPageNumber == 1 && !File.Exists("Data/botTeam.json")) return;
-        if (nextPageNumber== 2 && !File.Exists("Data/oppTeam.json")) return;
+        if (nextPageNumber == 1 && !File.Exists("Data/botTeam.json"))
+        {
+            LoadTeamErrorOpen = true;
+            return;
+        }
+        if (nextPageNumber== 2 && !File.Exists("Data/oppTeam.json"))
+        {
+            LoadTeamErrorOpen = true;
+            return;
+        }
         var instance = Activator.CreateInstance(targetPage.ModelType);
         if (instance is null) return;
         currentPage = (ViewModelBase)instance;
