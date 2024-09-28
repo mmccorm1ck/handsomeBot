@@ -86,12 +86,12 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
-        if (nextPageNumber == 1 && !File.Exists("Data/botTeam.json"))
+        if (nextPageNumber == 1 && !File.Exists("Data/newBotTeam.json"))
         {
             LoadTeamErrorOpen = true;
             return;
         }
-        if (nextPageNumber== 2 && !File.Exists("Data/oppTeam.json"))
+        if (nextPageNumber== 2 && !File.Exists("Data/newOppTeam.json"))
         {
             LoadTeamErrorOpen = true;
             return;
@@ -102,6 +102,9 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         currentButtonLabel = targetPage.ButtonLabel;
         if (nextPageNumber == 3)
         {
+            File.Move("Data/newBotTeam.json","Data/botTeam.json",true);
+            File.Move("Data/newOppTeam.json","Data/oppTeam.json",true);
+            File.Move("Data/newGameInfo.json","Data/gameInfo.json",true);
             nextPageNumber = 0;
             return;
         }

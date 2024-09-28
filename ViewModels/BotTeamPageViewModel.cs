@@ -66,8 +66,8 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         if (BotTeamInfo[0].Name == "Pokemon 1") {
             return;
         }
-        string teamFileName = "Data/botTeam.json";
-        string infoFileName = "Data/gameInfo.json";
+        string teamFileName = "Data/newBotTeam.json";
+        string infoFileName = "Data/newGameInfo.json";
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(teamFileName))
         {

@@ -23,7 +23,8 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    public string teamFileName = "Data/oppTeam.json";
+    public string teamFileName = "Data/newOppTeam.json";
+    public string prevTeamFileName = "Data/oppTeam.json";
     public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
@@ -154,7 +155,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         string teamJsonString = "";
         try
         {
-            using (StreamReader sr = File.OpenText(teamFileName))
+            using (StreamReader sr = File.OpenText(prevTeamFileName))
             {
                 teamJsonString = sr.ReadToEnd();
                 Debug.WriteLine(teamJsonString);
