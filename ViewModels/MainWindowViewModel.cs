@@ -91,7 +91,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             LoadTeamErrorOpen = true;
             return;
         }
-        if (nextPageNumber== 2 && !File.Exists("Data/newOppTeam.json"))
+        if (nextPageNumber == 2 && !File.Exists("Data/newOppTeam.json"))
         {
             LoadTeamErrorOpen = true;
             return;
@@ -110,5 +110,4 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
         nextPageNumber++;
     }
-
 }
