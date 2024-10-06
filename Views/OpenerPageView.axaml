@@ -11,19 +11,22 @@
     <dialogHost:DialogHost Identifier="OpenerDialogHost">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
-                <Label HorizontalAlignment="Center" FontSize="18" Content="{Binding eventNumber}" />
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Label FontSize="18">Event #</Label>
+                    <Label FontSize="18" Content="{Binding EventNumber}"/>
+                </StackPanel>
                 <Grid HorizontalAlignment="Center" ShowGridLines="False"
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto">
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Pokemon</Label>
                     <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event</Label>
                     <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding availablePokemon}"/>
+                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding AvailablePokemon}"/>
                         <!-- <ComboBoxItem>Pokemon1</ComboBoxItem>
                         <ComboBoxItem>Pokemon2</ComboBoxItem>
                         <ComboBoxItem>PokemonA</ComboBoxItem>
                         <ComboBoxItem>PokemonB</ComboBoxItem> -->
                     <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding availableEvents}"/>
+                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"/>
                         <!-- <ComboBoxItem>Ability Activation</ComboBoxItem>
                         <ComboBoxItem>Switch</ComboBoxItem>
                         <ComboBoxItem>Move</ComboBoxItem>

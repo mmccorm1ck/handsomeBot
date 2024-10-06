@@ -28,7 +28,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private string _currentButtonLabel = "Confirm Team"; // Label to display on the change page button
 
-    public ViewModelBase currentPage
+    public ViewModelBase CurrentPage
     {
         get => _currentPage;
         set
@@ -38,7 +38,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public string currentButtonLabel
+    public string CurrentButtonLabel
     {
         get => _currentButtonLabel;
         set
@@ -98,8 +98,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
         var instance = Activator.CreateInstance(targetPage.ModelType);
         if (instance is null) return;
-        currentPage = (ViewModelBase)instance;
-        currentButtonLabel = targetPage.ButtonLabel;
+        CurrentPage = (ViewModelBase)instance;
+        CurrentButtonLabel = targetPage.ButtonLabel;
         if (nextPageNumber == 3)
         {
             File.Move("Data/newBotTeam.json","Data/botTeam.json",true);

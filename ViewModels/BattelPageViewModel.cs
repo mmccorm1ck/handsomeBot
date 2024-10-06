@@ -15,12 +15,12 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     }
     private int _eventNumber = 1; // Tracks event number in the chain of events
 
-    public string eventNumber
+    public int EventNumber
     {
-    get => String.Format("Event #{0}",_eventNumber);
+    get => _eventNumber;
         set
         {
-            _eventNumber = Int32.Parse(value.Split('#')[1]);
+            _eventNumber = value;
             OnPropertyChanged();
         }
     }
@@ -42,7 +42,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         "Gigantamax",
         "Z-Move"
     ];
-    public string[] availablePokemon
+    public string[] AvailablePokemon
     {
     get => _availablePokemon;
         set
@@ -51,7 +51,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public string[] availableEvents
+    public string[] AvailableEvents
     {
     get => _availableEvents;
         set

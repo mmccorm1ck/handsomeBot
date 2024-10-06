@@ -117,7 +117,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 return;
             }
         }
-        Debug.WriteLine(OppTeamInfo[0].Name);
+        //Debug.WriteLine(OppTeamInfo[0].Name);
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(teamFileName))
         {
@@ -158,7 +158,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             using (StreamReader sr = File.OpenText(prevTeamFileName))
             {
                 teamJsonString = sr.ReadToEnd();
-                Debug.WriteLine(teamJsonString);
+                //Debug.WriteLine(teamJsonString);
                 sr.Close();
             }
         }

@@ -26,8 +26,8 @@
         </dialogHost:DialogHost.DialogContent>
     <ScrollViewer>
         <StackPanel>
-            <TransitioningContentControl Margin="0,30,0,0" Content="{Binding currentPage}" />
-            <Button HorizontalAlignment="Center" Margin="0,0,0,30" Command="{Binding NextPage}" Content="{Binding currentButtonLabel}" />
+            <TransitioningContentControl Margin="0,30,0,0" Content="{Binding CurrentPage}" />
+            <Button HorizontalAlignment="Center" Margin="0,0,0,30" Command="{Binding NextPage}" Content="{Binding CurrentButtonLabel}" />
         </StackPanel>
     </ScrollViewer>
 </dialogHost:DialogHost>

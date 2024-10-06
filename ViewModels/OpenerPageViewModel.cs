@@ -22,14 +22,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    private int _eventNumber = 1; // Trachs event number in chain of events
+    private int _eventNumber = 1; // Tracks event number in chain of events
 
-    public string eventNumber
+    public int EventNumber
     {
-    get => String.Format("Event #{0}",_eventNumber);
+    get => _eventNumber;
         set
         {
-            _eventNumber = Int32.Parse(value.Split('#')[1]);
+            _eventNumber = value;
             OnPropertyChanged();
         }
     }
@@ -49,7 +49,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         "Ability Activation",
         "Item Activation",
     ];
-    public string[] availablePokemon
+    public string[] AvailablePokemon
     {
     get => _availablePokemon;
         set
@@ -58,7 +58,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public string[] availableEvents
+    public string[] AvailableEvents
     {
     get => _availableEvents;
         set
@@ -108,8 +108,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         ObservableCollection<Models.TeamModel> OppTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
         for (int i = 0; i < 6; i++)
         {
-            availablePokemon[i]   = BotTeamInfoTemp[i].Name;
-            availablePokemon[i+6] = OppTeamInfoTemp[i].Name;
+            AvailablePokemon[i]   = BotTeamInfoTemp[i].Name;
+            AvailablePokemon[i+6] = OppTeamInfoTemp[i].Name;
             OpponentsPokemon[i]   = OppTeamInfoTemp[i].Name;
         }
     }
