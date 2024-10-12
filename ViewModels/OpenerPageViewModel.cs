@@ -6,6 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Microsoft.ClearScript;
+using Microsoft.ClearScript.JavaScript;
+using Microsoft.ClearScript.V8;
 
 namespace HandsomeBot.ViewModels;
 
@@ -13,7 +17,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public OpenerPageViewModel()
     {
+        engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableDebugging);
         LoadTeams();
+        CalcOpening();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -144,6 +150,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+
     public void LoadTeams() // Loads json files to get both teams
     {
         string oppTeamFileName = "Data/newOppTeam.json";
@@ -216,5 +223,26 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OppTeamInfo[i].Move4     = OppTeamInfoTemp[i].Move4;
             OppTeamInfo[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
         }
+    }
+
+    private V8ScriptEngine engine;
+    public class MyConsole
+    {
+        public void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+    public void CalcOpening()
+    {
+        string jsContents = File.ReadAllText(@"Javascript/test.js");
+        engine.Execute(jsContents);
+        engine.AddHostObject("Console", new MyConsole());
+        string callBackCode = @"OutputFunc.Reply = function(input){
+        Console.WriteLine(input);
+        };";
+        engine.Execute(callBackCode);
+        engine.Script.InputFunc.Replyer("test");
+        engine.Script.InputFunc.Replyer("Beep");
     }
 }
