@@ -235,14 +235,13 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     }
     public void CalcOpening()
     {
-        string jsContents = File.ReadAllText(@"Javascript/test.js");
+        string jsContents = File.ReadAllText(@"Javascript/calcHandler.js");
         engine.Execute(jsContents);
         engine.AddHostObject("Console", new MyConsole());
-        string callBackCode = @"OutputFunc.Reply = function(input){
-        Console.WriteLine(input);
+        string callBackCode = @"OutputFunc.ReturnData = function(data){
+        Console.WriteLine(data);
         };";
         engine.Execute(callBackCode);
-        engine.Script.InputFunc.Replyer("test");
-        engine.Script.InputFunc.Replyer("Beep");
+        engine.Script.InputFunc.CalcMove();
     }
 }
