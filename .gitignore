@@ -3,3 +3,4 @@ HandsomeBot.sln
 obj/*
 Data/*
 Javascript/Calc/*
+Javascript/node_modules
