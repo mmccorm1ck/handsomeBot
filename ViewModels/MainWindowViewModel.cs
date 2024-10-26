@@ -71,6 +71,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     }
     public Process p = new Process();
 
+    public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
+
     public void Envoke()
     {
         Console.WriteLine("Setting up process");
@@ -79,8 +81,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
-        p.StartInfo.WorkingDirectory = "S:/Documents/Projects/Programming/HandsomeBot/Javascript";
-        p.StartInfo.Arguments = "npm run dev";
         Console.WriteLine("Starting event listener");
         p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
         {
@@ -91,8 +91,12 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         });
         Console.WriteLine("Starting process");
         p.Start();
+        Console.WriteLine("Changing directory");
+        p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         Console.WriteLine("Listening for output");
         p.BeginOutputReadLine();
+        Console.WriteLine("Running test code");
+        p.StandardInput.WriteLine("npm run dev");
         p.WaitForExit();
         p.Close();
     }
