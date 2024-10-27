@@ -20,11 +20,6 @@ namespace HandsomeBot.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public MainWindowViewModel()
-    {
-        Envoke();
-    }
-
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
@@ -68,37 +63,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             _loadTeamErrorOpen = value;
             OnPropertyChanged();
         }
-    }
-    public Process p = new Process();
-
-    public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
-
-    public void Envoke()
-    {
-        Console.WriteLine("Setting up process");
-        p.StartInfo.RedirectStandardError = true;
-        p.StartInfo.RedirectStandardInput = true;
-        p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        p.StartInfo.FileName = "cmd.exe";
-        Console.WriteLine("Starting event listener");
-        p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
-        {
-            if (!String.IsNullOrEmpty(e.Data))
-            {
-                Console.WriteLine(e.Data);
-            }
-        });
-        Console.WriteLine("Starting process");
-        p.Start();
-        Console.WriteLine("Changing directory");
-        p.StandardInput.WriteLine($"cd {rootDir}Javascript");
-        Console.WriteLine("Listening for output");
-        p.BeginOutputReadLine();
-        Console.WriteLine("Running test code");
-        p.StandardInput.WriteLine("npm run dev");
-        p.WaitForExit();
-        p.Close();
     }
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through

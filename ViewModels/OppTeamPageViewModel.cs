@@ -12,19 +12,67 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using DynamicData;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace HandsomeBot.ViewModels;
 
 public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
+    public OppTeamPageViewModel()
+    {
+        bool running = false;
+        p.StartInfo.RedirectStandardError = true;
+        p.StartInfo.RedirectStandardInput = true;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        p.StartInfo.FileName = "cmd.exe";
+        p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+        {
+            if (!String.IsNullOrEmpty(e.Data))
+            {
+                string temp = e.Data.ToString().Trim(' ','\t');
+                Console.WriteLine(temp);
+                if (running)
+                {
+                    if (temp.Contains("£stop"))
+                    {
+                        running = false;
+                        Console.WriteLine("Stopped");
+                        p.Close();
+                    }
+                    else AllMons.Add(temp);
+                }
+                if (temp.Contains("£start"))
+                {
+                    running = true;
+                    Console.WriteLine("Running");
+                }
+            }
+        });
+        p.Start();
+        Console.WriteLine("Starting Process");
+        p.StandardInput.WriteLine($"cd {rootDir}Javascript");
+        p.BeginOutputReadLine();
+        p.StandardInput.WriteLine("npm run dev");
+        p.WaitForExit();
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public Process p = new Process();
+
+    public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
+
     public string teamFileName = "Data/newOppTeam.json";
+    
     public string prevTeamFileName = "Data/oppTeam.json";
+    
     public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
@@ -58,7 +106,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         }
     };
-    private ObservableCollection<string> _allMons = ["Placeholder", "List", "Of", "All", "Available", "Pokemon"];
+    private ObservableCollection<string> _allMons = new ObservableCollection<string>();
     public ObservableCollection<string> AllMons
     {
         get => _allMons;
