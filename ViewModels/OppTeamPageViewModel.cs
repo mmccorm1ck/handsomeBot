@@ -21,6 +21,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public OppTeamPageViewModel()
     {
+        LoadInfo();
         bool running = false;
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
@@ -54,7 +55,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         //Console.WriteLine("Starting Process");
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
-        p.StandardInput.WriteLine("npm run dev");
+        p.StandardInput.WriteLine($"ts-node src/index.ts l {Gen}");
         p.WaitForExit();
     }
 
@@ -72,6 +73,8 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public string teamFileName = "Data/newOppTeam.json";
     
     public string prevTeamFileName = "Data/oppTeam.json";
+    
+    public string infoFileName = "Data/newGameInfo.json";
     
     public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
@@ -156,6 +159,41 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    private char _gen;
+
+    public char Gen
+    {
+        get => _gen;
+        set
+        {
+            _gen = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public void LoadInfo()
+    {
+        string infoJsonString = "";
+        try
+        {
+            using (StreamReader sr = File.OpenText(infoFileName))
+            {
+                infoJsonString = sr.ReadToEnd();
+                sr.Close();
+            }
+        }
+        catch
+        {
+            return;
+        }
+        if (infoJsonString == "")
+        {
+            return;
+        }
+        Gen = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!.Format[3];
+    }
+
     public void SaveTeam() // Saves BotTeamInfo to json file
     {   
         for (int i = 0; i < 6; i++)

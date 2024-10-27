@@ -1,9 +1,10 @@
 import {SPECIES} from "@Smogon/calc";
 
-function Test(): void
+function ReturnAllMons(): void
 {
+    const gen = process.argv[3];
+    const temp = SPECIES[gen];
     console.log("£start");
-    const temp = SPECIES[9];
     for (const specie in temp)
     {
         console.log(specie);
@@ -11,4 +12,21 @@ function Test(): void
     console.log("£stop");
 }
 
-Test();
+function CalcDamage(): void
+{
+    // calc damage percentages
+    console.log("£start");
+    // print damage percentages
+    console.log("£stop");
+}
+
+const funcToUse = process.argv[2];
+
+if (funcToUse === 'l')
+{
+    ReturnAllMons();
+}
+else if (funcToUse === 'c')
+{
+    CalcDamage();
+}
