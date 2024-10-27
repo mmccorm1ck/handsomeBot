@@ -1,9 +1,8 @@
-import {SPECIES} from "@Smogon/calc";
+import {calculate, Generations, GenerationNum, Pokemon, Move, Field, SPECIES} from "@Smogon/calc";
 
 function ReturnAllMons(): void
 {
-    const gen = process.argv[3];
-    const temp = SPECIES[gen];
+    const temp = SPECIES[genNum];
     console.log("£start");
     for (const specie in temp)
     {
@@ -14,13 +13,39 @@ function ReturnAllMons(): void
 
 function CalcDamage(): void
 {
-    // calc damage percentages
+    const result = calculate(
+        gen,
+        ParsePokemon(4),
+        ParsePokemon(5),
+        ParseMove(),
+        ParseField()
+    );
     console.log("£start");
-    // print damage percentages
+    console.log(result);
     console.log("£stop");
 }
 
+function ParsePokemon(argNum: Number): Pokemon
+{
+    let mon: Pokemon;
+    return mon;
+}
+
+function ParseMove(): Move
+{
+    let move: Move;
+    return move;
+}
+
+function ParseField(): Field
+{
+    let field: Field;
+    return field;
+}
+
 const funcToUse = process.argv[2];
+const genNum = parseInt(process.argv[3]);
+const gen = Generations.get(genNum as GenerationNum);
 
 if (funcToUse === 'l')
 {
