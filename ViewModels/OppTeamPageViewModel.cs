@@ -32,13 +32,13 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (!String.IsNullOrEmpty(e.Data))
             {
                 string temp = e.Data.ToString().Trim(' ','\t');
-                Console.WriteLine(temp);
+                //Console.WriteLine(temp);
                 if (running)
                 {
                     if (temp.Contains("£stop"))
                     {
                         running = false;
-                        Console.WriteLine("Stopped");
+                        //Console.WriteLine("Stopped");
                         p.Close();
                     }
                     else AllMons.Add(temp);
@@ -46,12 +46,12 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 if (temp.Contains("£start"))
                 {
                     running = true;
-                    Console.WriteLine("Running");
+                    //Console.WriteLine("Running");
                 }
             }
         });
         p.Start();
-        Console.WriteLine("Starting Process");
+        //Console.WriteLine("Starting Process");
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
         p.StandardInput.WriteLine("npm run dev");

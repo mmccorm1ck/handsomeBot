@@ -8,13 +8,6 @@
         x:Class="HandsomeBot.Views.BotTeamPageView"
         x:DataType="vm:BotTeamPageViewModel">
 
-    <!--<dialogHost:DialogHost>
-        <dialogHost:DialogHost.DialogContent>
-            <StackPanel>
-                <TextBlock Text="Validation to go here" TextAlignment="Center" />
-                <Button HorizontalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Close</Button>
-            </StackPanel>
-        </dialogHost:DialogHost.DialogContent>-->
     <StackPanel>
         <Border Margin="5" 
             CornerRadius="10"
@@ -313,5 +306,4 @@
             </StackPanel>
         </Grid>
     </StackPanel>
-    <!--</dialogHost:DialogHost>-->
 </UserControl>
