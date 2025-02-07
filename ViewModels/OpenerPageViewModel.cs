@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace HandsomeBot.ViewModels;
 
@@ -14,6 +15,11 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public OpenerPageViewModel()
     {
+        p.StartInfo.RedirectStandardError = true;
+        p.StartInfo.RedirectStandardInput = true;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        p.StartInfo.FileName = "cmd.exe";
         LoadTeams();
         CalcOpening();
     }
@@ -24,6 +30,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public Process p = new Process();
 
     public ObservableCollection<Models.TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
@@ -125,7 +133,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     private string[] _availableEvents = [ // List of possible events in turn 0
         "Ability Activation",
         "Item Activation",
-        "Item Reveal"
+        "Ability Reveal",
+        "Item Reveal",
+        "Stat Change",
+        "Forme Reveal"
     ];
     public string[] AvailablePokemon
     {
@@ -146,13 +157,28 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
+
+    private char _gen;
+
+    public char Gen
+    {
+        get => _gen;
+        set
+        {
+            _gen = value;
+            OnPropertyChanged();
+        }
+    }
 
     public void LoadTeams() // Loads json files to get both teams
     {
         string oppTeamFileName = "Data/newOppTeam.json";
         string botTeamFileName = "Data/newBotTeam.json";
+        string infoFileName = "Data/newGameInfo.json";
         string oppTeamJsonString = "";
         string botTeamJsonString = "";
+        string infoJsonString = "";
         try{
             using (StreamReader sr = File.OpenText(botTeamFileName))
             {
@@ -183,8 +209,26 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
+        try{
+            using (StreamReader sr = File.OpenText(infoFileName))
+            {
+                infoJsonString = sr.ReadToEnd();
+                sr.Close();
+            }
+        }
+        catch
+        {
+            return;
+        }
+        if (infoJsonString == "")
+        {
+            return;
+        }
         ObservableCollection<Models.TeamModel> BotTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(botTeamJsonString)!;
         ObservableCollection<Models.TeamModel> OppTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
+        Models.GameModel GameInfoTemp = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
+        GameInfo.Format = GameInfoTemp.Format;
+        Gen = GameInfo.Format[3];
         for (int i = 0; i < 6; i++)
         {
             AvailablePokemon[i]      = BotTeamInfoTemp[i].Name;
@@ -221,7 +265,57 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private float[] _weights = new float[6];
+
+    public float[] Weights
+    {
+        get => _weights;
+        set
+        {
+            _weights = value;
+            OnPropertyChanged();
+        }
+    }
+
     public void CalcOpening()
     {
+        bool running = false;
+        bool lastCalc = false;
+        int currMon = 0;
+        p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+        {
+            if (!String.IsNullOrEmpty(e.Data))
+            {
+                string temp = e.Data.ToString().Trim(' ','\t');
+                //Console.WriteLine(temp);
+                if (running)
+                {
+                    if (temp.Contains("£stop"))
+                    {
+                        running = false;
+                        //Console.WriteLine("Stopped");
+                        if (lastCalc) p.Close();
+                    }
+                    else Weights[currMon] += ;
+                }
+                if (temp.Contains("£start"))
+                {
+                    running = true;
+                    //Console.WriteLine("Running");
+                }
+            }
+        });
+        p.StandardInput.WriteLine($"cd {rootDir}Javascript");
+        p.BeginOutputReadLine();
+        while (currMon < 6)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if (currMon == 5 && j == 5) lastCalc = true;
+                p.StandardInput.WriteLine($"ts-node src/index.ts l {Gen}");
+            }
+            currMon++;
+        }
+        p.WaitForExit();
     }
 }
