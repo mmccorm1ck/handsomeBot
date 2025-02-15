@@ -34,16 +34,15 @@ function ParsePokemon(gen: I.Generation, argNum: number): Pokemon
     console.log(gen);
     const temp = process.argv[argNum] as string;
     const fields = temp.split('%');
-    let mon: Pokemon = {
-        gen: gen as I.Generation,
-        name: fields[0] as I.SpeciesName,
-        species: fields[0] as I.Specie,
-        gender: fields[1] as I.GenderName,
-        item: fields[2] as I.ItemName,
-        level: parseInt(fields[3]),
-        ability: fields[4] as I.AbilityName,
-        nature: fields[5] as I.NatureName
-    };
+    let mon: Pokemon = new Pokemon(
+        gen, fields[0], {
+            gender: fields[1] as I.GenderName,
+            item: fields[2] as I.ItemName,
+            level: parseInt(fields[3]),
+            ability: fields[4] as I.AbilityName,
+            nature: fields[5] as I.NatureName
+        }
+    );
     return mon;
 }
 
