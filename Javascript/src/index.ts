@@ -1,5 +1,4 @@
 import {calculate, Generations, GenerationNum, Pokemon, Move, Field, SPECIES} from "@Smogon/calc";
-import * as I from "@smogon/calc/src/data/interface"
 
 function ReturnAllMons(): void
 {
@@ -19,9 +18,9 @@ function CalcDamage(): void
     const gen = Generations.get(genNum as GenerationNum);
     const result = calculate(
         gen,
-        ParsePokemon(gen, 4),
-        ParsePokemon(gen, 5),
-        ParseMove(gen),
+        ParsePokemon(4),
+        ParsePokemon(5),
+        ParseMove(),
         ParseField()
     );
     console.log("£start");
@@ -29,36 +28,24 @@ function CalcDamage(): void
     console.log("£stop");
 }
 
-function ParsePokemon(gen: I.Generation, argNum: number): Pokemon
+function ParsePokemon(argNum: number): Pokemon
 {
-    console.log(gen);
     const temp = process.argv[argNum] as string;
-    const fields = temp.split('%');
-    let mon: Pokemon = new Pokemon(
-        gen, fields[0], {
-            gender: fields[1] as I.GenderName,
-            item: fields[2] as I.ItemName,
-            level: parseInt(fields[3]),
-            ability: fields[4] as I.AbilityName,
-            nature: fields[5] as I.NatureName
-        }
-    );
+    const mon: Pokemon = JSON.parse(temp);
     return mon;
 }
 
-function ParseMove(gen: I.Generation): Move
+function ParseMove(): Move
 {
-    let move: Move;
-    move.gen = gen;
-    move.name = process.argv[7] as I.MoveName;
+    const temp = process.argv[7] as string;
+    const move: Move = JSON.parse(temp);
     return move;
 }
 
 function ParseField(): Field
 {
-    let field: Field;
     const temp = process.argv[8] as string;
-    const fields = temp.split('%');
+    const field: Field = JSON.parse(temp);
     return field;
 }
 
