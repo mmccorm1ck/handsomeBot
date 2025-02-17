@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace HandsomeBot.ViewModels;
 
@@ -277,6 +278,28 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public string EncodeCalc(int gen, int botMon, int oppMon, int moveNum)
+    {
+        string move;
+        switch(moveNum)
+        {
+            case 0:
+                move = BotTeamInfo[botMon].Move1;
+                break;
+            case 1:
+                move = BotTeamInfo[botMon].Move2;
+                break;
+            case 2:
+                move = BotTeamInfo[botMon].Move3;
+                break;
+            default:
+                move = BotTeamInfo[botMon].Move4;
+                break;
+        }
+        string encodedCalc = $"{gen} {BotTeamInfo[botMon]} {OppTeamInfo[oppMon]} {move}";
+        return encodedCalc;
+    }
+
     public void CalcOpening()
     {
         bool running = false;
@@ -296,7 +319,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                         //Console.WriteLine("Stopped");
                         if (lastCalc) p.Close();
                     }
-                    else Weights[currMon] += ;
+                    else 
+                    {
+                        Weights[currMon] += float.Parse(temp);
+                    }
                 }
                 if (temp.Contains("£start"))
                 {
@@ -311,8 +337,12 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             for (int j = 0; j < 5; j++)
             {
-                if (currMon == 5 && j == 5) lastCalc = true;
-                p.StandardInput.WriteLine($"ts-node src/index.ts l {Gen}");
+                for (int m = 0; m < 3; m++)
+                {
+                    if (currMon == 5 && j == 5 && m == 3) lastCalc = true;
+                    string encodedCalc = EncodeCalc(Gen, currMon, j, m);
+                    p.StandardInput.WriteLine($"ts-node src/index.ts c {encodedCalc}");
+                }
             }
             currMon++;
         }
