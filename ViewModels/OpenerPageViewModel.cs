@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
@@ -280,6 +281,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public string EncodeCalc(int gen, int botMon, int oppMon, int moveNum)
     {
+        TeamModel botTemp = BotTeamInfo[botMon];
+        TeamModel oppTemp = OppTeamInfo[oppMon];
         string move;
         switch(moveNum)
         {
@@ -296,7 +299,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                 move = BotTeamInfo[botMon].Move4;
                 break;
         }
-        string encodedCalc = $"{gen} {BotTeamInfo[botMon]} {OppTeamInfo[oppMon]} {move}";
+        string botEncoded = "{\"gen\":\""+gen+"\",\"name\":\""+botTemp.Name+"\",\"options\":{\"";
+        string oppEncoded = "{\"gen\":\""+gen+"\",\"name\":\""+oppTemp.Name+"\"}";
+        string encodedCalc = $"{gen} {botEncoded} {oppEncoded} " + "{\"gen\":\""+gen+"\"}";
         return encodedCalc;
     }
 
