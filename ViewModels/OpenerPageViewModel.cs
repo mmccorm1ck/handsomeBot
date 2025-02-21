@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using HandsomeBot.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HandsomeBot.ViewModels;
 
@@ -279,30 +280,46 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public string EncodeCalc(int gen, int botMon, int oppMon, int moveNum)
+    public string EncodeStats(int deflt, EVIVModel statsInfo)
     {
-        TeamModel botTemp = BotTeamInfo[botMon];
-        TeamModel oppTemp = OppTeamInfo[oppMon];
-        string move;
-        switch(moveNum)
-        {
-            case 0:
-                move = BotTeamInfo[botMon].Move1;
-                break;
-            case 1:
-                move = BotTeamInfo[botMon].Move2;
-                break;
-            case 2:
-                move = BotTeamInfo[botMon].Move3;
-                break;
-            default:
-                move = BotTeamInfo[botMon].Move4;
-                break;
+        string output = "{";
+        if (statsInfo.HP != deflt) {
+            output += "\"hp\":"+statsInfo.HP+",";
         }
-        string botEncoded = "{\"gen\":\""+gen+"\",\"name\":\""+botTemp.Name+"\",\"options\":{\"";
-        string oppEncoded = "{\"gen\":\""+gen+"\",\"name\":\""+oppTemp.Name+"\"}";
-        string encodedCalc = $"{gen} {botEncoded} {oppEncoded} " + "{\"gen\":\""+gen+"\"}";
-        return encodedCalc;
+        if (statsInfo.Atk != deflt) {
+            output += "\"atk\":"+statsInfo.Atk+",";
+        }
+        if (statsInfo.Def != deflt) {
+            output += "\"def\":"+statsInfo.Def+",";
+        }
+        if (statsInfo.SpA != deflt) {
+            output += "\"spa\":"+statsInfo.SpA+",";
+        }
+        if (statsInfo.SpD != deflt) {
+            output += "\"spd\":"+statsInfo.SpD+",";
+        }
+        return output.Trim(',') + "}";
+    }
+
+    public string EncodeMon(int gen, TeamModel monInfo)
+    {
+        string encodedMon = "{\"gen\":\""+gen+"\",\"name\":\""+monInfo.Name+"\",\"options\":{\"level\":\""
+            +monInfo.Level+"\"";
+        if (monInfo.Item != "None") {
+            encodedMon += ",\"item\":\"" + monInfo.Item + "\"";
+        }
+        if (monInfo.Gender != 'R') {
+            encodedMon += ",\"gender\":\"" + monInfo.Gender + "\"";
+        }
+        if (monInfo.Ability != "None") {
+            encodedMon += ",\"ability\":\"" + monInfo.Ability + "\"";
+        }
+        if (monInfo.Nature != "None") {
+            encodedMon += ",\"nature\":\"" + monInfo.Nature + "\"";
+        }
+        encodedMon += ",\"evs\":" + EncodeStats(0, monInfo.EV) + ",\"ivs\":" + EncodeStats(31, monInfo.IV);
+
+        return encodedMon + "}}";
     }
 
     public void CalcOpening()
@@ -342,11 +359,27 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             for (int j = 0; j < 5; j++)
             {
+                string encodedCalc = $"{Gen} {EncodeMon(Gen, BotTeamInfo[currMon])} {EncodeMon(Gen, OppTeamInfo[j])}";
                 for (int m = 0; m < 3; m++)
                 {
                     if (currMon == 5 && j == 5 && m == 3) lastCalc = true;
-                    string encodedCalc = EncodeCalc(Gen, currMon, j, m);
-                    p.StandardInput.WriteLine($"ts-node src/index.ts c {encodedCalc}");
+                    string move;
+                    switch(m)
+                    {
+                        case 0:
+                            move = BotTeamInfo[currMon].Move1;
+                            break;
+                        case 1:
+                            move = BotTeamInfo[currMon].Move2;
+                            break;
+                        case 2:
+                            move = BotTeamInfo[currMon].Move3;
+                            break;
+                        default:
+                            move = BotTeamInfo[currMon].Move4;
+                            break;
+                    }
+                    p.StandardInput.WriteLine("ts-node src/index.ts c "+encodedCalc+" {\"gen\":\""+Gen+"\",\"name\":\""+move+"\"}");
                 }
             }
             currMon++;
