@@ -284,66 +284,106 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         string output = "{";
         if (statsInfo.HP != deflt) {
-            output += "\"hp\":"+statsInfo.HP+",";
+            output += "#hp#:"+statsInfo.HP+",";
         }
         if (statsInfo.Atk != deflt) {
-            output += "\"atk\":"+statsInfo.Atk+",";
+            output += "#atk#:"+statsInfo.Atk+",";
         }
         if (statsInfo.Def != deflt) {
-            output += "\"def\":"+statsInfo.Def+",";
+            output += "#def#:"+statsInfo.Def+",";
         }
         if (statsInfo.SpA != deflt) {
-            output += "\"spa\":"+statsInfo.SpA+",";
+            output += "#spa#:"+statsInfo.SpA+",";
         }
         if (statsInfo.SpD != deflt) {
-            output += "\"spd\":"+statsInfo.SpD+",";
+            output += "#spd#:"+statsInfo.SpD+",";
         }
         return output.Trim(',') + "}";
     }
 
-    public string EncodeMon(int gen, TeamModel monInfo)
+    public string EncodeMon(char gen, TeamModel monInfo)
     {
-        string encodedMon = "{\"gen\":\""+gen+"\",\"name\":\""+monInfo.Name+"\",\"options\":{\"level\":\""
-            +monInfo.Level+"\"";
+        string encodedMon = "{#gen#:"+gen+",#name#:#"+monInfo.Name+"#,#options#:{#level#:"+monInfo.Level;
         if (monInfo.Item != "None") {
-            encodedMon += ",\"item\":\"" + monInfo.Item + "\"";
+            encodedMon += ",#item#:#" + monInfo.Item + "#";
         }
         if (monInfo.Gender != 'R') {
-            encodedMon += ",\"gender\":\"" + monInfo.Gender + "\"";
+            encodedMon += ",#gender#:#" + monInfo.Gender + "#";
         }
         if (monInfo.Ability != "None") {
-            encodedMon += ",\"ability\":\"" + monInfo.Ability + "\"";
+            encodedMon += ",#ability#:#" + monInfo.Ability + "#";
         }
         if (monInfo.Nature != "None") {
-            encodedMon += ",\"nature\":\"" + monInfo.Nature + "\"";
+            encodedMon += ",#nature#:#" + monInfo.Nature + "#";
         }
-        encodedMon += ",\"evs\":" + EncodeStats(0, monInfo.EV) + ",\"ivs\":" + EncodeStats(31, monInfo.IV);
+        encodedMon += ",#evs#:" + EncodeStats(0, monInfo.EV) + ",#ivs#:" + EncodeStats(31, monInfo.IV);
 
-        return encodedMon + "}}";
+        return (encodedMon + "}}").Replace(' ','_');
+    }
+
+    public void sendData(int mon, int opp, int m)
+    {
+        string encodedCalc = $"{Gen} {EncodeMon(Gen, BotTeamInfo[mon])} {EncodeMon(Gen, OppTeamInfo[opp])}";
+            string move;
+            switch(m)
+            {
+                case 0:
+                    move = BotTeamInfo[mon].Move1;
+                    break;
+                case 1:
+                    move = BotTeamInfo[mon].Move2;
+                    break;
+                case 2:
+                    move = BotTeamInfo[mon].Move3;
+                    break;
+                default:
+                    move = BotTeamInfo[mon].Move4;
+                    break;
+            }
+            string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+Gen+",#name#:#"+move.Replace(' ','_')+"#}";
+            Console.WriteLine(toSend);
+            p.StandardInput.WriteLine(toSend);
     }
 
     public void CalcOpening()
     {
         bool running = false;
-        bool lastCalc = false;
         int currMon = 0;
+        int currOpp = 0;
+        int currMove = 0;
         p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
                 string temp = e.Data.ToString().Trim(' ','\t');
-                //Console.WriteLine(temp);
+                Console.WriteLine("Result: "+temp);
                 if (running)
                 {
                     if (temp.Contains("£stop"))
                     {
                         running = false;
                         //Console.WriteLine("Stopped");
-                        if (lastCalc) p.Close();
+                        if (currMove < 3) currMove++;
+                        else if (currOpp < 5)
+                        {
+                            currOpp++;
+                            currMove = 0;
+                        }
+                        else if (currMon < 5)
+                        {
+                            currMon++;
+                            currOpp = 0;
+                            currMove = 0;
+                        }
+                        else {
+                            p.Close();
+                            return;
+                        }
+                        sendData(currMon, currOpp, currMove);
                     }
                     else 
                     {
-                        Weights[currMon] += float.Parse(temp);
+                        //Weights[currMon] += float.Parse(temp);
                     }
                 }
                 if (temp.Contains("£start"))
@@ -353,37 +393,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                 }
             }
         });
+        p.Start();
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
-        while (currMon < 6)
-        {
-            for (int j = 0; j < 5; j++)
-            {
-                string encodedCalc = $"{Gen} {EncodeMon(Gen, BotTeamInfo[currMon])} {EncodeMon(Gen, OppTeamInfo[j])}";
-                for (int m = 0; m < 3; m++)
-                {
-                    if (currMon == 5 && j == 5 && m == 3) lastCalc = true;
-                    string move;
-                    switch(m)
-                    {
-                        case 0:
-                            move = BotTeamInfo[currMon].Move1;
-                            break;
-                        case 1:
-                            move = BotTeamInfo[currMon].Move2;
-                            break;
-                        case 2:
-                            move = BotTeamInfo[currMon].Move3;
-                            break;
-                        default:
-                            move = BotTeamInfo[currMon].Move4;
-                            break;
-                    }
-                    p.StandardInput.WriteLine("ts-node src/index.ts c "+encodedCalc+" {\"gen\":\""+Gen+"\",\"name\":\""+move+"\"}");
-                }
-            }
-            currMon++;
-        }
+        sendData(0, 0, 0);
         p.WaitForExit();
     }
 }

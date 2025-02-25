@@ -20,31 +20,32 @@ function CalcDamage(): void
         gen,
         ParsePokemon(4),
         ParsePokemon(5),
-        ParseMove(),
-        ParseField()
+        ParseMove()
+        //ParseField()
     );
     console.log("£start");
-    console.log(result);
+    console.log(result.damage);
     console.log("£stop");
 }
 
 function ParsePokemon(argNum: number): Pokemon
 {
-    const temp = process.argv[argNum] as string;
+    const temp: string = process.argv[argNum].replace(/#/g,'\"').replace(/_/g,' ');
     const mon: Pokemon = JSON.parse(temp);
     return mon;
 }
 
 function ParseMove(): Move
 {
-    const temp = process.argv[7] as string;
+    const temp: string = process.argv[6].replace(/#/g,'\"').replace(/_/g,' ');
+    console.log(temp);
     const move: Move = JSON.parse(temp);
     return move;
 }
 
 function ParseField(): Field
 {
-    const temp = process.argv[8] as string;
+    const temp: string = process.argv[7].replace(/#/g,'\"').replace(/_/g,' ');
     const field: Field = JSON.parse(temp);
     return field;
 }
