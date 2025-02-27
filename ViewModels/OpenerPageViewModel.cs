@@ -321,7 +321,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         return (encodedMon + "}}").Replace(' ','_');
     }
 
-    public void sendData(int mon, int opp, int m)
+    public void SendData(int mon, int opp, int m)
     {
         string encodedCalc = $"{Gen} {EncodeMon(Gen, BotTeamInfo[mon])} {EncodeMon(Gen, OppTeamInfo[opp])}";
             string move;
@@ -340,7 +340,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     move = BotTeamInfo[mon].Move4;
                     break;
             }
-            string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+Gen+",#name#:#"+move.Replace(' ','_')+"#}";
+            string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+Gen+",#name#:#"+move.Replace(' ','_')+"#,#options#:{}}";
             Console.WriteLine(toSend);
             p.StandardInput.WriteLine(toSend);
     }
@@ -379,7 +379,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                             p.Close();
                             return;
                         }
-                        sendData(currMon, currOpp, currMove);
+                        SendData(currMon, currOpp, currMove);
                     }
                     else 
                     {
@@ -396,7 +396,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.Start();
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
-        sendData(0, 0, 0);
+        SendData(0, 0, 0);
         p.WaitForExit();
     }
 }

@@ -24,22 +24,25 @@ function CalcDamage(): void
         //ParseField()
     );
     console.log("£start");
-    console.log(result.damage);
+    console.log(result.damage)
+    console.log(result.moveDesc());
+    console.log(result.kochance(false));
     console.log("£stop");
 }
 
 function ParsePokemon(argNum: number): Pokemon
 {
     const temp: string = process.argv[argNum].replace(/#/g,'\"').replace(/_/g,' ');
-    const mon: Pokemon = JSON.parse(temp);
+    const tempJson = JSON.parse(temp);
+    const mon = new Pokemon(tempJson.gen, tempJson.name, tempJson.options);
     return mon;
 }
 
 function ParseMove(): Move
 {
     const temp: string = process.argv[6].replace(/#/g,'\"').replace(/_/g,' ');
-    console.log(temp);
-    const move: Move = JSON.parse(temp);
+    const tempJson = JSON.parse(temp);
+    const move = new Move(tempJson.gen, tempJson.name, tempJson.options);
     return move;
 }
 
