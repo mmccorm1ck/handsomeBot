@@ -24,9 +24,9 @@ function CalcDamage(): void
         //ParseField()
     );
     console.log("£start");
-    console.log(result.damage)
+    //console.log(result.damage)
     console.log(result.moveDesc());
-    console.log(result.kochance(false));
+    //console.log(result.kochance(false));
     console.log("£stop");
 }
 
@@ -61,5 +61,10 @@ if (funcToUse === 'l')
 }
 else if (funcToUse === 'c')
 {
-    CalcDamage();
+    try {CalcDamage();}
+    catch {
+        console.log("£start");
+        console.log("0 - 0%");
+        console.log("£stop");
+    }
 }

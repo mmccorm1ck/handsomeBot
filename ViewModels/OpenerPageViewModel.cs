@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using HandsomeBot.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Avalonia.Markup.Xaml;
+using DialogHostAvalonia;
 
 namespace HandsomeBot.ViewModels;
 
@@ -18,6 +20,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public OpenerPageViewModel()
     {
+        AvaloniaXamlLoader.Load("handsomeBot.Views.OpenerPageView");
+        DialogHost.Show("Calculating opening", "OpenerDialogHost");
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
@@ -25,6 +29,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.FileName = "cmd.exe";
         LoadTeams();
         CalcOpening();
+        for (int i = 0; i < 6; i++){
+            Console.WriteLine(Weights[i]);
+        }
+        DialogHost.Close("OpenerDialogHost");
     }
 
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -351,6 +359,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         int currMon = 0;
         int currOpp = 0;
         int currMove = 0;
+        float curWeight = 0;
         p.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
         {
             if (!String.IsNullOrEmpty(e.Data))
@@ -364,18 +373,22 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                         running = false;
                         //Console.WriteLine("Stopped");
                         if (currMove < 3) currMove++;
-                        else if (currOpp < 5)
-                        {
+                        else if (currOpp < 5) {
                             currOpp++;
                             currMove = 0;
+                            Weights[currMon] += curWeight;
+                            curWeight = 0;
                         }
                         else if (currMon < 5)
                         {
+                            Weights[currMon] += curWeight;
+                            curWeight = 0;
                             currMon++;
                             currOpp = 0;
                             currMove = 0;
                         }
                         else {
+                            Weights[currMon] += curWeight;
                             p.Close();
                             return;
                         }
@@ -383,7 +396,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     }
                     else 
                     {
-                        //Weights[currMon] += float.Parse(temp);
+                        float tempWeight = float.Parse(temp.Split(" - ")[0]);
+                        if (tempWeight > curWeight) curWeight = tempWeight;
                     }
                 }
                 if (temp.Contains("£start"))
