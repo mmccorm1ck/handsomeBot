@@ -20,19 +20,20 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public OpenerPageViewModel()
     {
-        AvaloniaXamlLoader.Load("handsomeBot.Views.OpenerPageView");
-        DialogHost.Show("Calculating opening", "OpenerDialogHost");
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
         LoadTeams();
-        CalcOpening();
+        CalcDamage();
         for (int i = 0; i < 6; i++){
             Console.WriteLine(Weights[i]);
         }
-        DialogHost.Close("OpenerDialogHost");
+        CalcStrategy();
+        for (int i = 0; i < 6; i++){
+            Console.WriteLine(Weights[i]);
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -43,6 +44,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     }
 
     public Process p = new Process();
+
+    public Dictionary<string, int> StratWeights = new(); // Contains strategic value of moves & abilities for deciding on an opener
 
     public ObservableCollection<Models.TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
@@ -274,6 +277,29 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OppTeamInfo[i].Move4     = OppTeamInfoTemp[i].Move4;
             OppTeamInfo[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
         }
+        string gameType = "Singles";
+        if (GameInfo.Format.Contains("vgc"))
+        {
+            gameType = "Doubles";
+        }
+        string stratFileName = "Data/stratWeights-"+gameType+".json";
+        string stratJsonString = "";
+        try{
+            using (StreamReader sr = File.OpenText(stratFileName))
+            {
+                stratJsonString = sr.ReadToEnd();
+                sr.Close();
+            }
+        }
+        catch
+        {
+            return;
+        }
+        if (stratJsonString == "")
+        {
+            return;
+        }
+        StratWeights = JsonSerializer.Deserialize<Dictionary<string, int>>(stratJsonString)!;
     }
 
     private float[] _weights = new float[6];
@@ -353,7 +379,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             p.StandardInput.WriteLine(toSend);
     }
 
-    public void CalcOpening()
+    public void CalcDamage()
     {
         bool running = false;
         int currMon = 0;
@@ -412,5 +438,32 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.BeginOutputReadLine();
         SendData(0, 0, 0);
         p.WaitForExit();
+    }
+
+    public void CalcStrategy() 
+    {
+        for (int currMon = 0; currMon < 6; currMon++)
+        {
+            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Ability) )
+            {
+                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Ability] * 10;
+            }
+            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move1) )
+            {
+                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move1] * 10;
+            }
+            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move2) )
+            {
+                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move2] * 10;
+            }
+            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move3) )
+            {
+                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move3] * 10;
+            }
+            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move4) )
+            {
+                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move4] * 10;
+            }
+        }
     }
 }
