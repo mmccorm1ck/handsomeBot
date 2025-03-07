@@ -9,10 +9,14 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Security.Permissions;
 using HandsomeBot.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Avalonia.Markup.Xaml;
 using DialogHostAvalonia;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace HandsomeBot.ViewModels;
 
@@ -238,9 +242,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        ObservableCollection<Models.TeamModel> BotTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(botTeamJsonString)!;
-        ObservableCollection<Models.TeamModel> OppTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
-        Models.GameModel GameInfoTemp = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
+        ObservableCollection<Models.TeamModel> BotTeamInfoTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(botTeamJsonString)!;
+        ObservableCollection<Models.TeamModel> OppTeamInfoTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
+        Models.GameModel GameInfoTemp = System.Text.Json.JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
         GameInfo.Format = GameInfoTemp.Format;
         Gen = GameInfo.Format[3];
         for (int i = 0; i < 6; i++)
@@ -277,12 +281,12 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OppTeamInfo[i].Move4     = OppTeamInfoTemp[i].Move4;
             OppTeamInfo[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
         }
-        string gameType = "Singles";
+        int gameType = 0;
         if (GameInfo.Format.Contains("vgc"))
         {
-            gameType = "Doubles";
+            gameType = 1;
         }
-        string stratFileName = "Data/stratWeights-"+gameType+".json";
+        string stratFileName = "Data/stratWeights.json";
         string stratJsonString = "";
         try{
             using (StreamReader sr = File.OpenText(stratFileName))
@@ -299,7 +303,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        StratWeights = JsonSerializer.Deserialize<Dictionary<string, int>>(stratJsonString)!;
+        StratWeights = JsonConvert.DeserializeObject<Dictionary<string, int>[]>(stratJsonString)[gameType];
     }
 
     private float[] _weights = new float[6];
