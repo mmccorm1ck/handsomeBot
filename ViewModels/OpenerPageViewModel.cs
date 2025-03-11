@@ -31,12 +31,23 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.FileName = "cmd.exe";
         LoadTeams();
         CalcDamage();
-        for (int i = 0; i < 6; i++){
-            Console.WriteLine(Weights[i]);
-        }
         CalcStrategy();
-        for (int i = 0; i < 6; i++){
-            Console.WriteLine(Weights[i]);
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (OpenerMonNos[j] == -1 || Weights[i] > Weights[OpenerMonNos[j]])
+                {
+                    OpenerMonNos.Insert(j, i);
+                    break;
+                }
+            } 
+        }
+        OpenerMonNos.RemoveRange(4, OpenerMonNos.Count-4);
+        for (int i = 0; i < 4; i++)
+        {
+            AvailablePokemon[i] = BotTeamInfo[OpenerMonNos[i]].Name;
+            NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]);
         }
     }
 
@@ -175,6 +186,30 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private List<int> _openerMonNos = [-1];
+
+    public List<int> OpenerMonNos
+    {
+        get => _openerMonNos;
+        set
+        {
+            _openerMonNos = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private Dictionary<string, int> _nameToNo = new Dictionary<string, int>();
+
+    public Dictionary<string, int> NameToNo
+    {
+        get => _nameToNo;
+        set
+        {
+            _nameToNo = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
 
     private char _gen;
@@ -249,8 +284,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         Gen = GameInfo.Format[3];
         for (int i = 0; i < 6; i++)
         {
-            AvailablePokemon[i]      = BotTeamInfoTemp[i].Name;
-            AvailablePokemon[i+6]    = "Opponent's "+ OppTeamInfoTemp[i].Name;
+            AvailablePokemon[i+4]    = "Opponent's "+ OppTeamInfoTemp[i].Name;
             OpponentsPokemon[i]      = OppTeamInfoTemp[i].Name;
             BotTeamInfo[i].Name      = BotTeamInfoTemp[i].Name;
             BotTeamInfo[i].Gender    = BotTeamInfoTemp[i].Gender;

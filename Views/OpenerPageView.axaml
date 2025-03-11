@@ -55,9 +55,9 @@
             RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Pokemon1</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Content="{Binding AvailablePokemon[0]}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10">Pokemon2</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding AvailablePokemon[1]}"/>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Pokemon in Reserve</Label>
         <Grid ShowGridLines="False" Margin="5"
@@ -65,9 +65,9 @@
             RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Pokemon3</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Content="{Binding AvailablePokemon[2]}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10">Pokemon4</Label>
+            <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding AvailablePokemon[3]}"/>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Enter Opponent's Opening Pokemon</Label>
         <Grid ShowGridLines="False" Margin="5"
@@ -80,7 +80,6 @@
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
                 MaxDropDownHeight="500" HorizontalAlignment="Center"/>
-            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
         </Grid>
         <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Results</Button>
     </StackPanel>
