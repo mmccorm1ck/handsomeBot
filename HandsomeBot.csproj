@@ -22,7 +22,7 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
     <PackageReference Include="DialogHost.Avalonia" Version="0.7.9" />
-    <PackageReference Include="newtonsoft.json" Version="1.0.2.201" />
+    <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.2" />
   </ItemGroup>
 </Project>
