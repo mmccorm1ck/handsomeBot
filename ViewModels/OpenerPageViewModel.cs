@@ -337,7 +337,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        StratWeights = JsonConvert.DeserializeObject<Dictionary<string, int>[]>(stratJsonString)[gameType];
+        Dictionary<string, int>[]? temp = JsonConvert.DeserializeObject<Dictionary<string, int>[]>(stratJsonString);
+        if (temp is not null) StratWeights = temp[gameType];
     }
 
     private float[] _weights = new float[6];
