@@ -133,12 +133,12 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
-    private string _name; // Pokemon's name
-    private char _gender; // Pokemon's gender
-    private string _item; // Pokemon's held item
-    private int _level; // Pokemon's level
-    private string _ability; // Pokemon's ability
-    private string _nature; // Pokemon's nature
+    private string _name = "None"; // Pokemon's name
+    private char _gender = 'R'; // Pokemon's gender
+    private string _item = "None"; // Pokemon's held item
+    private int _level = 50; // Pokemon's level
+    private string _ability = "None"; // Pokemon's ability
+    private string _nature = "None"; // Pokemon's nature
     private EVIVModel _ev = new EVIVModel()
     {
         HP = 0,
@@ -157,13 +157,13 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         SpD = 31,
         Spe = 31
     }; // Array of pokemon's IVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
-    private string _tera; // Pokemon's tera type
-    private string _move1; // Array of pokemon's moves
-    private string _move2; // Array of pokemon's moves
-    private string _move3; // Array of pokemon's moves
-    private string _move4; // Array of pokemon's moves
-    private string _image; // URL of pokemon's image
-    public event PropertyChangedEventHandler PropertyChanged; // Event handler to update UI when variables change
+    private string _tera = "None"; // Pokemon's tera type
+    private string _move1 = "None"; // Array of pokemon's moves
+    private string _move2 = "None"; // Array of pokemon's moves
+    private string _move3 = "None"; // Array of pokemon's moves
+    private string _move4 = "None"; // Array of pokemon's moves
+    private string _image = ""; // URL of pokemon's image
+    public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

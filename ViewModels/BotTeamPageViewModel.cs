@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.IO;
 
-
 namespace HandsomeBot.ViewModels;
 
 public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
@@ -19,7 +18,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         File.Delete("Data/newOppTeam.json");
         File.Delete("Data/newGameInfo.json");
     }
-    public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
+    public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

@@ -66,7 +66,7 @@ public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _spd; // Pokemon's special defence stat
     private int _spe; // Pokemon's speed stat
 
-    public event PropertyChangedEventHandler PropertyChanged; // Event handler to update UI when variables change
+    public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
