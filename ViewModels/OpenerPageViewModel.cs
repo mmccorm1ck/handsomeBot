@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -30,7 +29,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
         LoadTeams();
-        CalcDamage();
+        HandleP();
         CalcStrategy();
         for (int i = 0; i < 6; i++)
         {
@@ -136,6 +135,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         BotTeamURL = "",
         OppTeamURL = ""
     };
+
+    public ObservableCollection<Models.EventModel> EventList{get;set;} = new();
+
     private int _eventNumber = 1; // Tracks event number in chain of events
 
     public int EventNumber
@@ -158,7 +160,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private string[] _availablePokemon = new string[12]; // List of pokemon that can trigger events;
+    private string[] _availablePokemon = new string[10]; // List of pokemon that can trigger events;
     private string[] _availableEvents = [ // List of possible events in turn 0
         "Ability Activation",
         "Item Activation",
@@ -206,6 +208,30 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _nameToNo = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<string> _allItems = new();
+
+    private ObservableCollection<string> _allAbilities = new();
+
+    public ObservableCollection<string> AllItems
+    {
+        get => _allItems;
+        set
+        {
+            _allItems = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<string> AllAbilities
+    {
+        get => _allAbilities;
+        set
+        {
+            _allAbilities = value;
             OnPropertyChanged();
         }
     }
@@ -418,9 +444,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             p.StandardInput.WriteLine(toSend);
     }
 
-    public void CalcDamage()
+    public void HandleP()
     {
         bool running = false;
+        char currStep = 'i';
         int currMon = 0;
         int currOpp = 0;
         int currMove = 0;
@@ -436,33 +463,51 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     if (temp.Contains("£stop"))
                     {
                         running = false;
-                        //Console.WriteLine("Stopped");
-                        if (currMove < 3) currMove++;
-                        else if (currOpp < 5) {
-                            currOpp++;
-                            currMove = 0;
-                            Weights[currMon] += curWeight;
-                            curWeight = 0;
-                        }
-                        else if (currMon < 5)
+                        if (currStep == 'i')
                         {
-                            Weights[currMon] += curWeight;
-                            curWeight = 0;
-                            currMon++;
-                            currOpp = 0;
-                            currMove = 0;
+                            currStep = 'a';
+                            p.StandardInput.WriteLine($"ts-node src/index.ts a {Gen}");
                         }
-                        else {
-                            Weights[currMon] += curWeight;
-                            p.Close();
-                            return;
+                        else if (currStep == 'a')
+                        {
+                            currStep = 'b';
+                            SendData(0,0,0);
                         }
-                        SendData(currMon, currOpp, currMove);
+                        //Console.WriteLine("Stopped");
+                        else 
+                        {
+                            if (currMove < 3) currMove++;
+                            else if (currOpp < 5) {
+                                currOpp++;
+                                currMove = 0;
+                                Weights[currMon] += curWeight;
+                                curWeight = 0;
+                            }
+                            else if (currMon < 5)
+                            {
+                                Weights[currMon] += curWeight;
+                                curWeight = 0;
+                                currMon++;
+                                currOpp = 0;
+                                currMove = 0;
+                            }
+                            else {
+                                Weights[currMon] += curWeight;
+                                p.Close();
+                                return;
+                            }
+                            SendData(currMon, currOpp, currMove);
+                        }
                     }
                     else 
                     {
-                        float tempWeight = float.Parse(temp.Split(" - ")[0]);
-                        if (tempWeight > curWeight) curWeight = tempWeight;
+                        if (currStep == 'i') AllItems.Add(temp);
+                        else if (currStep == 'a') AllAbilities.Add(temp);
+                        else
+                        {
+                            float tempWeight = float.Parse(temp.Split(" - ")[0]);
+                            if (tempWeight > curWeight) curWeight = tempWeight;
+                        }
                     }
                 }
                 if (temp.Contains("£start"))
@@ -475,7 +520,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.Start();
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
-        SendData(0, 0, 0);
+        p.StandardInput.WriteLine($"ts-node src/index.ts i {Gen}");
         p.WaitForExit();
     }
 
