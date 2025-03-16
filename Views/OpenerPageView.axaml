@@ -11,31 +11,42 @@
     <dialogHost:DialogHost Identifier="OpenerDialogHost">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Label FontSize="18">Event #</Label>
-                    <Label FontSize="18" Content="{Binding EventNumber}"/>
-                </StackPanel>
+                <Label FontSize="18" Content="Event #{Binding EventNumber}"/>
                 <Grid HorizontalAlignment="Center" ShowGridLines="False"
-                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto">
-                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Pokemon</Label>
-                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event</Label>
+                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto">
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">User Pokemon</Label>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event Type</Label>
                     <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding AvailablePokemon}"/>
-                        <!-- <ComboBoxItem>Pokemon1</ComboBoxItem>
-                        <ComboBoxItem>Pokemon2</ComboBoxItem>
-                        <ComboBoxItem>PokemonA</ComboBoxItem>
-                        <ComboBoxItem>PokemonB</ComboBoxItem> -->
+                        MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
+                        SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
                     <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"/>
-                        <!-- <ComboBoxItem>Ability Activation</ComboBoxItem>
-                        <ComboBoxItem>Switch</ComboBoxItem>
-                        <ComboBoxItem>Move</ComboBoxItem>
-                        <ComboBoxItem>Terastallize</ComboBoxItem>
-                        <ComboBoxItem>Mega Evolution</ComboBoxItem>
-                        <ComboBoxItem>Dynamax</ComboBoxItem>
-                        <ComboBoxItem>Gigantamax</ComboBoxItem>
-                        <ComboBoxItem>Z-Move</ComboBoxItem> -->
+                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"
+                        SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
+                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center">Item:</Label>
+                    <ComboBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllItems}"
+                        SelectedItem="{Binding CurrEvent.ItemName, Mode=TwoWay}"/>
+                    <Label Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center">Ability:</Label>
+                    <ComboBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" SelectedIndex="0"
+                        MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllAbilities}"
+                        SelectedItem="{Binding CurrEvent.AbilityName, Mode=TwoWay}"/>
                 </Grid>
+                <Label HorizontalAlignment="Center">Target(s):</Label>
+                <Grid HorizontalAlignment="Center" ShowGridLines="True"
+                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <CheckBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[0]}" Name="bot0Chk" IsChecked="{Binding TargetsChecked[0], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[1]}" Name="bot1Chk" IsChecked="{Binding TargetsChecked[1], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[2]}" Name="bot2Chk" IsChecked="{Binding TargetsChecked[2], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[3]}" Name="bot3Chk" IsChecked="{Binding TargetsChecked[3], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[4]}" Name="opp0Chk" IsChecked="{Binding TargetsChecked[4], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[5]}" Name="opp1Chk" IsChecked="{Binding TargetsChecked[5], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[6]}" Name="opp2Chk" IsChecked="{Binding TargetsChecked[6], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[7]}" Name="opp3Chk" IsChecked="{Binding TargetsChecked[7], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[8]}" Name="opp4Chk" IsChecked="{Binding TargetsChecked[8], Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[9]}" Name="opp5Chk" IsChecked="{Binding TargetsChecked[9], Mode=TwoWay}"/>
+                </Grid>
+                <Button HorizontalAlignment="Center" Margin="10" Command="{Binding SaveEvent}">Save Event</Button>
+                <Button HorizontalAlignment="Center" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Finish</Button>
             </StackPanel>
         </dialogHost:DialogHost.DialogContent>
     <StackPanel>
@@ -81,7 +92,7 @@
             <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
                 MaxDropDownHeight="500" HorizontalAlignment="Center"/>
         </Grid>
-        <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Results</Button>
+        <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Events</Button>
     </StackPanel>
     </dialogHost:DialogHost>
 </UserControl>

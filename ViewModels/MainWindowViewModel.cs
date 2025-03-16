@@ -89,6 +89,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void NextPage() // Page changing function called when button is pressed
     {
+        Console.WriteLine("Loading Next Page");
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         if (targetPage is null) return;
         if (nextPageNumber == 1 && !File.Exists("Data/newBotTeam.json"))
@@ -114,5 +115,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             return;
         }
         nextPageNumber++;
+        Console.WriteLine("Loaded");
     }
 }

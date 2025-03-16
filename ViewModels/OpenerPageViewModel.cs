@@ -136,9 +136,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         OppTeamURL = ""
     };
 
-    public ObservableCollection<Models.EventModel> EventList{get;set;} = new();
+    public List<Models.EventModel> EventList{get;set;} = new();
 
-    private int _eventNumber = 1; // Tracks event number in chain of events
+    private int _eventNumber = 0; // Tracks event number in chain of events
 
     public int EventNumber
     {
@@ -167,7 +167,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         "Ability Reveal",
         "Item Reveal",
         "Stat Change",
-        "Forme Reveal"
+        "Forme Reveal",
+        "Switch"
     ];
     public string[] AvailablePokemon
     {
@@ -200,23 +201,13 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private Dictionary<string, int> _nameToNo = new Dictionary<string, int>();
+    public Dictionary<string, int> NameToNo{get;set;} = new Dictionary<string, int>();
 
-    public Dictionary<string, int> NameToNo
-    {
-        get => _nameToNo;
-        set
-        {
-            _nameToNo = value;
-            OnPropertyChanged();
-        }
-    }
+    private List<string> _allItems = new();
 
-    private ObservableCollection<string> _allItems = new();
+    private List<string> _allAbilities = new();
 
-    private ObservableCollection<string> _allAbilities = new();
-
-    public ObservableCollection<string> AllItems
+    public List<string> AllItems
     {
         get => _allItems;
         set
@@ -226,12 +217,36 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<string> AllAbilities
+    public List<string> AllAbilities
     {
         get => _allAbilities;
         set
         {
             _allAbilities = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private Models.EventModel _currEvent = new();
+
+    public Models.EventModel CurrEvent
+    {
+        get => _currEvent;
+        set
+        {
+            _currEvent = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList();
+
+    public List<bool> TargetsChecked
+    {
+        get => _targetsChecked;
+        set
+        {
+            _targetsChecked = value;
             OnPropertyChanged();
         }
     }
@@ -311,6 +326,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         for (int i = 0; i < 6; i++)
         {
             AvailablePokemon[i+4]    = "Opponent's "+ OppTeamInfoTemp[i].Name;
+            NameToNo.Add("Opponent's "+OppTeamInfoTemp[i].Name, i+4);
             OpponentsPokemon[i]      = OppTeamInfoTemp[i].Name;
             BotTeamInfo[i].Name      = BotTeamInfoTemp[i].Name;
             BotTeamInfo[i].Gender    = BotTeamInfoTemp[i].Gender;
@@ -379,6 +395,19 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private string _userMonName = "";
+
+    public string UserMonName
+    {
+        get => _userMonName;
+        set
+        {
+            _userMonName = value;
+            if (value != "" && value != null) CurrEvent.UserMon = NameToNo[value];
+            OnPropertyChanged();
+        }
+    }
+
     public string EncodeStats(int deflt, EVIVModel statsInfo)
     {
         string output = "{";
@@ -440,7 +469,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     break;
             }
             string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+Gen+",#name#:#"+move.Replace(' ','_')+"#,#options#:{}}";
-            Console.WriteLine(toSend);
+            //Console.WriteLine(toSend);
             p.StandardInput.WriteLine(toSend);
     }
 
@@ -457,7 +486,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (!String.IsNullOrEmpty(e.Data))
             {
                 string temp = e.Data.ToString().Trim(' ','\t');
-                Console.WriteLine("Result: "+temp);
+                //Console.WriteLine("Result: "+temp);
                 if (running)
                 {
                     if (temp.Contains("£stop"))
@@ -465,11 +494,13 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                         running = false;
                         if (currStep == 'i')
                         {
+                            AllItems.Sort();
                             currStep = 'a';
                             p.StandardInput.WriteLine($"ts-node src/index.ts a {Gen}");
                         }
                         else if (currStep == 'a')
                         {
+                            AllAbilities.Sort();
                             currStep = 'b';
                             SendData(0,0,0);
                         }
@@ -549,5 +580,44 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                 Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move4] * 10;
             }
         }
+    }
+
+    public void SaveEvent()
+    {
+        if (UserMonName == "" || CurrEvent.EventType == "") return;
+        for (int i = 0; i < 10; i++)
+        {
+            if (TargetsChecked[i])
+            {
+                CurrEvent.TargetMons.Add(i);
+                TargetsChecked[i] = false;
+            }
+        }
+        if (!CurrEvent.EventType.Contains("Item"))
+        {
+            CurrEvent.ItemName = "";
+        }
+        if (!CurrEvent.EventType.Contains("Ability"))
+        {
+            CurrEvent.AbilityName = "";
+        }
+        EventList.Add(new());
+        EventList[EventNumber] = CurrEvent; 
+        Models.TurnModel turn = new Models.TurnModel
+        {
+            TurnNo = 0,
+            EventList = EventList  
+        };
+        string historyFileName = "Data/gameHistory.json";
+        var options = new JsonSerializerOptions {WriteIndented = true};
+        using (StreamWriter sw = File.CreateText(historyFileName))
+        {
+            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(turn, options);
+            sw.Write(historyJsonString);
+            sw.Close();
+        }
+        UserMonName = "";
+        CurrEvent = new();
+        EventNumber++;
     }
 }
