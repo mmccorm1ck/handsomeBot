@@ -11,7 +11,10 @@
     <dialogHost:DialogHost Identifier="OpenerDialogHost">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
-                <Label FontSize="18" Content="Event #{Binding EventNumber}"/>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Label FontSize="18" HorizontalAlignment="Right" Content="Event #"/>
+                    <Label FontSize="18" HorizontalAlignment="Left" Content="{Binding EventNumber}"/>
+                </StackPanel>
                 <Grid HorizontalAlignment="Center" ShowGridLines="False"
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto">
                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">User Pokemon</Label>
