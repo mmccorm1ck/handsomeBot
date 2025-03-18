@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Diagnostics;
 using System.Text;
+using Avalonia.Threading;
+using Avalonia.Platform;
+using Avalonia;
 
 namespace HandsomeBot.ViewModels;
 
@@ -53,14 +56,38 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
     
-    private bool _loadTeamErrorOpen = false;
+    private bool _mainDialogOpen = false;
 
-    public bool LoadTeamErrorOpen
+    public bool MainDialogOpen
     {
-        get => _loadTeamErrorOpen;
+        get => _mainDialogOpen;
         set
         {
-            _loadTeamErrorOpen = value;
+            _mainDialogOpen = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _dialogButtonVisible = false;
+
+    public bool DialogButtonVisible
+    {
+        get => _dialogButtonVisible;
+        set
+        {
+            _dialogButtonVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _dialogMessage = "";
+
+    public string DialogMessage
+    {
+        get => _dialogMessage;
+        set
+        {
+            _dialogMessage = value;
             OnPropertyChanged();
         }
     }
@@ -89,21 +116,38 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void NextPage() // Page changing function called when button is pressed
     {
-        Console.WriteLine("Loading Next Page");
-        PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
-        if (targetPage is null) return;
+        DialogButtonVisible = false;
+        DialogMessage = "Calculating...";
+        MainDialogOpen = true;
         if (nextPageNumber == 1 && !File.Exists("Data/newBotTeam.json"))
         {
-            LoadTeamErrorOpen = true;
+            DialogButtonVisible = true;
+            DialogMessage = "Please load a team";
             return;
         }
         if (nextPageNumber == 2 && !File.Exists("Data/newOppTeam.json"))
         {
-            LoadTeamErrorOpen = true;
+            DialogButtonVisible = true;
+            DialogMessage = "Please enter a team";
             return;
         }
+        Task.Run(() => InstanceCreator());
+    }
+
+    void InstanceCreator()
+    {
+        PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         var instance = Activator.CreateInstance(targetPage.ModelType);
-        if (instance is null) return;
+        Dispatcher.UIThread.Post(() => PageLoader(instance, targetPage));
+    }
+
+    void PageLoader(object? instance, PageNumberTemplate? targetPage)
+    {
+        if (instance is null || targetPage is null)
+        {
+            MainDialogOpen = false;
+            return;
+        }
         CurrentPage = (ViewModelBase)instance;
         CurrentButtonLabel = targetPage.ButtonLabel;
         if (nextPageNumber == 3)
@@ -115,6 +159,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             return;
         }
         nextPageNumber++;
-        Console.WriteLine("Loaded");
+        MainDialogOpen = false;
     }
 }
