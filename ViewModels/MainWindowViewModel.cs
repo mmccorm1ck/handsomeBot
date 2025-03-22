@@ -16,8 +16,6 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Text;
 using Avalonia.Threading;
-using Avalonia.Platform;
-using Avalonia;
 
 namespace HandsomeBot.ViewModels;
 
