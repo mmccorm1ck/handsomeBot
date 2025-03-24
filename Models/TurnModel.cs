@@ -61,10 +61,10 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
     }
     private int _turnNo;
     private List<Models.EventModel> _eventList = [];
-    private List<int> _botStartMons = [];
-    private List<int> _botEndMons = [];
-    private List<int> _oppStartMons = [];
-    private List<int> _oppEndMons = [];
+    private List<int> _botStartMons = [-1, -1];
+    private List<int> _botEndMons = [-1, -1];
+    private List<int> _oppStartMons = [-1, -1];
+    private List<int> _oppEndMons = [-1, -1];
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

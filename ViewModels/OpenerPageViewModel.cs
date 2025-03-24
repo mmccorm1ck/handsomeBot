@@ -28,6 +28,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
+        Console.WriteLine(TargetsChecked[0]);
         LoadTeams();
         HandleP();
         CalcStrategy();
@@ -136,7 +137,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         OppTeamURL = ""
     };
 
-    public List<Models.EventModel> EventList{get;set;} = new();
+    public Models.TurnModel Turn{get;set;} = new()
+    {
+        TurnNo=0
+    };
 
     private int _eventNumber = 0; // Tracks event number in chain of events
 
@@ -197,6 +201,27 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _openerMonNos = value;
+            Turn.BotStartMons = _openerMonNos;
+            Turn.BotEndMons = _openerMonNos;
+            OnPropertyChanged();
+        }
+    }
+
+    private string[] _oppOpener = ["", ""];
+
+    public string[] OppOpener
+    {
+        get => _oppOpener;
+        set
+        {
+            _oppOpener = value;
+            for (int i = 0; i < 2; i++)
+            {
+                if (!_oppOpener[i].Equals(""))
+                {
+                    Turn.OppStartMons[i] = NameToNo["Opponent's "+_oppOpener[i]];
+                }
+            }
             OnPropertyChanged();
         }
     }
@@ -239,15 +264,16 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList();
+    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList<bool>();
 
     public List<bool> TargetsChecked
     {
         get => _targetsChecked;
         set
-        {
+        {   
             _targetsChecked = value;
             OnPropertyChanged();
+            Console.WriteLine(value);
         }
     }
 
@@ -582,9 +608,23 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public class MonSwitchSearch
+    {
+        int _mon;
+        public MonSwitchSearch(int Mon)
+        {
+            _mon = Mon;
+        }
+        public bool MonMatch(int i)
+        {
+            return i == _mon;
+        }
+    }
+
     public void SaveEvent()
     {
         if (UserMonName == "" || CurrEvent.EventType == "") return;
+        if (Turn.OppEndMons[0] == -1 || Turn.OppEndMons[1] == -1) Turn.OppEndMons = Turn.OppStartMons; 
         for (int i = 0; i < 10; i++)
         {
             if (TargetsChecked[i])
@@ -601,18 +641,27 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             CurrEvent.AbilityName = "";
         }
-        EventList.Add(new());
-        EventList[EventNumber] = CurrEvent; 
-        Models.TurnModel turn = new Models.TurnModel
+        if (CurrEvent.EventType.Contains("Switch"))
         {
-            TurnNo = 0,
-            EventList = EventList  
-        };
+            if (CurrEvent.TargetMons.Count != 1) return;
+            var search = new MonSwitchSearch(CurrEvent.UserMon);
+            if (CurrEvent.UserMon < 4)
+            {
+                int i = Turn.BotEndMons.FindIndex(search.MonMatch);
+                Turn.BotEndMons[i] = CurrEvent.TargetMons[0];
+            } else 
+            {
+                int i = Turn.OppEndMons.FindIndex(search.MonMatch);
+                Turn.OppEndMons[i] = CurrEvent.TargetMons[0];
+            }
+        }
+        Turn.EventList.Add(new());
+        Turn.EventList[EventNumber] = CurrEvent; 
         string historyFileName = "Data/gameHistory.json";
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(historyFileName))
         {
-            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(turn, options);
+            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(Turn, options);
             sw.Write(historyJsonString);
             sw.Close();
         }

@@ -90,10 +90,12 @@
             HorizontalAlignment="Center">
             <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
-                MaxDropDownHeight="500" HorizontalAlignment="Center"/>
+                MaxDropDownHeight="500" HorizontalAlignment="Center"
+                SelectedItem="{Binding OppOpener[0], Mode=TwoWay}"/>
             <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
             <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
-                MaxDropDownHeight="500" HorizontalAlignment="Center"/>
+                MaxDropDownHeight="500" HorizontalAlignment="Center"
+                SelectedItem="{Binding OppOpener[1], Mode=TwoWay}"/>
         </Grid>
         <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Events</Button>
     </StackPanel>
