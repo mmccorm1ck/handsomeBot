@@ -28,7 +28,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
-        Console.WriteLine(TargetsChecked[0]);
         LoadTeams();
         HandleP();
         CalcStrategy();
@@ -49,6 +48,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             AvailablePokemon[i] = BotTeamInfo[OpenerMonNos[i]].Name;
             NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]);
         }
+        for (int i = 0; i < 2; i++) Turn.BotStartMons[i] = OpenerMonNos[i];
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -264,16 +264,15 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList<bool>();
+    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList();
 
     public List<bool> TargetsChecked
     {
         get => _targetsChecked;
         set
-        {   
+        {
             _targetsChecked = value;
             OnPropertyChanged();
-            Console.WriteLine(value);
         }
     }
 
@@ -624,7 +623,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     public void SaveEvent()
     {
         if (UserMonName == "" || CurrEvent.EventType == "") return;
-        if (Turn.OppEndMons[0] == -1 || Turn.OppEndMons[1] == -1) Turn.OppEndMons = Turn.OppStartMons; 
+        if (Turn.OppEndMons[0] == -1 || Turn.OppEndMons[1] == -1) Turn.OppEndMons = Turn.OppStartMons;
+        if (Turn.BotEndMons[0] == -1 || Turn.BotEndMons[1] == -1) Turn.BotEndMons = Turn.BotStartMons;
+        CurrEvent.TargetMons = [];
         for (int i = 0; i < 10; i++)
         {
             if (TargetsChecked[i])
@@ -648,10 +649,13 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (CurrEvent.UserMon < 4)
             {
                 int i = Turn.BotEndMons.FindIndex(search.MonMatch);
+                Console.WriteLine(i);
+                if (i == -1) return;
                 Turn.BotEndMons[i] = CurrEvent.TargetMons[0];
             } else 
             {
                 int i = Turn.OppEndMons.FindIndex(search.MonMatch);
+                if (i == -1) return;
                 Turn.OppEndMons[i] = CurrEvent.TargetMons[0];
             }
         }
