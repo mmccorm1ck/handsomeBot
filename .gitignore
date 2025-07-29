@@ -1,6 +1,5 @@
-bin/*
-HandsomeBot.sln
-obj/*
-Data/*
-Javascript/Calc/*
-Javascript/node_modules
+client/bin/*
+client/HandsomeBot.sln
+client/obj/*
+client/Data/*
+server/node_modules
