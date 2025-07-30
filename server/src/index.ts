@@ -1,102 +1,102 @@
 import {calculate, Generations, GenerationNum, Pokemon, Move, Field, SPECIES, ITEMS, ABILITIES} from "@Smogon/calc";
+import 'dotenv/config';
+import { createServer } from "http";
 
-function ReturnAllMons(): void
-{
-    const genNum = parseInt(process.argv[3]);
-    const temp = SPECIES[genNum];
-    console.log("£start");
-    for (const specie in temp)
-    {
-        console.log(specie);
+const port = process.env.port || 3000;
+
+const server = createServer(async (req, res) => {
+    console.log("New connection");
+    const calcResult = handleRequest(req.url);
+    const statusCode = calcResult.valid ? 200 : 404;
+    const response: string = JSON.stringify(calcResult.result);
+    res.writeHead(statusCode, {"Content-Type": "text/plain"});
+    res.write(response);
+    console.log(response + " sent");
+    res.end();
+});
+
+const handleRequest = (url:string) => {
+    let valid = false;
+    let result = {};
+    const params = url.split('?');
+    if (url === '/' || !params[1]) return { valid, result };
+    console.log(params[1]);
+    const inputJson = JSON.parse(decodeURI(params[1]));
+    const genNum = inputJson.gen || 0;
+    if (params[0] === '/calc') {
+        result = calcDamages(genNum, inputJson.field, inputJson.userMons, inputJson.opponentMons);
+        if (!result) valid = false;
+        else valid = true;
     }
-    console.log("£stop");
+    else if (params[0] === '/mons') {
+        result = SPECIES[genNum];
+        valid = true;
+    }
+    else if (params[0] === '/items') {
+        result = ITEMS[genNum];
+        valid = true;
+    }
+    else if (params[0] === '/abilities') {
+        result = ABILITIES[genNum];
+        valid = true;
+    }
+    return { valid, result };
 }
 
-function ReturnAllItems(): void
-{
-    const genNum = parseInt(process.argv[3]);
-    const temp = ITEMS[genNum];
-    console.log("£start");
-    for (const item in temp)
-    {
-        console.log(temp[item]);
-    }
-    console.log("£stop");
-}
-
-function ReturnAllAbilities(): void
-{
-    const genNum = parseInt(process.argv[3]);
-    const temp = ABILITIES[genNum];
-    console.log("£start");
-    for (const ability in temp)
-    {
-        console.log(temp[ability]);
-    }
-    console.log("£stop");
-}
-
-function CalcDamage(): void
-{
-    const genNum = parseInt(process.argv[3]);
+function calcDamages(genNum:number, fieldRaw:JSON, userMons:JSON, opponentMons:JSON): object[] {
     const gen = Generations.get(genNum as GenerationNum);
-    const result = calculate(
-        gen,
-        ParsePokemon(4),
-        ParsePokemon(5),
-        ParseMove()
-        //ParseField()
-    );
-    console.log("£start");
-    //console.log(result.damage)
-    console.log(result.moveDesc());
-    //console.log(result.kochance(false));
-    console.log("£stop");
-}
-
-function ParsePokemon(argNum: number): Pokemon
-{
-    const temp: string = process.argv[argNum].replace(/#/g,'\"').replace(/_/g,' ');
-    const tempJson = JSON.parse(temp);
-    const mon = new Pokemon(tempJson.gen, tempJson.name, tempJson.options);
-    return mon;
-}
-
-function ParseMove(): Move
-{
-    const temp: string = process.argv[6].replace(/#/g,'\"').replace(/_/g,' ');
-    const tempJson = JSON.parse(temp);
-    const move = new Move(tempJson.gen, tempJson.name, tempJson.options);
-    return move;
-}
-
-function ParseField(): Field
-{
-    const temp: string = process.argv[7].replace(/#/g,'\"').replace(/_/g,' ');
-    const field: Field = JSON.parse(temp);
-    return field;
-}
-
-const funcToUse = process.argv[2];
-
-if (funcToUse === 'l')
-{
-    ReturnAllMons();
-}
-else if (funcToUse === 'i')
-{
-    ReturnAllItems();
-}
-else if (funcToUse === 'a')
-{
-    ReturnAllAbilities();
-}
-else if (funcToUse === 'c')
-{
-    try {CalcDamage();}
-    catch {
-        console.log("£start");
-        console.log("0 - 0%");
-        console.log("£stop");
+    const field: Field = fieldRaw[0];
+    let results: object[] = [];
+    for (const user of userMons[Symbol.iterator]) {
+        const userMon: Pokemon = new Pokemon(gen, user.name, user.options);
+        for (const opp of opponentMons[Symbol.iterator]) {
+            const oppMon: Pokemon = new Pokemon(gen, opp.name, opp.options);
+            let tempResult: resultObject = {
+                user: userMon.name,
+                opponent: oppMon.name,
+                damages: []
+            };
+            let options = { ability: userMon.ability.toString(), item: userMon.item.toString(), species: userMon.species.name };
+            for (const moveName of userMon.moves) {
+                const move: Move = new Move(gen, moveName, options);
+                tempResult.damages.push({
+                    attacker: "user",
+                    damage: calculate(
+                        gen,
+                        userMon,
+                        oppMon,
+                        move,
+                        field
+                    )
+                });
+            }
+            options = { ability: oppMon.ability.toString(), item: oppMon.item.toString(), species: oppMon.species.name };
+            for (const moveName of oppMon.moves) {
+                const move: Move = new Move(gen, moveName, options);
+                tempResult.damages.push({
+                    attacker: "opponent",
+                    damage: calculate(
+                        gen,
+                        oppMon,
+                        userMon,
+                        move,
+                        field
+                    )
+                });
+            }
+            results.push(tempResult);
+        }
     }
+    return results;
 }
+
+type resultObject = 
+{
+    user:string,
+    opponent:string,
+    damages:object[]
+}
+
+server.listen(port, () => {
+    console.log("Server running on port " + port);
+});

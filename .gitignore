@@ -3,3 +3,4 @@ client/HandsomeBot.sln
 client/obj/*
 client/Data/*
 server/node_modules
+server/.env
