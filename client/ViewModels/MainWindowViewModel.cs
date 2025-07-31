@@ -28,11 +28,11 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private ViewModelBase _currentPage = new BotTeamPageViewModel(); // Current app page to display
+    private ViewModelBase _currentPage = new SettingsPageViewModel(); // Current app page to display
 
     private int nextPageNumber = 1; // Page number to display next
 
-    private string _currentButtonLabel = "Confirm Team"; // Label to display on the change page button
+    private string _currentButtonLabel = "Save Settings"; // Label to display on the change page button
 
     public ViewModelBase CurrentPage
     {
@@ -92,10 +92,11 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {
-        new PageNumberTemplate(typeof(BotTeamPageViewModel), 0, "Confirm Team"),
-        new PageNumberTemplate(typeof(OppTeamPageViewModel), 1, "Confirm Team"),
-        new PageNumberTemplate(typeof(OpenerPageViewModel), 2, "Begin Battle!"),
-        new PageNumberTemplate(typeof(BattlePageViewModel), 3, "Reset")
+        new PageNumberTemplate(typeof(SettingsPageViewModel), 0, "Save Settings"),
+        new PageNumberTemplate(typeof(BotTeamPageViewModel), 1, "Confirm Team"),
+        new PageNumberTemplate(typeof(OppTeamPageViewModel), 2, "Confirm Team"),
+        new PageNumberTemplate(typeof(OpenerPageViewModel), 3, "Begin Battle!"),
+        new PageNumberTemplate(typeof(BattlePageViewModel), 4, "Reset")
     };
 
     public class PageNumberTemplate // Template for pages containing page info
@@ -117,13 +118,13 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         DialogButtonVisible = false;
         DialogMessage = "Calculating...";
         MainDialogOpen = true;
-        if (nextPageNumber == 1 && !File.Exists("Data/newBotTeam.json"))
+        if (nextPageNumber == 2 && !File.Exists("Data/newBotTeam.json"))
         {
             DialogButtonVisible = true;
             DialogMessage = "Please load a team";
             return;
         }
-        if (nextPageNumber == 2 && !File.Exists("Data/newOppTeam.json"))
+        if (nextPageNumber == 3 && !File.Exists("Data/newOppTeam.json"))
         {
             DialogButtonVisible = true;
             DialogMessage = "Please enter a team";
@@ -148,12 +149,12 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
         CurrentPage = (ViewModelBase)instance;
         CurrentButtonLabel = targetPage.ButtonLabel;
-        if (nextPageNumber == 3)
+        if (nextPageNumber == 4)
         {
             File.Move("Data/newBotTeam.json","Data/botTeam.json",true);
             File.Move("Data/newOppTeam.json","Data/oppTeam.json",true);
             File.Move("Data/newGameInfo.json","Data/gameInfo.json",true);
-            nextPageNumber = 0;
+            nextPageNumber = 1;
             return;
         }
         nextPageNumber++;

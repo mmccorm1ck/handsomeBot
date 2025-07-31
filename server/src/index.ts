@@ -11,7 +11,7 @@ const server = createServer(async (req, res) => {
     const response: string = JSON.stringify(calcResult.result);
     res.writeHead(statusCode, {"Content-Type": "text/plain"});
     res.write(response);
-    console.log(response + " sent");
+    //console.log(response + " sent");
     res.end();
 });
 
