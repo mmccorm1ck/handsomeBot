@@ -7,4 +7,23 @@
         x:Class="HandsomeBot.Views.SettingsPageView"
         x:DataType="vm:SettingsPageViewModel">
 
+    <StackPanel>
+        <Border Margin="5" 
+            CornerRadius="10"
+            Background="DarkGray"
+            BoxShadow="0 0 10 0 Gray">
+            <TextBlock Margin="5"
+                FontSize="24" 
+                HorizontalAlignment="Center"
+                Text="Calc Server Settings">
+            </TextBlock>
+        </Border>
+		<StackPanel
+			Margin="400"
+			VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+			<Label Margin="10">Server Address</Label>
+            <TextBox Name="serverAddress" Margin="0 5" Watermark="Server Address" Text=""/>
+		</StackPanel>
+    </StackPanel>
 </UserControl>
