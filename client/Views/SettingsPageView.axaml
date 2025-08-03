@@ -23,7 +23,7 @@
 			VerticalAlignment="Center"
             HorizontalAlignment="Center">
 			<Label Margin="10">Server Address</Label>
-            <TextBox Name="serverAddress" Margin="0 5" Watermark="Server Address" Text=""/>
+            <TextBox Name="serverAddress" Margin="0 5" Watermark="Server Address" Text="{Binding ServerUrl, Mode=TwoWay}"/>
 		</StackPanel>
     </StackPanel>
 </UserControl>
