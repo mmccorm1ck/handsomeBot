@@ -130,12 +130,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     };
 
-    public Models.GameModel GameInfo{get;set;} = new()
-    {
-        Format = "",
-        BotTeamURL = "",
-        OppTeamURL = ""
-    };
+    public Models.GameModel GameInfo{get;set;} = new() {};
 
     public Models.TurnModel Turn{get;set;} = new()
     {

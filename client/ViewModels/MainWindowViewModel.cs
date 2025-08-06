@@ -16,11 +16,17 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Text;
 using Avalonia.Threading;
+using HandsomeBot.Models;
+using System.Text.Json;
 
 namespace HandsomeBot.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
+    public MainWindowViewModel()
+    {
+        TheGame = LoadData();
+    }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
@@ -28,11 +34,23 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    private GameModel _theGame = new() { };
+
     private ViewModelBase _currentPage = new SettingsPageViewModel(); // Current app page to display
 
     private int nextPageNumber = 1; // Page number to display next
 
     private string _currentButtonLabel = "Save Settings"; // Label to display on the change page button
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ViewModelBase CurrentPage
     {
@@ -136,7 +154,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     void InstanceCreator()
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
-        var instance = Activator.CreateInstance(targetPage.ModelType);
+        var instance = Activator.CreateInstance(targetPage.ModelType, TheGame);
         Dispatcher.UIThread.Post(() => PageLoader(instance, targetPage));
     }
 
@@ -151,13 +169,37 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         CurrentButtonLabel = targetPage.ButtonLabel;
         if (nextPageNumber == 4)
         {
-            File.Move("Data/newBotTeam.json","Data/botTeam.json",true);
-            File.Move("Data/newOppTeam.json","Data/oppTeam.json",true);
-            File.Move("Data/newGameInfo.json","Data/gameInfo.json",true);
+            File.Move("Data/newBotTeam.json", "Data/botTeam.json", true);
+            File.Move("Data/newOppTeam.json", "Data/oppTeam.json", true);
+            File.Move("Data/newGameInfo.json", "Data/gameInfo.json", true);
             nextPageNumber = 1;
             return;
         }
         nextPageNumber++;
         MainDialogOpen = false;
+    }
+    static GameModel LoadData()
+    {
+        GameModel temp = new() {};
+        string dataFileName = "Data/data.json";
+        string dataJsonString = "";
+        try
+        {
+            using (StreamReader sr = File.OpenText(dataFileName))
+            {
+                dataJsonString = sr.ReadToEnd();
+                sr.Close();
+            }
+        }
+        catch
+        {
+            return temp;
+        }
+        if (dataJsonString == "")
+        {
+            return temp;
+        }
+        temp = JsonSerializer.Deserialize<GameModel>(dataJsonString)!;
+        return temp;
     }
 }

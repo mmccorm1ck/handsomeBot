@@ -95,12 +95,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     };
 
-    public Models.GameModel GameInfo{get;set;} = new()
-    {
-        Format = "",
-        BotTeamURL = "",
-        OppTeamURL = ""
-    };
+    public Models.GameModel GameInfo{get;set;} = new() {};
 
     public List<Models.EventModel> EventList{get;set;} = new();
     private int _eventNumber = 0; // Tracks event number in the chain of events

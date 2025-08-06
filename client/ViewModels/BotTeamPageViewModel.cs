@@ -58,12 +58,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     };
 
-    public Models.GameModel GameInfo{get;set;} = new()
-    {
-        Format = "",
-        BotTeamURL = "",
-        OppTeamURL = ""
-    };
+    public Models.GameModel GameInfo{get;set;} = new() {};
 
     public void SaveTeam() // Saves BotTeamInfo to json file
     {   
