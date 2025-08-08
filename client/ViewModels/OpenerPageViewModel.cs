@@ -21,8 +21,9 @@ namespace HandsomeBot.ViewModels;
 
 public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public OpenerPageViewModel()
+    public OpenerPageViewModel(GameModel game)
     {
+        TheGame = game;
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
@@ -56,6 +57,18 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private GameModel _theGame = new();
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
     }
 
     public Process p = new Process();

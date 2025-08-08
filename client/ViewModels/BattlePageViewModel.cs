@@ -5,19 +5,22 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Linq;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
 public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public BattlePageViewModel()
+    public BattlePageViewModel(GameModel game)
     {
+        TheGame = game;
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
     }
+
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
@@ -25,6 +28,18 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     
+    private GameModel _theGame = new();
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
+    }
+
     public Process p = new Process();
     
     public ObservableCollection<Models.TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team

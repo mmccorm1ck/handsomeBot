@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.IO;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
 public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public BotTeamPageViewModel()
+    public BotTeamPageViewModel(GameModel game)
     {
+        TheGame = game;
         File.Delete("Data/newBotTeam.json");
         File.Delete("Data/newOppTeam.json");
         File.Delete("Data/newGameInfo.json");
@@ -24,7 +26,20 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    public ObservableCollection<Models.TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
+    
+    private GameModel _theGame = new();
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<Models.TeamModel> BotTeamInfo { get; set; } = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
         {

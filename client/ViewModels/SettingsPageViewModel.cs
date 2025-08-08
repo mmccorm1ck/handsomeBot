@@ -6,13 +6,15 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.IO;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
 public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public SettingsPageViewModel()
+    public SettingsPageViewModel(GameModel game)
     {
+        TheGame = game;
         LoadSettings();
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -21,6 +23,18 @@ public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         SaveSettings();
+    }
+
+    private GameModel _theGame = new();
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
     }
 
     private string _serverUrl = "";

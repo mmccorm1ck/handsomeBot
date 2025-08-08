@@ -26,6 +26,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     public MainWindowViewModel()
     {
         TheGame = LoadData();
+        CurrentPage = new SettingsPageViewModel(TheGame);
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -36,12 +37,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private GameModel _theGame = new() { };
 
-    private ViewModelBase _currentPage = new SettingsPageViewModel(); // Current app page to display
-
-    private int nextPageNumber = 1; // Page number to display next
-
-    private string _currentButtonLabel = "Save Settings"; // Label to display on the change page button
-
     public GameModel TheGame
     {
         get => _theGame;
@@ -51,6 +46,11 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+    private ViewModelBase _currentPage = new(); // Current app page to display
+
+    private int nextPageNumber = 1; // Page number to display next
+
+    private string _currentButtonLabel = "Save Settings"; // Label to display on the change page button
 
     public ViewModelBase CurrentPage
     {

@@ -14,13 +14,15 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using DynamicData;
 using System.Linq;
 using System.Collections.Generic;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
 public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public OppTeamPageViewModel()
+    public OppTeamPageViewModel(GameModel game)
     {
+        TheGame = game;
         LoadInfo();
         bool running = false;
         p.StartInfo.RedirectStandardError = true;
@@ -64,6 +66,18 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private GameModel _theGame = new();
+
+    public GameModel TheGame
+    {
+        get => _theGame;
+        set
+        {
+            _theGame = value;
+            OnPropertyChanged();
+        }
     }
 
     public Process p = new Process();
