@@ -16,9 +16,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public BotTeamPageViewModel(GameModel game)
     {
         TheGame = game;
-        File.Delete("Data/newBotTeam.json");
-        File.Delete("Data/newOppTeam.json");
-        File.Delete("Data/newGameInfo.json");
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -39,7 +36,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<Models.TeamModel> BotTeamInfo { get; set; } = new() // Initialize collection of pokemon to store info about bot team
+    /*public ObservableCollection<Models.TeamModel> TheGame.BotTeam { get; set; } = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
         {
@@ -75,10 +72,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public Models.GameModel GameInfo{get;set;} = new() {};
 
-    public void SaveTeam() // Saves BotTeamInfo to json file
+    public void SaveTeam() // Saves TheGame.BotTeam to json file
     {   
-        //Debug.WriteLine(BotTeamInfo[0].Name);
-        if (BotTeamInfo[0].Name == "Pokemon 1") {
+        //Debug.WriteLine(TheGame.BotTeam[0].Name);
+        if (TheGame.BotTeam[0].Name == "Pokemon 1") {
             return;
         }
         string teamFileName = "Data/newBotTeam.json";
@@ -86,7 +83,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(teamFileName))
         {
-            string teamJsonString = JsonSerializer.Serialize(BotTeamInfo, options);
+            string teamJsonString = JsonSerializer.Serialize(TheGame.BotTeam, options);
             sw.Write(teamJsonString);
             sw.Close();
         }
@@ -98,7 +95,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public void LoadTeam() // Loads json file into BotTeamInfo
+    public void LoadTeam() // Loads json file into TheGame.BotTeam
     {
         string teamFileName = "Data/botTeam.json";
         string infoFileName = "Data/gameInfo.json";
@@ -120,7 +117,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        ObservableCollection<Models.TeamModel> BotTeamInfoTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(teamJsonString)!;
+        ObservableCollection<Models.TeamModel> TheGame.BotTeamTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(teamJsonString)!;
         using (StreamReader sr = File.OpenText(infoFileName))
         {
             infoJsonString = sr.ReadToEnd();
@@ -134,37 +131,42 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         Models.GameModel GameInfoTemp = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
         for (int i = 0; i < 6; i++)
         {
-            BotTeamInfo[i].Name = BotTeamInfoTemp[i].Name;
-            BotTeamInfo[i].Gender = BotTeamInfoTemp[i].Gender;
-            BotTeamInfo[i].Item = BotTeamInfoTemp[i].Item;
-            BotTeamInfo[i].Level = BotTeamInfoTemp[i].Level;
-            BotTeamInfo[i].Ability = BotTeamInfoTemp[i].Ability;
-            BotTeamInfo[i].Nature = BotTeamInfoTemp[i].Nature;
-            BotTeamInfo[i].EV = BotTeamInfoTemp[i].EV;
-            BotTeamInfo[i].IV = BotTeamInfoTemp[i].IV;
-            BotTeamInfo[i].Tera = BotTeamInfoTemp[i].Tera;
-            BotTeamInfo[i].Move1 = BotTeamInfoTemp[i].Move1;
-            BotTeamInfo[i].Move2 = BotTeamInfoTemp[i].Move2;
-            BotTeamInfo[i].Move3 = BotTeamInfoTemp[i].Move3;
-            BotTeamInfo[i].Move4 = BotTeamInfoTemp[i].Move4;
-            BotTeamInfo[i].PokeImage = BotTeamInfoTemp[i].PokeImage;
+            TheGame.BotTeam[i].Name = BotTeamInfoTemp[i].Name;
+            TheGame.BotTeam[i].Gender = BotTeamInfoTemp[i].Gender;
+            TheGame.BotTeam[i].Item = BotTeamInfoTemp[i].Item;
+            TheGame.BotTeam[i].Level = BotTeamInfoTemp[i].Level;
+            TheGame.BotTeam[i].Ability = BotTeamInfoTemp[i].Ability;
+            TheGame.BotTeam[i].Nature = BotTeamInfoTemp[i].Nature;
+            TheGame.BotTeam[i].EV = BotTeamInfoTemp[i].EV;
+            TheGame.BotTeam[i].IV = BotTeamInfoTemp[i].IV;
+            TheGame.BotTeam[i].Tera = BotTeamInfoTemp[i].Tera;
+            TheGame.BotTeam[i].Move1 = BotTeamInfoTemp[i].Move1;
+            TheGame.BotTeam[i].Move2 = BotTeamInfoTemp[i].Move2;
+            TheGame.BotTeam[i].Move3 = BotTeamInfoTemp[i].Move3;
+            TheGame.BotTeam[i].Move4 = BotTeamInfoTemp[i].Move4;
+            TheGame.BotTeam[i].PokeImage = BotTeamInfoTemp[i].PokeImage;
         }
         GameInfo.Format = GameInfoTemp.Format;
         GameInfo.BotTeamURL = GameInfoTemp.BotTeamURL;
         SaveTeam();
+    }*/
+
+    public void LoadTeam()
+    {
+        TheGame.BotTeam = TheGame.BotTeamPrev;
     }
 
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
     {
-        if (GameInfo.BotTeamURL == "")
+        if (TheGame.BotTeamURL == "")
         {
             return;
         }
         //Debug.WriteLine(GameInfo.BotTeamURL);
-        Task task = Task.Run(async () => await LoadPasteHtml(GameInfo.BotTeamURL));
+        Task task = Task.Run(async () => await LoadPasteHtml(TheGame.BotTeamURL));
     }
     
-    public async Task LoadPasteHtml(string httpLink) // Parses HTML from pokepaste link and stores info in BotTeamInfo
+    public async Task LoadPasteHtml(string httpLink) // Parses HTML from pokepaste link and stores info in TheGame.BotTeam
     {
         HttpClient client = new HttpClient();
         string response = await client.GetStringAsync(httpLink);
@@ -182,17 +184,17 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 continue;
             }
             if (responses[i].Contains("Format")) { // Saves format of pokepaste
-                GameInfo.Format = responses[i].Split(' ')[1][0..^4];
+                TheGame.Format = responses[i].Split(' ')[1][0..^4];
                 //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("img-pokemon")) { // Saves URL of pokemon image
-                BotTeamInfo[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
+                TheGame.BotTeam[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature")) { // Saves pokemon's nature
-                BotTeamInfo[currPokemon].Nature = responses[i].Split(' ')[0];
+                TheGame.BotTeam[currPokemon].Nature = responses[i].Split(' ')[0];
                 currMove = 0; // Prepares to load moves
                 //Debug.WriteLine(i);
                 continue;
@@ -214,22 +216,22 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         switch(temp[1])
                         {
                             case "HP":
-                                BotTeamInfo[currPokemon].IV.HP = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.HP = Int32.Parse(temp[0]);
                                 break;
                             case "Atk":
-                                BotTeamInfo[currPokemon].IV.Atk = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.Atk = Int32.Parse(temp[0]);
                                 break;
                             case "Def":
-                                BotTeamInfo[currPokemon].IV.Def = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.Def = Int32.Parse(temp[0]);
                                 break;
                             case "SpA":
-                                BotTeamInfo[currPokemon].IV.SpA = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.SpA = Int32.Parse(temp[0]);
                                 break;
                             case "SpD":
-                                BotTeamInfo[currPokemon].IV.SpD = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.SpD = Int32.Parse(temp[0]);
                                 break;
                             case "Spe":
-                                BotTeamInfo[currPokemon].IV.Spe = Int32.Parse(temp[0]);
+                                TheGame.BotTeam[currPokemon].IV.Spe = Int32.Parse(temp[0]);
                                 break;
                         }
                     }
@@ -241,16 +243,16 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 switch(currMove)
                 {
                     case 1:
-                        BotTeamInfo[currPokemon].Move1 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move1 = responses[i][idx..].TrimStart([' ','-']);
                         break;
                     case 2:
-                        BotTeamInfo[currPokemon].Move2 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move2 = responses[i][idx..].TrimStart([' ','-']);
                         break;
                     case 3:
-                        BotTeamInfo[currPokemon].Move3 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move3 = responses[i][idx..].TrimStart([' ','-']);
                         break;
                     case 4:
-                        BotTeamInfo[currPokemon].Move4 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move4 = responses[i][idx..].TrimStart([' ','-']);
                         currMove = -1;
                         break;
                 }
@@ -269,32 +271,32 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         int idxtemp = item.LastIndexOf('>');
                         item = item[idxtemp..];
                     }
-                    BotTeamInfo[currPokemon].Item = item;
+                    TheGame.BotTeam[currPokemon].Item = item;
                 }
                 if (responses[i].Contains("gender")) { // If there is a specified gender
                     idx = responses[i].LastIndexOf("gender")+10;
-                    BotTeamInfo[currPokemon].Gender = responses[i][idx];
+                    TheGame.BotTeam[currPokemon].Gender = responses[i][idx];
                 }
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
-                BotTeamInfo[currPokemon].Name = responses[i][idx..];
+                TheGame.BotTeam[currPokemon].Name = responses[i][idx..];
             }
             if (responses[i].Contains("Ability")) { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
-                BotTeamInfo[currPokemon].Ability = responses[i][idx..];
+                TheGame.BotTeam[currPokemon].Ability = responses[i][idx..];
                 //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level")) { // Saves pokemon's level
                 int idx = responses[i].LastIndexOf('>') + 1;
-                BotTeamInfo[currPokemon].Level = Int32.Parse(responses[i][idx..]);
+                TheGame.BotTeam[currPokemon].Level = Int32.Parse(responses[i][idx..]);
                 //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type")) { // Saves pokemon's tera type
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
-                BotTeamInfo[currPokemon].Tera = responses[i][idx..];
+                TheGame.BotTeam[currPokemon].Tera = responses[i][idx..];
                 //Debug.WriteLine(i);
                 continue;
             }
@@ -309,22 +311,22 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     switch(temp[1])
                     {
                         case "HP":
-                            BotTeamInfo[currPokemon].EV.HP = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.HP = Int32.Parse(temp[0]);
                             break;
                         case "Atk":
-                            BotTeamInfo[currPokemon].EV.Atk = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.Atk = Int32.Parse(temp[0]);
                             break;
                         case "Def":
-                            BotTeamInfo[currPokemon].EV.Def = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.Def = Int32.Parse(temp[0]);
                             break;
                         case "SpA":
-                            BotTeamInfo[currPokemon].EV.SpA = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.SpA = Int32.Parse(temp[0]);
                             break;
                         case "SpD":
-                            BotTeamInfo[currPokemon].EV.SpD = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.SpD = Int32.Parse(temp[0]);
                             break;
                         case "Spe":
-                            BotTeamInfo[currPokemon].EV.Spe = Int32.Parse(temp[0]);
+                            TheGame.BotTeam[currPokemon].EV.Spe = Int32.Parse(temp[0]);
                             break;
                     }
                 }
@@ -333,6 +335,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
 
         }
-        SaveTeam();
+        //SaveTeam();
     }
 }
