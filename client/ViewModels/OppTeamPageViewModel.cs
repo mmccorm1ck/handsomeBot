@@ -15,6 +15,7 @@ using DynamicData;
 using System.Linq;
 using System.Collections.Generic;
 using HandsomeBot.Models;
+using DynamicData.Binding;
 
 namespace HandsomeBot.ViewModels;
 
@@ -23,7 +24,8 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public OppTeamPageViewModel(GameModel game)
     {
         TheGame = game;
-        LoadInfo();
+        Task.Run(async () => await GetAllMons());
+        /*LoadInfo();
         bool running = false;
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
@@ -58,7 +60,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
         p.StandardInput.WriteLine($"ts-node src/index.ts l {Gen}");
-        p.WaitForExit();
+        p.WaitForExit();*/
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -80,7 +82,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Process p = new Process();
+    /*public Process p = new Process();
 
     public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
 
@@ -122,7 +124,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             Name = "", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
             Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
         }
-    };
+    };*/
     private ObservableCollection<string> _allMons = new ObservableCollection<string>();
     public ObservableCollection<string> AllMons
     {
@@ -133,7 +135,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private bool _teamEditable = true;
+    /*private bool _teamEditable = true;
     public bool TeamEditable
     {
         get => _teamEditable;
@@ -184,11 +186,11 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             _gen = value;
             OnPropertyChanged();
         }
-    }
+    }*/
 
-    public void LoadInfo()
+    public void LoadPrev()
     {
-        string infoJsonString = "";
+        /*string infoJsonString = "";
         try
         {
             using (StreamReader sr = File.OpenText(infoFileName))
@@ -205,10 +207,32 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        Gen = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!.Format[3];
+        Gen = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!.Format[3];*/
+        TheGame.OppTeam = TheGame.OppTeamPrev;
     }
 
-    public void SaveTeam() // Saves BotTeamInfo to json file
+    async public Task GetAllMons()
+    {
+        HttpClient client = new HttpClient();
+        string url = "http://" + TheGame.ServerUrl + "/mons?{%22gen%22:" + TheGame.Gen.ToString() + "}";
+        string response = "";
+        try
+        {
+            response = await client.GetStringAsync(url);
+        }
+        catch
+        {
+            return;
+        }
+        if (response == "") return;
+        Dictionary<string, object>? mons = JsonSerializer.Deserialize<Dictionary<string, object>>(response);
+        if (mons == null) return;
+        ObservableCollection<string> temp = [];
+        foreach (string mon in mons.Keys) temp.Add(mon);
+        AllMons = temp;
+    }
+
+    /*public void SaveTeam() // Saves BotTeamInfo to json file
     {   
         for (int i = 0; i < 6; i++)
         {
@@ -323,5 +347,5 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             UnloadTeam();
         }
-    }
+    }*/
 }
