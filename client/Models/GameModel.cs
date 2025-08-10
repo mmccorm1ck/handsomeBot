@@ -7,6 +7,15 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 namespace HandsomeBot.Models;
 public class GameModel() : INotifyPropertyChanged // Class to hold info about a game
 {
+    public string ServerUrl
+    {
+        get => _serverUrl;
+        set
+        {
+            _serverUrl = value;
+            OnPropertyChanged();
+        }
+    }
     public string Format
     {
         get => _format;
@@ -70,6 +79,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    private string _serverUrl = "";
     private string _format = "";
     private string _botTeamURL = "";
     private ObservableCollection<TeamModel> _botTeam = new()
