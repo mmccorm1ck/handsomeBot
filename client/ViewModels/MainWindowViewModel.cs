@@ -136,7 +136,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         DialogButtonVisible = false;
         DialogMessage = "Calculating...";
         MainDialogOpen = true;
-        if (nextPageNumber == 2 && !File.Exists("Data/newBotTeam.json"))
+        /*if (nextPageNumber == 2)
         {
             DialogButtonVisible = true;
             DialogMessage = "Please load a team";
@@ -147,7 +147,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             DialogButtonVisible = true;
             DialogMessage = "Please enter a team";
             return;
-        }
+        }*/
         Task.Run(() => InstanceCreator());
     }
 
@@ -169,9 +169,8 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         CurrentButtonLabel = targetPage.ButtonLabel;
         if (nextPageNumber == 4)
         {
-            File.Move("Data/newBotTeam.json", "Data/botTeam.json", true);
-            File.Move("Data/newOppTeam.json", "Data/oppTeam.json", true);
-            File.Move("Data/newGameInfo.json", "Data/gameInfo.json", true);
+            TheGame.BotTeamPrev = TheGame.BotTeam;
+            TheGame.OppTeamPrev = TheGame.OppTeam;
             nextPageNumber = 1;
             return;
         }

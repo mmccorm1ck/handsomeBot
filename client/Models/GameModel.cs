@@ -25,6 +25,15 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public int Gen
+    {
+        get => _gen;
+        set
+        {
+            _gen = value;
+            OnPropertyChanged();
+        }
+    }
     public string BotTeamURL
     {
         get => _botTeamURL;
@@ -81,6 +90,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
     }
     private string _serverUrl = "";
     private string _format = "";
+    private int _gen = 0;
     private string _botTeamURL = "";
     private ObservableCollection<TeamModel> _botTeam = new()
     {

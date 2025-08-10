@@ -165,7 +165,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         //Debug.WriteLine(GameInfo.BotTeamURL);
         Task task = Task.Run(async () => await LoadPasteHtml(TheGame.BotTeamURL));
     }
-    
+
     public async Task LoadPasteHtml(string httpLink) // Parses HTML from pokepaste link and stores info in TheGame.BotTeam
     {
         HttpClient client = new HttpClient();
@@ -173,39 +173,48 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         string[] responses = response.Split('\n');
         int currPokemon = -1;
         int currMove = -1;
-        for (int i = 0; i < responses.Length-1; i++) {
-            responses[i] = responses[i].Trim(' ','\t');
+        for (int i = 0; i < responses.Length - 1; i++)
+        {
+            responses[i] = responses[i].Trim(' ', '\t');
             //Debug.WriteLine(i.ToString()+responses[i]);
-            if (responses[i].Contains("<article>")) { // Detects splits between each pokemon
+            if (responses[i].Contains("<article>"))
+            { // Detects splits between each pokemon
                 currPokemon++;
                 continue;
             }
-            if (currPokemon < 0) { // If not yet reached pokemon info in pokepaste
+            if (currPokemon < 0)
+            { // If not yet reached pokemon info in pokepaste
                 continue;
             }
-            if (responses[i].Contains("Format")) { // Saves format of pokepaste
+            if (responses[i].Contains("Format"))
+            { // Saves format of pokepaste
                 TheGame.Format = responses[i].Split(' ')[1][0..^4];
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("img-pokemon")) { // Saves URL of pokemon image
+            if (responses[i].Contains("img-pokemon"))
+            { // Saves URL of pokemon image
                 TheGame.BotTeam[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Nature")) { // Saves pokemon's nature
+            if (responses[i].Contains("Nature"))
+            { // Saves pokemon's nature
                 TheGame.BotTeam[currPokemon].Nature = responses[i].Split(' ')[0];
                 currMove = 0; // Prepares to load moves
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (currMove > -1) { // If loading moves
-                if (responses[i] == "") { // If last move has been read
+            if (currMove > -1)
+            { // If loading moves
+                if (responses[i] == "")
+                { // If last move has been read
                     currMove = -1;
                     continue;
                 }
                 int idx;
-                if (responses[i].Contains("IVs")) { // If there are IVs to be read
+                if (responses[i].Contains("IVs"))
+                { // If there are IVs to be read
                     string[] temps = responses[i][31..].Split(" / ");
                     for (int j = 0; j < temps.Length; j++)
                     {
@@ -213,7 +222,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         string[] temp = temps[j].Split(" ");
                         idx = temp[0].LastIndexOf('>') + 1;
                         temp[0] = temp[0][idx..];
-                        switch(temp[1])
+                        switch (temp[1])
                         {
                             case "HP":
                                 TheGame.BotTeam[currPokemon].IV.HP = Int32.Parse(temp[0]);
@@ -240,67 +249,76 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
                 currMove++; // Increments to next move
-                switch(currMove)
+                switch (currMove)
                 {
                     case 1:
-                        TheGame.BotTeam[currPokemon].Move1 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move1 = responses[i][idx..].TrimStart([' ', '-']);
                         break;
                     case 2:
-                        TheGame.BotTeam[currPokemon].Move2 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move2 = responses[i][idx..].TrimStart([' ', '-']);
                         break;
                     case 3:
-                        TheGame.BotTeam[currPokemon].Move3 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move3 = responses[i][idx..].TrimStart([' ', '-']);
                         break;
                     case 4:
-                        TheGame.BotTeam[currPokemon].Move4 = responses[i][idx..].TrimStart([' ','-']);
+                        TheGame.BotTeam[currPokemon].Move4 = responses[i][idx..].TrimStart([' ', '-']);
                         currMove = -1;
                         break;
                 }
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (!responses[i].Contains("<span")) { // If line has no relevent info
+            if (!responses[i].Contains("<span"))
+            { // If line has no relevent info
                 continue;
             }
-            if (responses[i].Contains("<pre>")) { // Detects line that contains pokemon name, gender and item
+            if (responses[i].Contains("<pre>"))
+            { // Detects line that contains pokemon name, gender and item
                 int idx = responses[i].LastIndexOf('@') + 2;
-                if (idx != 1) { // If there is an item
+                if (idx != 1)
+                { // If there is an item
                     string item = responses[i][idx..];
-                    if (item.Contains("<span")) {
+                    if (item.Contains("<span"))
+                    {
                         item = item[0..^7];
                         int idxtemp = item.LastIndexOf('>');
                         item = item[idxtemp..];
                     }
                     TheGame.BotTeam[currPokemon].Item = item;
                 }
-                if (responses[i].Contains("gender")) { // If there is a specified gender
-                    idx = responses[i].LastIndexOf("gender")+10;
+                if (responses[i].Contains("gender"))
+                { // If there is a specified gender
+                    idx = responses[i].LastIndexOf("gender") + 10;
                     TheGame.BotTeam[currPokemon].Gender = responses[i][idx];
                 }
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
                 TheGame.BotTeam[currPokemon].Name = responses[i][idx..];
             }
-            if (responses[i].Contains("Ability")) { // Saves pokemon's ability
+            if (responses[i].Contains("Ability"))
+            { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Ability = responses[i][idx..];
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Level")) { // Saves pokemon's level
+            if (responses[i].Contains("Level"))
+            { // Saves pokemon's level
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Level = Int32.Parse(responses[i][idx..]);
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("Tera Type")) { // Saves pokemon's tera type
+            if (responses[i].Contains("Tera Type"))
+            { // Saves pokemon's tera type
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Tera = responses[i][idx..];
                 //Debug.WriteLine(i);
                 continue;
             }
-            if (responses[i].Contains("EVs")) { // Saves pokemon's EVs
+            if (responses[i].Contains("EVs"))
+            { // Saves pokemon's EVs
                 string[] temps = responses[i][31..].Split(" / ");
                 for (int j = 0; j < temps.Length; j++)
                 {
@@ -308,7 +326,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     string[] temp = temps[j].Split(" ");
                     int idx = temp[0].LastIndexOf('>') + 1;
                     temp[0] = temp[0][idx..];
-                    switch(temp[1])
+                    switch (temp[1])
                     {
                         case "HP":
                             TheGame.BotTeam[currPokemon].EV.HP = Int32.Parse(temp[0]);
@@ -335,6 +353,9 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
 
         }
+        string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2);
+        if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1);
+        TheGame.Gen = int.Parse(tempGen);
         //SaveTeam();
     }
 }
