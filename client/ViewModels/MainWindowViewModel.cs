@@ -71,7 +71,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
+
     private bool _mainDialogOpen = false;
 
     public bool MainDialogOpen
@@ -107,6 +107,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+    string dataFileName = "Data/data.json";
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {
@@ -123,7 +124,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         {
             ModelType = type;
             PageNumber = pgNum;
-            ButtonLabel = lab; 
+            ButtonLabel = lab;
         }
 
         public int PageNumber { get; }
@@ -174,13 +175,13 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             nextPageNumber = 1;
             return;
         }
+        SaveData();
         nextPageNumber++;
         MainDialogOpen = false;
     }
-    static GameModel LoadData()
+    GameModel LoadData()
     {
-        GameModel temp = new() {};
-        string dataFileName = "Data/data.json";
+        GameModel temp = new() { };
         string dataJsonString = "";
         try
         {
@@ -200,5 +201,15 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
         temp = JsonSerializer.Deserialize<GameModel>(dataJsonString)!;
         return temp;
+    }
+    void SaveData()
+    {
+        var options = new JsonSerializerOptions {WriteIndented = true};
+        using (StreamWriter sw = File.CreateText(dataFileName))
+        {
+            string dataJsonString = JsonSerializer.Serialize(TheGame, options);
+            sw.Write(dataJsonString);
+            sw.Close();
+        }
     }
 }
