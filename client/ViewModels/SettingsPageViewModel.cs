@@ -15,14 +15,14 @@ public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
     public SettingsPageViewModel(GameModel game)
     {
         TheGame = game;
-        LoadSettings();
+        //LoadSettings();
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        SaveSettings();
+        //SaveSettings();
     }
 
     private GameModel _theGame = new();
@@ -37,7 +37,7 @@ public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private string _serverUrl = "";
+    /*private string _serverUrl = "";
 
     public string ServerUrl
     {
@@ -90,5 +90,5 @@ public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
     public class ServerSettings()
     {
         public string? serverUrl;
-    }
+    }*/
 }
