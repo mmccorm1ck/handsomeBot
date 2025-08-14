@@ -24,12 +24,18 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     public OpenerPageViewModel(GameModel game)
     {
         TheGame = game;
+        TheGame.Turns = new() {
+            new()
+            {
+                TurnNo = 0
+            }
+        };
         p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
-        LoadTeams();
+        //LoadTeams();
         HandleP();
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -46,10 +52,10 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         OpenerMonNos.RemoveRange(4, OpenerMonNos.Count-4);
         for (int i = 0; i < 4; i++)
         {
-            AvailablePokemon[i] = BotTeamInfo[OpenerMonNos[i]].Name;
+            AvailablePokemon[i] = TheGame.BotTeam[OpenerMonNos[i]].Name;
             NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]);
         }
-        for (int i = 0; i < 2; i++) Turn.BotStartMons[i] = OpenerMonNos[i];
+        for (int i = 0; i < 2; i++) TheGame.Turns[0].BotStartMons[i] = OpenerMonNos[i];
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -75,7 +81,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public Dictionary<string, int> StratWeights = new(); // Contains strategic value of moves & abilities for deciding on an opener
 
-    public ObservableCollection<Models.TeamModel> BotTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
+    /*public ObservableCollection<Models.TeamModel> TheGame.BotTeam{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
         {
@@ -109,7 +115,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     };
 
-    public ObservableCollection<Models.TeamModel> OppTeamInfo{get;set;} = new() // Initialize collection of pokemon to store info about bot team
+    public ObservableCollection<Models.TeamModel> TheGame.OppTeam{get;set;} = new() // Initialize collection of pokemon to store info about bot team
     {
         new Models.TeamModel
         {
@@ -148,7 +154,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     public Models.TurnModel Turn{get;set;} = new()
     {
         TurnNo=0
-    };
+    };*/
 
     private int _eventNumber = 0; // Tracks event number in chain of events
 
@@ -209,8 +215,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _openerMonNos = value;
-            Turn.BotStartMons = _openerMonNos;
-            Turn.BotEndMons = _openerMonNos;
+            TheGame.Turns[0].BotStartMons = _openerMonNos;
+            TheGame.Turns[0].BotEndMons = _openerMonNos;
             OnPropertyChanged();
         }
     }
@@ -227,7 +233,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             {
                 if (!_oppOpener[i].Equals(""))
                 {
-                    Turn.OppStartMons[i] = NameToNo["Opponent's "+_oppOpener[i]];
+                    TheGame.Turns[0].OppStartMons[i] = NameToNo["Opponent's "+_oppOpener[i]];
                 }
             }
             OnPropertyChanged();
@@ -286,7 +292,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
 
-    private char _gen;
+    /*private char _gen;
 
     public char Gen
     {
@@ -351,44 +357,44 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        ObservableCollection<Models.TeamModel> BotTeamInfoTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(botTeamJsonString)!;
-        ObservableCollection<Models.TeamModel> OppTeamInfoTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
+        ObservableCollection<Models.TeamModel> TheGame.BotTeamTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(botTeamJsonString)!;
+        ObservableCollection<Models.TeamModel> TheGame.OppTeamTemp = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(oppTeamJsonString)!;
         Models.GameModel GameInfoTemp = System.Text.Json.JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
         GameInfo.Format = GameInfoTemp.Format;
         Gen = GameInfo.Format[3];
         for (int i = 0; i < 6; i++)
         {
-            AvailablePokemon[i+4]    = "Opponent's "+ OppTeamInfoTemp[i].Name;
-            NameToNo.Add("Opponent's "+OppTeamInfoTemp[i].Name, i+4);
-            OpponentsPokemon[i]      = OppTeamInfoTemp[i].Name;
-            BotTeamInfo[i].Name      = BotTeamInfoTemp[i].Name;
-            BotTeamInfo[i].Gender    = BotTeamInfoTemp[i].Gender;
-            BotTeamInfo[i].Item      = BotTeamInfoTemp[i].Item;
-            BotTeamInfo[i].Level     = BotTeamInfoTemp[i].Level;
-            BotTeamInfo[i].Ability   = BotTeamInfoTemp[i].Ability;
-            BotTeamInfo[i].Nature    = BotTeamInfoTemp[i].Nature;
-            BotTeamInfo[i].EV        = BotTeamInfoTemp[i].EV;
-            BotTeamInfo[i].IV        = BotTeamInfoTemp[i].IV;
-            BotTeamInfo[i].Tera      = BotTeamInfoTemp[i].Tera;
-            BotTeamInfo[i].Move1     = BotTeamInfoTemp[i].Move1;
-            BotTeamInfo[i].Move2     = BotTeamInfoTemp[i].Move2;
-            BotTeamInfo[i].Move3     = BotTeamInfoTemp[i].Move3;
-            BotTeamInfo[i].Move4     = BotTeamInfoTemp[i].Move4;
-            BotTeamInfo[i].PokeImage = BotTeamInfoTemp[i].PokeImage;
-            OppTeamInfo[i].Name      = OppTeamInfoTemp[i].Name;
-            OppTeamInfo[i].Gender    = OppTeamInfoTemp[i].Gender;
-            OppTeamInfo[i].Item      = OppTeamInfoTemp[i].Item;
-            OppTeamInfo[i].Level     = OppTeamInfoTemp[i].Level;
-            OppTeamInfo[i].Ability   = OppTeamInfoTemp[i].Ability;
-            OppTeamInfo[i].Nature    = OppTeamInfoTemp[i].Nature;
-            OppTeamInfo[i].EV        = OppTeamInfoTemp[i].EV;
-            OppTeamInfo[i].IV        = OppTeamInfoTemp[i].IV;
-            OppTeamInfo[i].Tera      = OppTeamInfoTemp[i].Tera;
-            OppTeamInfo[i].Move1     = OppTeamInfoTemp[i].Move1;
-            OppTeamInfo[i].Move2     = OppTeamInfoTemp[i].Move2;
-            OppTeamInfo[i].Move3     = OppTeamInfoTemp[i].Move3;
-            OppTeamInfo[i].Move4     = OppTeamInfoTemp[i].Move4;
-            OppTeamInfo[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
+            AvailablePokemon[i+4]    = "Opponent's "+ TheGame.OppTeamTemp[i].Name;
+            NameToNo.Add("Opponent's "+TheGame.OppTeamTemp[i].Name, i+4);
+            OpponentsPokemon[i]      = TheGame.OppTeamTemp[i].Name;
+            TheGame.BotTeam[i].Name      = BotTeamInfoTemp[i].Name;
+            TheGame.BotTeam[i].Gender    = BotTeamInfoTemp[i].Gender;
+            TheGame.BotTeam[i].Item      = BotTeamInfoTemp[i].Item;
+            TheGame.BotTeam[i].Level     = BotTeamInfoTemp[i].Level;
+            TheGame.BotTeam[i].Ability   = BotTeamInfoTemp[i].Ability;
+            TheGame.BotTeam[i].Nature    = BotTeamInfoTemp[i].Nature;
+            TheGame.BotTeam[i].EV        = BotTeamInfoTemp[i].EV;
+            TheGame.BotTeam[i].IV        = BotTeamInfoTemp[i].IV;
+            TheGame.BotTeam[i].Tera      = BotTeamInfoTemp[i].Tera;
+            TheGame.BotTeam[i].Move1     = BotTeamInfoTemp[i].Move1;
+            TheGame.BotTeam[i].Move2     = BotTeamInfoTemp[i].Move2;
+            TheGame.BotTeam[i].Move3     = BotTeamInfoTemp[i].Move3;
+            TheGame.BotTeam[i].Move4     = BotTeamInfoTemp[i].Move4;
+            TheGame.BotTeam[i].PokeImage = BotTeamInfoTemp[i].PokeImage;
+            TheGame.OppTeam[i].Name      = OppTeamInfoTemp[i].Name;
+            TheGame.OppTeam[i].Gender    = OppTeamInfoTemp[i].Gender;
+            TheGame.OppTeam[i].Item      = OppTeamInfoTemp[i].Item;
+            TheGame.OppTeam[i].Level     = OppTeamInfoTemp[i].Level;
+            TheGame.OppTeam[i].Ability   = OppTeamInfoTemp[i].Ability;
+            TheGame.OppTeam[i].Nature    = OppTeamInfoTemp[i].Nature;
+            TheGame.OppTeam[i].EV        = OppTeamInfoTemp[i].EV;
+            TheGame.OppTeam[i].IV        = OppTeamInfoTemp[i].IV;
+            TheGame.OppTeam[i].Tera      = OppTeamInfoTemp[i].Tera;
+            TheGame.OppTeam[i].Move1     = OppTeamInfoTemp[i].Move1;
+            TheGame.OppTeam[i].Move2     = OppTeamInfoTemp[i].Move2;
+            TheGame.OppTeam[i].Move3     = OppTeamInfoTemp[i].Move3;
+            TheGame.OppTeam[i].Move4     = OppTeamInfoTemp[i].Move4;
+            TheGame.OppTeam[i].PokeImage = OppTeamInfoTemp[i].PokeImage;
         }
         int gameType = 0;
         if (GameInfo.Format.Contains("vgc"))
@@ -414,7 +420,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         Dictionary<string, int>[]? temp = JsonConvert.DeserializeObject<Dictionary<string, int>[]>(stratJsonString);
         if (temp is not null) StratWeights = temp[gameType];
-    }
+    }*/
 
     private float[] _weights = new float[6];
 
@@ -462,7 +468,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         return output.Trim(',') + "}";
     }
 
-    public string EncodeMon(char gen, TeamModel monInfo)
+    public string EncodeMon(int gen, TeamModel monInfo)
     {
         string encodedMon = "{#gen#:"+gen+",#name#:#"+monInfo.Name+"#,#options#:{#level#:"+monInfo.Level;
         if (monInfo.Item != "None") {
@@ -484,24 +490,24 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void SendData(int mon, int opp, int m)
     {
-        string encodedCalc = $"{Gen} {EncodeMon(Gen, BotTeamInfo[mon])} {EncodeMon(Gen, OppTeamInfo[opp])}";
+        string encodedCalc = $"{TheGame.Gen} {EncodeMon(TheGame.Gen, TheGame.BotTeam[mon])} {EncodeMon(TheGame.Gen, TheGame.OppTeam[opp])}";
             string move;
             switch(m)
             {
                 case 0:
-                    move = BotTeamInfo[mon].Move1;
+                    move = TheGame.BotTeam[mon].Move1;
                     break;
                 case 1:
-                    move = BotTeamInfo[mon].Move2;
+                    move = TheGame.BotTeam[mon].Move2;
                     break;
                 case 2:
-                    move = BotTeamInfo[mon].Move3;
+                    move = TheGame.BotTeam[mon].Move3;
                     break;
                 default:
-                    move = BotTeamInfo[mon].Move4;
+                    move = TheGame.BotTeam[mon].Move4;
                     break;
             }
-            string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+Gen+",#name#:#"+move.Replace(' ','_')+"#,#options#:{}}";
+            string toSend = "ts-node src/index.ts c "+encodedCalc+" {#gen#:"+TheGame.Gen +",#name#:#"+move.Replace(' ','_')+"#,#options#:{}}";
             //Console.WriteLine(toSend);
             p.StandardInput.WriteLine(toSend);
     }
@@ -529,7 +535,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                         {
                             AllItems.Sort();
                             currStep = 'a';
-                            p.StandardInput.WriteLine($"ts-node src/index.ts a {Gen}");
+                            p.StandardInput.WriteLine($"ts-node src/index.ts a {TheGame.Gen}");
                         }
                         else if (currStep == 'a')
                         {
@@ -584,7 +590,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.Start();
         p.StandardInput.WriteLine($"cd {rootDir}Javascript");
         p.BeginOutputReadLine();
-        p.StandardInput.WriteLine($"ts-node src/index.ts i {Gen}");
+        p.StandardInput.WriteLine($"ts-node src/index.ts i {TheGame.Gen}");
         p.WaitForExit();
     }
 
@@ -592,25 +598,25 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         for (int currMon = 0; currMon < 6; currMon++)
         {
-            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Ability) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability) )
             {
-                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Ability] * 10;
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
             }
-            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move1) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1) )
             {
-                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move1] * 10;
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
             }
-            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move2) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2) )
             {
-                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move2] * 10;
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move2] * 10;
             }
-            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move3) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3) )
             {
-                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move3] * 10;
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move3] * 10;
             }
-            if (StratWeights.ContainsKey(BotTeamInfo[currMon].Move4) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4) )
             {
-                Weights[currMon] += StratWeights[BotTeamInfo[currMon].Move4] * 10;
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
             }
         }
     }
@@ -631,8 +637,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     public void SaveEvent()
     {
         if (UserMonName == "" || CurrEvent.EventType == "") return;
-        if (Turn.OppEndMons[0] == -1 || Turn.OppEndMons[1] == -1) Turn.OppEndMons = Turn.OppStartMons;
-        if (Turn.BotEndMons[0] == -1 || Turn.BotEndMons[1] == -1) Turn.BotEndMons = Turn.BotStartMons;
+        if (TheGame.Turns[0].OppEndMons[0] == -1 || TheGame.Turns[0].OppEndMons[1] == -1) TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
+        if (TheGame.Turns[0].BotEndMons[0] == -1 || TheGame.Turns[0].BotEndMons[1] == -1) TheGame.Turns[0].BotEndMons = TheGame.Turns[0].BotStartMons;
         CurrEvent.TargetMons = [];
         for (int i = 0; i < 10; i++)
         {
@@ -656,24 +662,24 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             var search = new MonSwitchSearch(CurrEvent.UserMon);
             if (CurrEvent.UserMon < 4)
             {
-                int i = Turn.BotEndMons.FindIndex(search.MonMatch);
+                int i = TheGame.Turns[0].BotEndMons.FindIndex(search.MonMatch);
                 Console.WriteLine(i);
                 if (i == -1) return;
-                Turn.BotEndMons[i] = CurrEvent.TargetMons[0];
+                TheGame.Turns[0].BotEndMons[i] = CurrEvent.TargetMons[0];
             } else 
             {
-                int i = Turn.OppEndMons.FindIndex(search.MonMatch);
+                int i = TheGame.Turns[0].OppEndMons.FindIndex(search.MonMatch);
                 if (i == -1) return;
-                Turn.OppEndMons[i] = CurrEvent.TargetMons[0];
+                TheGame.Turns[0].OppEndMons[i] = CurrEvent.TargetMons[0];
             }
         }
-        Turn.EventList.Add(new());
-        Turn.EventList[EventNumber] = CurrEvent; 
+        TheGame.Turns[0].EventList.Add(new());
+        TheGame.Turns[0].EventList[EventNumber] = CurrEvent; 
         string historyFileName = "Data/gameHistory.json";
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(historyFileName))
         {
-            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(Turn, options);
+            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(TheGame.Turns[0], options);
             sw.Write(historyJsonString);
             sw.Close();
         }
