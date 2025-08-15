@@ -214,7 +214,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     async public Task GetAllMons()
     {
         HttpClient client = new HttpClient();
-        string url = "http://" + TheGame.ServerUrl + "/mons?{%22gen%22:" + TheGame.Gen.ToString() + "}";
+        string url = "http://" + TheGame.ServerUrl + "/mons?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
         string response = "";
         try
         {

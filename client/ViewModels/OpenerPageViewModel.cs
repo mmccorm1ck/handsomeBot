@@ -13,9 +13,9 @@ using HandsomeBot.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Avalonia.Markup.Xaml;
 using DialogHostAvalonia;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace HandsomeBot.ViewModels;
 
@@ -30,13 +30,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                 TurnNo = 0
             }
         };
-        p.StartInfo.RedirectStandardError = true;
+        /*p.StartInfo.RedirectStandardError = true;
         p.StartInfo.RedirectStandardInput = true;
         p.StartInfo.RedirectStandardOutput = true;
         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         p.StartInfo.FileName = "cmd.exe";
         //LoadTeams();
-        HandleP();
+        HandleP();*/
+        CalcDamages();
         CalcStrategy();
         for (int i = 0; i < 6; i++)
         {
@@ -77,7 +78,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Process p = new Process();
+    //public Process p = new Process();
 
     public Dictionary<string, int> StratWeights = new(); // Contains strategic value of moves & abilities for deciding on an opener
 
@@ -290,7 +291,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
+    //public string rootDir = System.AppDomain.CurrentDomain.BaseDirectory;
 
     /*private char _gen;
 
@@ -447,7 +448,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public string EncodeStats(int deflt, EVIVModel statsInfo)
+    /*public string EncodeStats(int deflt, EVIVModel statsInfo)
     {
         string output = "{";
         if (statsInfo.HP != deflt) {
@@ -592,29 +593,54 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         p.BeginOutputReadLine();
         p.StandardInput.WriteLine($"ts-node src/index.ts i {TheGame.Gen}");
         p.WaitForExit();
+    }*/
+
+    public async void CalcDamages()
+    {
+        CalcCallModel callData = new()
+        {
+            Gen = TheGame.Gen,
+            BotMons = TheGame.BotTeam,
+            OppMons = TheGame.OppTeam
+        };
+        string callString = JsonSerializer.Serialize(callData);
+        HttpClient client = new HttpClient();
+        List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{TheGame.ServerUrl}/calc?{callString}");
+        if (response == null) return;
+        foreach (CalcRespModel result in response)
+        {
+            if (result.BotUser)
+            {
+                Weights[result.UserMon] += result.DamageRange[0];
+            }
+            else
+            {
+                Weights[result.TargetMon] -= result.DamageRange[result.DamageRange.Count] / 2;
+            }
+        }
     }
 
-    public void CalcStrategy() 
+    public void CalcStrategy()
     {
         for (int currMon = 0; currMon < 6; currMon++)
         {
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
             }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
             }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move2] * 10;
             }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move3] * 10;
             }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4) )
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
             }
