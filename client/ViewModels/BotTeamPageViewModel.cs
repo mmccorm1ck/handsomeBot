@@ -2,11 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Net.Http;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Text.Json;
-using System.IO;
 using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
@@ -35,121 +31,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    /*public ObservableCollection<Models.TeamModel> TheGame.BotTeam { get; set; } = new() // Initialize collection of pokemon to store info about bot team
-    {
-        new Models.TeamModel
-        {
-            Name = "Pokemon 1", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        },
-        new Models.TeamModel
-        {
-            Name = "Pokemon 2", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        },
-        new Models.TeamModel
-        {
-            Name = "Pokemon 3", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        },
-        new Models.TeamModel
-        {
-            Name = "Pokemon 4", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        },
-        new Models.TeamModel
-        {
-            Name = "Pokemon 5", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        },
-        new Models.TeamModel
-        {
-            Name = "Pokemon 6", Gender = 'R', Item = "None", Level =  50, Ability = "None", Nature = "None",
-            Tera = "None", Move1 = "None", Move2 = "None", Move3 = "None", Move4 = "None", PokeImage = ""
-        }
-    };
-
-    public Models.GameModel GameInfo{get;set;} = new() {};
-
-    public void SaveTeam() // Saves TheGame.BotTeam to json file
-    {   
-        //Debug.WriteLine(TheGame.BotTeam[0].Name);
-        if (TheGame.BotTeam[0].Name == "Pokemon 1") {
-            return;
-        }
-        string teamFileName = "Data/newBotTeam.json";
-        string infoFileName = "Data/newGameInfo.json";
-        var options = new JsonSerializerOptions {WriteIndented = true};
-        using (StreamWriter sw = File.CreateText(teamFileName))
-        {
-            string teamJsonString = JsonSerializer.Serialize(TheGame.BotTeam, options);
-            sw.Write(teamJsonString);
-            sw.Close();
-        }
-        using (StreamWriter sw = File.CreateText(infoFileName))
-        {
-            string infoJsonString = JsonSerializer.Serialize(GameInfo, options);
-            sw.Write(infoJsonString);
-            sw.Close();
-        }
-    }
-
-    public void LoadTeam() // Loads json file into TheGame.BotTeam
-    {
-        string teamFileName = "Data/botTeam.json";
-        string infoFileName = "Data/gameInfo.json";
-        string teamJsonString = "";
-        string infoJsonString = "";
-        try{
-            using (StreamReader sr = File.OpenText(teamFileName))
-            {
-                teamJsonString = sr.ReadToEnd();
-                //Debug.WriteLine(teamJsonString);
-                sr.Close();
-            }
-        }
-        catch
-        {
-            return;
-        }
-        if (teamJsonString == "")
-        {
-            return;
-        }
-        ObservableCollection<Models.TeamModel> TheGame.BotTeamTemp = JsonSerializer.Deserialize<ObservableCollection<Models.TeamModel>>(teamJsonString)!;
-        using (StreamReader sr = File.OpenText(infoFileName))
-        {
-            infoJsonString = sr.ReadToEnd();
-            //Debug.WriteLine(infoJsonString);
-            sr.Close();
-        }
-        if (infoJsonString == "")
-        {
-            return;
-        }
-        Models.GameModel GameInfoTemp = JsonSerializer.Deserialize<Models.GameModel>(infoJsonString)!;
-        for (int i = 0; i < 6; i++)
-        {
-            TheGame.BotTeam[i].Name = BotTeamInfoTemp[i].Name;
-            TheGame.BotTeam[i].Gender = BotTeamInfoTemp[i].Gender;
-            TheGame.BotTeam[i].Item = BotTeamInfoTemp[i].Item;
-            TheGame.BotTeam[i].Level = BotTeamInfoTemp[i].Level;
-            TheGame.BotTeam[i].Ability = BotTeamInfoTemp[i].Ability;
-            TheGame.BotTeam[i].Nature = BotTeamInfoTemp[i].Nature;
-            TheGame.BotTeam[i].EV = BotTeamInfoTemp[i].EV;
-            TheGame.BotTeam[i].IV = BotTeamInfoTemp[i].IV;
-            TheGame.BotTeam[i].Tera = BotTeamInfoTemp[i].Tera;
-            TheGame.BotTeam[i].Move1 = BotTeamInfoTemp[i].Move1;
-            TheGame.BotTeam[i].Move2 = BotTeamInfoTemp[i].Move2;
-            TheGame.BotTeam[i].Move3 = BotTeamInfoTemp[i].Move3;
-            TheGame.BotTeam[i].Move4 = BotTeamInfoTemp[i].Move4;
-            TheGame.BotTeam[i].PokeImage = BotTeamInfoTemp[i].PokeImage;
-        }
-        GameInfo.Format = GameInfoTemp.Format;
-        GameInfo.BotTeamURL = GameInfoTemp.BotTeamURL;
-        SaveTeam();
-    }*/
 
     public void LoadTeam()
     {
@@ -356,6 +237,5 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2);
         if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1);
         TheGame.Gen = int.Parse(tempGen);
-        //SaveTeam();
     }
 }

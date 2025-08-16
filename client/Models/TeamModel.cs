@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace HandsomeBot.Models;
 

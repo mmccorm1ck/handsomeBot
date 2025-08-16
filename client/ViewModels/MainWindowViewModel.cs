@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Reflection.Emit;
-using System.Runtime;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using DialogHostAvalonia;
-using ReactiveUI;
 using System.Threading.Tasks;
-using System.Reflection;
-using System.Diagnostics;
-using System.Text;
 using Avalonia.Threading;
-using HandsomeBot.Models;
 using System.Text.Json;
+using HandsomeBot.Models;
 
 namespace HandsomeBot.ViewModels;
 
@@ -137,18 +126,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         DialogButtonVisible = false;
         DialogMessage = "Calculating...";
         MainDialogOpen = true;
-        /*if (nextPageNumber == 2)
-        {
-            DialogButtonVisible = true;
-            DialogMessage = "Please load a team";
-            return;
-        }
-        if (nextPageNumber == 3 && !File.Exists("Data/newOppTeam.json"))
-        {
-            DialogButtonVisible = true;
-            DialogMessage = "Please enter a team";
-            return;
-        }*/
         Task.Run(() => InstanceCreator());
     }
 
