@@ -21,10 +21,17 @@ const handleRequest = (url:string) => {
     const params = url.split('?');
     if (url === '/' || !params[1]) return { valid, result };
     console.log(params[1]);
-    const inputJson = JSON.parse(decodeURI(params[1]));
-    const genNum = inputJson.gen || 0;
-    if (params[0] === '/calc') {
-        result = calcDamages(genNum, inputJson.field, inputJson.userMons, inputJson.opponentMons);
+    let inputJson: inputObject;
+    try {
+        inputJson = JSON.parse(decodeURI(params[1])) as inputObject;
+    }
+    catch
+    {
+        return {valid, result};
+    }
+    const genNum = inputJson.Gen || 0;
+    if (params[0] === '/calc' && inputJson.BotMons && inputJson.OppMons) {
+        result = calcDamages(inputJson);
         if (!result) valid = false;
         else valid = true;
     }
@@ -43,14 +50,12 @@ const handleRequest = (url:string) => {
     return { valid, result };
 }
 
-function calcDamages(genNum:number, fieldRaw:JSON, userMons:JSON, opponentMons:JSON): object[] {
-    const gen = Generations.get(genNum as GenerationNum);
-    const field: Field = fieldRaw[0];
+function calcDamages(input: inputObject): object[] {
+    const gen = Generations.get(input.Gen as GenerationNum);
+    const field: Field = input.Field || new Field;
     let results: object[] = [];
-    for (const user of userMons[Symbol.iterator]) {
-        const userMon: Pokemon = new Pokemon(gen, user.name, user.options);
-        for (const opp of opponentMons[Symbol.iterator]) {
-            const oppMon: Pokemon = new Pokemon(gen, opp.name, opp.options);
+    for (const userMon of input.BotMons) {
+        for (const oppMon of input.OppMons) {
             let tempResult: resultObject = {
                 user: userMon.name,
                 opponent: oppMon.name,
@@ -95,6 +100,14 @@ type resultObject =
     user:string,
     opponent:string,
     damages:object[]
+}
+
+type inputObject = 
+{
+    Gen: number,
+    BotMons?: Pokemon[],
+    OppMons?: Pokemon[],
+    Field?: Field
 }
 
 server.listen(port, () => {
