@@ -3,8 +3,34 @@ using System.ComponentModel;
 
 namespace HandsomeBot.Models;
 
-public class FieldModel() : INotifyPropertyChanged // Class to convert pokemon info into server-compatable format
+public class FieldModel() : INotifyPropertyChanged // Class to convert field info into server-compatable format
 {
+    public FieldModel(string inputGameType, ArenaModel inputModel, bool attackerIsBot) : this()
+    {
+        gameType = inputGameType;
+        if (inputModel.Weather != "None") weather = inputModel.Weather;
+        if (inputModel.Terrain != "None") terrain = inputModel.Terrain;
+        isMagicRoom = inputModel.MagicRoom;
+        isWonderRoom = inputModel.WonderRoom;
+        isGravity = inputModel.Gravity;
+        isAuraBreak = inputModel.AuraBreak;
+        isFairyAura = inputModel.FairyAura;
+        isDarkAura = inputModel.DarkAura;
+        isBeadsOfRuin = inputModel.BeadsOfRuin;
+        isSwordOfRuin = inputModel.SwordOfRuin;
+        isTabletOfRuin = inputModel.TabletOfRuin;
+        isVesselOfRuin = inputModel.VesselOfRuin;
+        if (attackerIsBot)
+        {
+            attackerSide = ParseSide(inputModel.BotSide);
+            defenderSide = ParseSide(inputModel.OppSide);
+        }
+        else
+        {
+            attackerSide = ParseSide(inputModel.OppSide);
+            defenderSide = ParseSide(inputModel.BotSide);
+        }
+    }
     public string gameType
     {
         get => _gameType;
@@ -143,39 +169,64 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert pokemon i
     private string _gameType = "Doubles";
     private string? _weather;
     private string? _terrain;
-    private bool _isMagicRoom = false;
-    private bool _isWonderRoom = false;
-    private bool _isGravity = false;
-    private bool _isAuraBreak = false;
-    private bool _isFairyAura = false;
-    private bool _isDarkAura = false;
-    private bool _isBeadsOfRuin = false;
-    private bool _isSwordOfRuin = false;
-    private bool _isTabletOfRuin = false;
-    private bool _isVesselOfRuin = false;
-    private Side _attackerSide = new();
-    private Side _defenderSide = new();
+    private bool _isMagicRoom;
+    private bool _isWonderRoom;
+    private bool _isGravity;
+    private bool _isAuraBreak;
+    private bool _isFairyAura;
+    private bool _isDarkAura;
+    private bool _isBeadsOfRuin;
+    private bool _isSwordOfRuin;
+    private bool _isTabletOfRuin;
+    private bool _isVesselOfRuin;
+    private Side _attackerSide;
+    private Side _defenderSide;
     public struct Side()
     {
-        public int spikes = 0;
-        public bool steelsurge = false;
-        public bool vinelash = false;
-        public bool wildfire = false;
-        public bool connonade = false;
-        public bool valcalith = false;
-        public bool isSR = false;
-        public bool isReflect = false;
-        public bool isLightScreen = false;
-        public bool isProtected = false;
-        public bool isSeeded = false;
-        public bool isForesight = false;
-        public bool isTailwind = false;
-        public bool isHelpingHand = false;
-        public bool isFlowerGift = false;
-        public bool isFriendGuard = false;
-        public bool isAuroraVeil = false;
-        public bool isBattery = false;
-        public bool isPowerSpot = false;
+        public int spikes;
+        public bool steelsurge;
+        public bool vinelash;
+        public bool wildfire;
+        public bool cannonade;
+        public bool volcalith;
+        public bool isSR;
+        public bool isReflect;
+        public bool isLightScreen;
+        public bool isProtected;
+        public bool isSeeded;
+        public bool isForesight;
+        public bool isTailwind;
+        public bool isHelpingHand;
+        public bool isFlowerGift;
+        public bool isFriendGuard;
+        public bool isAuroraVeil;
+        public bool isBattery;
+        public bool isPowerSpot;
+    }
+    public Side ParseSide(ArenaSideModel inputSide)
+    {
+        Side side = new()
+        {
+            spikes = inputSide.Spikes,
+            steelsurge = inputSide.Steelsurge,
+            vinelash = inputSide.Vinelash,
+            wildfire = inputSide.Wildfire,
+            cannonade = inputSide.Cannonade,
+            isSR = inputSide.SR,
+            isReflect = inputSide.Reflect,
+            isLightScreen = inputSide.LightScreen,
+            isProtected = inputSide.Protected,
+            isSeeded = inputSide.Seeded,
+            isForesight = inputSide.Foresight,
+            isTailwind = inputSide.Tailwind,
+            isHelpingHand = inputSide.HelpingHand,
+            isFlowerGift = inputSide.FlowerGift,
+            isFriendGuard = inputSide.FriendGuard,
+            isAuroraVeil = inputSide.AuroraVeil,
+            isBattery = inputSide.Battery,
+            isPowerSpot = inputSide.PowerSpot
+        };
+        return side;
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
