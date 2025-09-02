@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.Models;
-public class CalcCallModel() : INotifyPropertyChanged // Class to hold info about an event during a game
+public class CalcCallModel() : INotifyPropertyChanged // Class to hold info to send to calc server
 {
     public int Gen
     {
@@ -32,9 +32,19 @@ public class CalcCallModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
+    public FieldModel Field
+    {
+        get => _field;
+        set
+        {
+            _field = value;
+            OnPropertyChanged();
+        }
+    }
     private int _gen = -1;
     private ObservableCollection<TeamModel> _botMons = [];
     private ObservableCollection<TeamModel> _oppMons = [];
+    private FieldModel _field = new();
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
