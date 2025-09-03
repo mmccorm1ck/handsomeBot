@@ -77,6 +77,15 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public ArenaModel CurrentArena
+    {
+        get => _currentArena;
+        set
+        {
+            _currentArena = value;
+            OnPropertyChanged();
+        }
+    }
     public ObservableCollection<TurnModel> Turns
     {
         get => _turns;
@@ -106,6 +115,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
     {
         new(), new(), new(), new(), new(), new()
     };
+    private ArenaModel _currentArena = new();
     private ObservableCollection<TurnModel> _turns = [];
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
