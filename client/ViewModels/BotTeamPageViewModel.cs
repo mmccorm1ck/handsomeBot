@@ -237,5 +237,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2);
         if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1);
         TheGame.Gen = int.Parse(tempGen);
+        if (TheGame.Format.Contains("VGC") || TheGame.Format.Contains("Doubles")) TheGame.GameType = "Doubles";
+        else TheGame.GameType = "Singles";
     }
 }

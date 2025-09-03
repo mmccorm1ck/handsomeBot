@@ -5,7 +5,7 @@ namespace HandsomeBot.Models;
 
 public class FieldModel() : INotifyPropertyChanged // Class to convert field info into server-compatable format
 {
-    public FieldModel(string inputGameType, ArenaModel inputModel, bool attackerIsBot) : this()
+    public FieldModel(string inputGameType, ArenaModel inputModel) : this()
     {
         gameType = inputGameType;
         if (inputModel.Weather != "None") weather = inputModel.Weather;
@@ -20,16 +20,8 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
         isSwordOfRuin = inputModel.SwordOfRuin;
         isTabletOfRuin = inputModel.TabletOfRuin;
         isVesselOfRuin = inputModel.VesselOfRuin;
-        if (attackerIsBot)
-        {
-            attackerSide = ParseSide(inputModel.BotSide);
-            defenderSide = ParseSide(inputModel.OppSide);
-        }
-        else
-        {
-            attackerSide = ParseSide(inputModel.OppSide);
-            defenderSide = ParseSide(inputModel.BotSide);
-        }
+        attackerSide = ParseSide(inputModel.BotSide);
+        defenderSide = ParseSide(inputModel.OppSide);
     }
     public string gameType
     {

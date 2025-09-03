@@ -230,7 +230,11 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             Gen = TheGame.Gen,
             BotMons = TheGame.BotTeam,
-            OppMons = TheGame.OppTeam
+            OppMons = TheGame.OppTeam,
+            Field = new(
+                TheGame.GameType,
+                TheGame.CurrentArena
+                )
         };
         string callString = JsonSerializer.Serialize(callData);
         HttpClient client = new HttpClient();
