@@ -53,6 +53,10 @@ const handleRequest = (url:string) => {
 function calcDamages(input: inputObject): object[] {
     const gen = Generations.get(input.Gen as GenerationNum);
     const field: Field = input.Field || new Field;
+    let switchedField: Field;
+    Object.assign(switchedField, field);
+    switchedField.attackerSide = field.defenderSide;
+    switchedField.defenderSide = field.attackerSide;
     let results: object[] = [];
     for (const userMon of input.BotMons) {
         for (const oppMon of input.OppMons) {
@@ -85,7 +89,7 @@ function calcDamages(input: inputObject): object[] {
                         oppMon,
                         userMon,
                         move,
-                        field
+                        switchedField
                     )
                 });
             }
