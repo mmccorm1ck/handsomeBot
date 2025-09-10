@@ -14,7 +14,7 @@ public class CalcCallModel() : INotifyPropertyChanged // Class to hold info to s
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> BotMons
+    public ObservableCollection<PokemonModel> BotMons
     {
         get => _botMons;
         set
@@ -23,7 +23,7 @@ public class CalcCallModel() : INotifyPropertyChanged // Class to hold info to s
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> OppMons
+    public ObservableCollection<PokemonModel> OppMons
     {
         get => _oppMons;
         set
@@ -42,8 +42,8 @@ public class CalcCallModel() : INotifyPropertyChanged // Class to hold info to s
         }
     }
     private int _gen = -1;
-    private ObservableCollection<TeamModel> _botMons = [];
-    private ObservableCollection<TeamModel> _oppMons = [];
+    private ObservableCollection<PokemonModel> _botMons = [];
+    private ObservableCollection<PokemonModel> _oppMons = [];
     private FieldModel _field = new();
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
