@@ -17,7 +17,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         get => _gen;
         set
         {
-            gen = value;
+            _gen = value;
             OnPropertyChanged();
         }
     }
@@ -26,7 +26,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         get => _name;
         set
         {
-            name = value;
+            _name = value;
             OnPropertyChanged();
         }
     }
@@ -39,7 +39,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             OnPropertyChanged();
         } 
     }
-    private int _gen;
+    private int _gen = -1;
     private string _name = "None";
     private Options _options;
     public struct Options()
