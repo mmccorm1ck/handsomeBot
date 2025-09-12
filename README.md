@@ -12,4 +12,3 @@ UI is built using the Avalonia framework for linux compatibility - https://avalo
 
 Dependencies:
 - [DialogHost](https://github.com/AvaloniaUtils/DialogHost.Avalonia/tree/main)
-- [Json.Net](https://github.com/JamesNK/Newtonsoft.Json)
