@@ -227,18 +227,20 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public async void CalcDamages()
     {
-        ObservableCollection<PokemonModel> BotPokemon = [];
-        ObservableCollection<PokemonModel> OppPokemon = [];
+        Dictionary<string, int> botMonToNo = [];
+        ObservableCollection<PokemonModel> botPokemon = [];
+        ObservableCollection<PokemonModel> oppPokemon = [];
         for (int i = 0; i < 6; i++)
         {
-            BotPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.BotTeam[i]));
-            OppPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.OppTeam[i]));
+            botMonToNo.Add(TheGame.BotTeam[i].Name, i);
+            botPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.BotTeam[i]));
+            oppPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.OppTeam[i]));
         }
         CalcCallModel callData = new()
         {
             Gen = TheGame.Gen,
-            BotMons = BotPokemon,
-            OppMons = OppPokemon,
+            BotMons = botPokemon,
+            OppMons = oppPokemon,
             Field = new(
                 TheGame.GameType,
                 TheGame.CurrentArena
@@ -254,15 +256,22 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         foreach (CalcRespModel result in response)
         {
-            /*if (result.BotUser)
+            if (result.BotUser)
             {
-                Weights[result.UserMon] += result.DamageRange[0];
+                Weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage);
             }
             else
             {
-                Weights[result.TargetMon] -= result.DamageRange[result.DamageRange.Count] / 2;
-            }*/
+                Weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2;
+            }
         }
+    }
+
+    public static float ParseDamage(string input)
+    {
+        string splitInput = input.Split(':')[1].Split('(')[1].Split(" - ")[0];
+        if (!Single.TryParse(splitInput, out float damage)) return 0;
+        return damage;
     }
 
     public void CalcStrategy()
