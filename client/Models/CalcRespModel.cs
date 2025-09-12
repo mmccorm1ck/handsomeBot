@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -14,7 +13,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public int UserMon
+    public string UserMon
     {
         get => _userMon;
         set
@@ -23,7 +22,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public int TargetMon
+    public string TargetMon
     {
         get => _targetMon;
         set
@@ -41,20 +40,20 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public List<int> DamageRange
+    public string Damage
     {
-        get => _damageRange;
+        get => _damage;
         set
         {
-            _damageRange = value;
+            _damage = value;
             OnPropertyChanged();
         }
     }
     private bool _botUser = true;
-    private int _userMon = -1;
-    private int _targetMon = -1;
+    private string _userMon = "";
+    private string _targetMon = "";
     private int _moveNo = -1;
-    private List<int> _damageRange = new();
+    private string _damage = "";
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
