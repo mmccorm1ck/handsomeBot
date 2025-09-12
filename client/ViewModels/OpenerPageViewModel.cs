@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
@@ -23,7 +24,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                 TurnNo = 0
             }
         };
-        CalcDamages();
+        Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
         {
@@ -225,8 +226,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public async void CalcDamages()
+    public async Task<float[]> CalcDamages()
     {
+        float[] weights = new float[6];
         Dictionary<string, int> botMonToNo = [];
         ObservableCollection<PokemonModel> botPokemon = [];
         ObservableCollection<PokemonModel> oppPokemon = [];
@@ -249,29 +251,26 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         string callString = JsonSerializer.Serialize(callData);
         HttpClient client = new();
         List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{TheGame.ServerUrl}/calc?{callString}");
-        if (response == null) return;
-        foreach (CalcRespModel item in response)
-        {
-            Console.Write(JsonSerializer.Serialize(item));
-        }
+        if (response == null) return weights;
         foreach (CalcRespModel result in response)
         {
             if (result.BotUser)
             {
-                Weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage);
+                weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage);
             }
             else
             {
-                Weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2;
+                weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2;
             }
         }
+        return weights;
     }
 
     public static float ParseDamage(string input)
     {
         string splitInput = input.Split(':')[1].Split('(')[1].Split(" - ")[0];
-        if (!Single.TryParse(splitInput, out float damage)) return 0;
-        return damage;
+        if (Single.TryParse(splitInput, out float damage)) return damage;
+        return 0;
     }
 
     public void CalcStrategy()
