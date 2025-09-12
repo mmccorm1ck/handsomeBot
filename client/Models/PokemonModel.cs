@@ -10,7 +10,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
     {
         gen = inputGen;
         name = inputModel.Name;
-        options = ParseOptions(inputModel);
+        options = new Options(inputModel);
     }
     public int gen // Lower case variable names for server compatability
     {
@@ -41,61 +41,190 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
     }
     private int _gen = -1;
     private string _name = "None";
-    private Options _options;
-    public struct Options()
+    private Options _options = new() {};
+    public class Options()
     {
-        public int level = 50;
-        public char? gender;
-        public string? ability;
-        public bool? abilityOn;
-        public string? item;
-        public string? teraType;
-        public string? nature;
-        public EVIV ivs;
-        public EVIV evs;
-        public EVIV? boosts;
-        public List<string>? moves;
-    }
-
-    public struct EVIV()
-    {
-        public int hp;
-        public int atk;
-        public int def;
-        public int spa;
-        public int spd;
-        public int spe;
-    }
-
-    static private Options ParseOptions(TeamModel inputModel)
-    {
-        Options tempOptions = new()
+        public Options(TeamModel inputModel) : this()
         {
-            level = inputModel.Level
-        };
-        if (inputModel.Gender != 'R') tempOptions.gender = inputModel.Gender;
-        if (inputModel.Ability != "None") tempOptions.ability = inputModel.Ability;
-        if (inputModel.Item != "None") tempOptions.item = inputModel.Item;
-        if (inputModel.Tera != "None") tempOptions.teraType = inputModel.Tera;
-        if (inputModel.Nature != "None") tempOptions.nature = inputModel.Nature;
-        tempOptions.ivs = ParseStats(inputModel.IV);
-        tempOptions.evs = ParseStats(inputModel.EV);
-        tempOptions.moves = ParseMoves(inputModel);
-        return tempOptions;
-    }
 
-    static private EVIV ParseStats(EVIVModel inputModel)
-    {
-        EVIV tempStats = new()
+            level = inputModel.Level;
+            if (inputModel.Gender != 'R') gender = inputModel.Gender;
+            if (inputModel.Ability != "None") ability = inputModel.Ability;
+            // Add abilityOn here once implemented
+            if (inputModel.Item != "None") item = inputModel.Item;
+            if (inputModel.Tera != "None") teraType = inputModel.Tera;
+            if (inputModel.Nature != "None") nature = inputModel.Nature;
+            ivs = new EVIV(inputModel.IV);
+            evs = new EVIV(inputModel.EV);
+            // Add boosts here once implemented
+            moves = ParseMoves(inputModel);
+        }
+        public int level
         {
-            hp = inputModel.HP,
-            atk = inputModel.Atk,
-            def = inputModel.Def,
-            spa = inputModel.SpA,
-            spd = inputModel.SpD,
-            spe = inputModel.Spe
-        };
-        return tempStats;
+            get => _level;
+            set
+            {
+                _level = value;
+            }
+        }
+        public char? gender
+        {
+            get => _gender;
+            set
+            {
+                _gender = value;
+            }
+        }
+        public string? ability
+        {
+            get => _ability;
+            set
+            {
+                _ability = value;
+            }
+        }
+        public bool? abilityOn
+        {
+            get => _abilityOn;
+            set
+            {
+                _abilityOn = value;
+            }
+        }
+        public string? item
+        {
+            get => _item;
+            set
+            {
+                _item = value;
+            }
+        }
+        public string? teraType
+        {
+            get => _teraType;
+            set
+            {
+                _teraType = value;
+            }
+        }
+        public string? nature
+        {
+            get => _nature;
+            set
+            {
+                _nature = value;
+            }
+        }
+        public EVIV ivs
+        {
+            get => _ivs;
+            set
+            {
+                _ivs = value;
+            }
+        }
+        public EVIV evs
+        {
+            get => _evs;
+            set
+            {
+                _evs = value;
+            }
+        }
+        public EVIV? boosts
+        {
+            get => _boosts;
+            set
+            {
+                _boosts = value;
+            }
+        }
+        public List<string>? moves
+        {
+            get => _moves;
+            set
+            {
+                _moves = value;
+            }
+        }
+        private int _level = 50;
+        private char? _gender;
+        private string? _ability;
+        private bool? _abilityOn;
+        private string? _item;
+        private string? _teraType;
+        private string? _nature;
+        private EVIV _ivs = new();
+        private EVIV _evs = new();
+        private EVIV? _boosts;
+        private List<string>? _moves;
+        }
+
+    public class EVIV()
+    {
+        public EVIV(EVIVModel inputModel) : this()
+        {
+            hp = inputModel.HP;
+            atk = inputModel.Atk;
+            def = inputModel.Def;
+            spa = inputModel.SpA;
+            spd = inputModel.SpD;
+            spe = inputModel.Spe;
+        }
+        public int hp
+        {
+            get => _hp;
+            set
+            {
+                _hp = value;
+            }
+        }
+        public int atk
+        {
+            get => _atk;
+            set
+            {
+                _atk = value;
+            }
+        }
+        public int def
+        {
+            get => _def;
+            set
+            {
+                _def = value;
+            }
+        }
+        public int spa
+        {
+            get => _spa;
+            set
+            {
+                _spa = value;
+            }
+        }
+        public int spd
+        {
+            get => _spd;
+            set
+            {
+                _spd = value;
+            }
+        }
+        public int spe
+        {
+            get => _spe;
+            set
+            {
+                _spe = value;
+            }
+        }
+        private int _hp;
+        private int _atk;
+        private int _def;
+        private int _spa;
+        private int _spd;
+        private int _spe;
     }
 
     static private List<string> ParseMoves(TeamModel inputModel)
