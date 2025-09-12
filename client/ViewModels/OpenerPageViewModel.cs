@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
+using System.Collections.ObjectModel;
 
 namespace HandsomeBot.ViewModels;
 
@@ -226,20 +227,31 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public async void CalcDamages()
     {
+        ObservableCollection<PokemonModel> BotPokemon = [];
+        ObservableCollection<PokemonModel> OppPokemon = [];
+        for (int i = 0; i < 6; i++)
+        {
+            BotPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.BotTeam[i]));
+            OppPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.OppTeam[i]));
+        }
         CalcCallModel callData = new()
         {
             Gen = TheGame.Gen,
-            BotMons = TheGame.BotTeam,
-            OppMons = TheGame.OppTeam,
+            BotMons = BotPokemon,
+            OppMons = OppPokemon,
             Field = new(
                 TheGame.GameType,
                 TheGame.CurrentArena
                 )
         };
         string callString = JsonSerializer.Serialize(callData);
-        HttpClient client = new HttpClient();
+        HttpClient client = new();
         List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{TheGame.ServerUrl}/calc?{callString}");
         if (response == null) return;
+        foreach (CalcRespModel item in response)
+        {
+            Console.Write(JsonSerializer.Serialize(item));
+        }
         foreach (CalcRespModel result in response)
         {
             if (result.BotUser)
