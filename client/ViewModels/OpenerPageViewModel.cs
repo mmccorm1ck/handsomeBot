@@ -65,7 +65,115 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    /* ----------------------------------------
+    Weighting calculations for choosing openers
+    ---------------------------------------- */
+    
+    private float[] _weights = new float[6];
+
+    public float[] Weights
+    {
+        get => _weights;
+        set
+        {
+            _weights = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private List<int> _openerMonNos = [-1];
+
+    public List<int> OpenerMonNos
+    {
+        get => _openerMonNos;
+        set
+        {
+            _openerMonNos = value;
+            TheGame.Turns[0].BotStartMons = _openerMonNos;
+            TheGame.Turns[0].BotEndMons = _openerMonNos;
+            OnPropertyChanged();
+        }
+    }
+
     public Dictionary<string, int> StratWeights = new(); // Contains strategic value of moves & abilities for deciding on an opener
+
+    public async Task<float[]> CalcDamages()
+    {
+        float[] weights = new float[6];
+        Dictionary<string, int> botMonToNo = [];
+        ObservableCollection<PokemonModel> botPokemon = [];
+        ObservableCollection<PokemonModel> oppPokemon = [];
+        for (int i = 0; i < 6; i++)
+        {
+            botMonToNo.Add(TheGame.BotTeam[i].Name, i);
+            botPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.BotTeam[i]));
+            oppPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.OppTeam[i]));
+        }
+        CalcCallModel callData = new()
+        {
+            Gen = TheGame.Gen,
+            BotMons = botPokemon,
+            OppMons = oppPokemon,
+            Field = new(
+                TheGame.GameType,
+                TheGame.CurrentArena
+                )
+        };
+        string callString = JsonSerializer.Serialize(callData);
+        HttpClient client = new();
+        List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{TheGame.ServerUrl}/calc?{callString}");
+        if (response == null) return weights;
+        foreach (CalcRespModel result in response)
+        {
+            if (result.BotUser)
+            {
+                weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage);
+            }
+            else
+            {
+                weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2;
+            }
+        }
+        return weights;
+    }
+
+    public static float ParseDamage(string input)
+    {
+        string splitInput = input.Split(':')[1].Split('(')[1].Split(" - ")[0];
+        if (Single.TryParse(splitInput, out float damage)) return damage;
+        return 0;
+    }
+
+    public void CalcStrategy()
+    {
+        for (int currMon = 0; currMon < 6; currMon++)
+        {
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability))
+            {
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
+            }
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
+            {
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
+            }
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2))
+            {
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move2] * 10;
+            }
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3))
+            {
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move3] * 10;
+            }
+            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4))
+            {
+                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
+            }
+        }
+    }
+
+    /* -----------------------
+    Handling event information
+    ----------------------- */
 
     private int _eventNumber = 0; // Tracks event number in chain of events
 
@@ -114,20 +222,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _availableEvents = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private List<int> _openerMonNos = [-1];
-
-    public List<int> OpenerMonNos
-    {
-        get => _openerMonNos;
-        set
-        {
-            _openerMonNos = value;
-            TheGame.Turns[0].BotStartMons = _openerMonNos;
-            TheGame.Turns[0].BotEndMons = _openerMonNos;
             OnPropertyChanged();
         }
     }
@@ -201,18 +295,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private float[] _weights = new float[6];
-
-    public float[] Weights
-    {
-        get => _weights;
-        set
-        {
-            _weights = value;
-            OnPropertyChanged();
-        }
-    }
-
     private string _userMonName = "";
 
     public string UserMonName
@@ -223,80 +305,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             _userMonName = value;
             if (value != "" && value != null) CurrEvent.UserMon = NameToNo[value];
             OnPropertyChanged();
-        }
-    }
-
-    public async Task<float[]> CalcDamages()
-    {
-        float[] weights = new float[6];
-        Dictionary<string, int> botMonToNo = [];
-        ObservableCollection<PokemonModel> botPokemon = [];
-        ObservableCollection<PokemonModel> oppPokemon = [];
-        for (int i = 0; i < 6; i++)
-        {
-            botMonToNo.Add(TheGame.BotTeam[i].Name, i);
-            botPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.BotTeam[i]));
-            oppPokemon.Add(new PokemonModel(TheGame.Gen, TheGame.OppTeam[i]));
-        }
-        CalcCallModel callData = new()
-        {
-            Gen = TheGame.Gen,
-            BotMons = botPokemon,
-            OppMons = oppPokemon,
-            Field = new(
-                TheGame.GameType,
-                TheGame.CurrentArena
-                )
-        };
-        string callString = JsonSerializer.Serialize(callData);
-        HttpClient client = new();
-        List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{TheGame.ServerUrl}/calc?{callString}");
-        if (response == null) return weights;
-        foreach (CalcRespModel result in response)
-        {
-            if (result.BotUser)
-            {
-                weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage);
-            }
-            else
-            {
-                weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2;
-            }
-        }
-        return weights;
-    }
-
-    public static float ParseDamage(string input)
-    {
-        string splitInput = input.Split(':')[1].Split('(')[1].Split(" - ")[0];
-        if (Single.TryParse(splitInput, out float damage)) return damage;
-        return 0;
-    }
-
-    public void CalcStrategy()
-    {
-        for (int currMon = 0; currMon < 6; currMon++)
-        {
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move2] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move3] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
-            }
         }
     }
 
