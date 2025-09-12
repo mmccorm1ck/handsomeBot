@@ -20,8 +20,8 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
         isSwordOfRuin = inputModel.SwordOfRuin;
         isTabletOfRuin = inputModel.TabletOfRuin;
         isVesselOfRuin = inputModel.VesselOfRuin;
-        attackerSide = ParseSide(inputModel.BotSide);
-        defenderSide = ParseSide(inputModel.OppSide);
+        attackerSide = new Side(inputModel.BotSide);
+        defenderSide = new Side(inputModel.OppSide);
     }
     public string gameType
     {
@@ -171,54 +171,202 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
     private bool _isSwordOfRuin;
     private bool _isTabletOfRuin;
     private bool _isVesselOfRuin;
-    private Side _attackerSide;
-    private Side _defenderSide;
-    public struct Side()
+    private Side _attackerSide = new();
+    private Side _defenderSide = new();
+    public class Side()
     {
-        public int spikes;
-        public bool steelsurge;
-        public bool vinelash;
-        public bool wildfire;
-        public bool cannonade;
-        public bool volcalith;
-        public bool isSR;
-        public bool isReflect;
-        public bool isLightScreen;
-        public bool isProtected;
-        public bool isSeeded;
-        public bool isForesight;
-        public bool isTailwind;
-        public bool isHelpingHand;
-        public bool isFlowerGift;
-        public bool isFriendGuard;
-        public bool isAuroraVeil;
-        public bool isBattery;
-        public bool isPowerSpot;
-    }
-    public Side ParseSide(ArenaSideModel inputSide)
-    {
-        Side side = new()
+        public Side(ArenaSideModel inputSide) : this()
         {
-            spikes = inputSide.Spikes,
-            steelsurge = inputSide.Steelsurge,
-            vinelash = inputSide.Vinelash,
-            wildfire = inputSide.Wildfire,
-            cannonade = inputSide.Cannonade,
-            isSR = inputSide.SR,
-            isReflect = inputSide.Reflect,
-            isLightScreen = inputSide.LightScreen,
-            isProtected = inputSide.Protected,
-            isSeeded = inputSide.Seeded,
-            isForesight = inputSide.Foresight,
-            isTailwind = inputSide.Tailwind,
-            isHelpingHand = inputSide.HelpingHand,
-            isFlowerGift = inputSide.FlowerGift,
-            isFriendGuard = inputSide.FriendGuard,
-            isAuroraVeil = inputSide.AuroraVeil,
-            isBattery = inputSide.Battery,
-            isPowerSpot = inputSide.PowerSpot
-        };
-        return side;
+            spikes = inputSide.Spikes;
+            steelsurge = inputSide.Steelsurge;
+            vinelash = inputSide.Vinelash;
+            wildfire = inputSide.Wildfire;
+            cannonade = inputSide.Cannonade;
+            isSR = inputSide.SR;
+            isReflect = inputSide.Reflect;
+            isLightScreen = inputSide.LightScreen;
+            isProtected = inputSide.Protected;
+            isSeeded = inputSide.Seeded;
+            isForesight = inputSide.Foresight;
+            isTailwind = inputSide.Tailwind;
+            isHelpingHand = inputSide.HelpingHand;
+            isFlowerGift = inputSide.FlowerGift;
+            isFriendGuard = inputSide.FriendGuard;
+            isAuroraVeil = inputSide.AuroraVeil;
+            isBattery = inputSide.Battery;
+            isPowerSpot = inputSide.PowerSpot;
+        }
+        public int spikes
+        {
+            get => _spikes;
+            set
+            {
+                _spikes = value;
+            }
+        }
+        public bool steelsurge
+        {
+            get => _steelsurge;
+            set
+            {
+                _steelsurge = value;
+            }
+        }
+        public bool vinelash
+        {
+            get => _vinelash;
+            set
+            {
+                _vinelash = value;
+            }
+        }
+        public bool wildfire
+        {
+            get => _wildfire;
+            set
+            {
+                _wildfire = value;
+            }
+        }
+        public bool cannonade
+        {
+            get => _cannonade;
+            set
+            {
+                _cannonade = value;
+            }
+        }
+        public bool volcalith
+        {
+            get => _volcalith;
+            set
+            {
+                _volcalith = value;
+            }
+        }
+        public bool isSR
+        {
+            get => _isSR;
+            set
+            {
+                _isSR = value;
+            }
+        }
+        public bool isReflect
+        {
+            get => _isReflect;
+            set
+            {
+                _isReflect = value;
+            }
+        }
+        public bool isLightScreen
+        {
+            get => _isLightScreen;
+            set
+            {
+                _isLightScreen = value;
+            }
+        }
+        public bool isProtected
+        {
+            get => _isProtected;
+            set
+            {
+                _isProtected = value;
+            }
+        }
+        public bool isSeeded
+        {
+            get => _isSeeded;
+            set
+            {
+                _isSeeded = value;
+            }
+        }
+        public bool isForesight
+        {
+            get => _isForesight;
+            set
+            {
+                _isForesight = value;
+            }
+        }
+        public bool isTailwind
+        {
+            get => _isTailwind;
+            set
+            {
+                _isTailwind = value;
+            }
+        }
+        public bool isHelpingHand
+        {
+            get => _isHelpingHand;
+            set
+            {
+                _isHelpingHand = value;
+            }
+        }
+        public bool isFlowerGift
+        {
+            get => _isFlowerGift;
+            set
+            {
+                _isFlowerGift = value;
+            }
+        }
+        public bool isFriendGuard
+        {
+            get => _isFriendGuard;
+            set
+            {
+                _isFriendGuard = value;
+            }
+        }
+        public bool isAuroraVeil
+        {
+            get => _isAuroraVeil;
+            set
+            {
+                _isAuroraVeil = value;
+            }
+        }
+        public bool isBattery
+        {
+            get => _isBattery;
+            set
+            {
+                _isBattery = value;
+            }
+        }
+        public bool isPowerSpot
+        {
+            get => _isPowerSpot;
+            set
+            {
+                _isPowerSpot = value;
+            }
+        }
+        private int _spikes;
+        private bool _steelsurge;
+        private bool _vinelash;
+        private bool _wildfire;
+        private bool _cannonade;
+        private bool _volcalith;
+        private bool _isSR;
+        private bool _isReflect;
+        private bool _isLightScreen;
+        private bool _isProtected;
+        private bool _isSeeded;
+        private bool _isForesight;
+        private bool _isTailwind;
+        private bool _isHelpingHand;
+        private bool _isFlowerGift;
+        private bool _isFriendGuard;
+        private bool _isAuroraVeil;
+        private bool _isBattery;
+        private bool _isPowerSpot;
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
