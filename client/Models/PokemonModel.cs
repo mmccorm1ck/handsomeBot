@@ -52,7 +52,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             if (inputModel.Ability != "None") ability = inputModel.Ability;
             // Add abilityOn here once implemented
             if (inputModel.Item != "None") item = inputModel.Item;
-            if (inputModel.Tera != "None") teraType = inputModel.Tera;
+            //if (inputModel.Tera != "None") teraType = inputModel.Tera; Commented out until tera on is implemented
             if (inputModel.Nature != "None") nature = inputModel.Nature;
             ivs = new EVIV(inputModel.IV);
             evs = new EVIV(inputModel.EV);
