@@ -1,4 +1,4 @@
-import {calculate, Generations, GenerationNum, Pokemon, Move, Field, SPECIES, ITEMS, ABILITIES} from "@Smogon/calc";
+import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES} from "@Smogon/calc";
 import 'dotenv/config';
 import { createServer } from "http";
 
@@ -11,7 +11,6 @@ const server = createServer(async (req, res) => {
     const response: string = JSON.stringify(calcResult.result);
     res.writeHead(statusCode, {"Content-Type": "text/plain"});
     res.write(response);
-    //console.log(response + " sent");
     res.end();
 });
 
@@ -20,7 +19,6 @@ const handleRequest = (url:string) => {
     let result = {};
     const params = url.split('?');
     if (url === '/' || !params[1]) return { valid, result };
-    console.log(params[1]);
     let inputJson: inputObject;
     try {
         inputJson = JSON.parse(decodeURI(params[1])) as inputObject;
@@ -52,66 +50,70 @@ const handleRequest = (url:string) => {
 
 function calcDamages(input: inputObject): object[] {
     const gen = Generations.get(input.Gen as GenerationNum);
-    const field: Field = input.Field || new Field;
-    let switchedField: Field;
-    Object.assign(switchedField, field);
+    const field: Field = new Field(input.Field);
+    let switchedField = Object.assign({}, field);
     switchedField.attackerSide = field.defenderSide;
     switchedField.defenderSide = field.attackerSide;
     let results: object[] = [];
-    for (const userMon of input.BotMons) {
-        for (const oppMon of input.OppMons) {
-            let tempResult: resultObject = {
-                user: userMon.name,
-                opponent: oppMon.name,
-                damages: []
-            };
-            let options = { ability: userMon.ability.toString(), item: userMon.item.toString(), species: userMon.species.name };
-            for (const moveName of userMon.moves) {
+    for (const rawUserMon of input.BotMons) {
+        const userMon: Pokemon = new Pokemon(rawUserMon.gen as GenerationNum, rawUserMon.name, rawUserMon.options);
+        for (const rawOppMon of input.OppMons) {
+            const oppMon: Pokemon = new Pokemon(rawOppMon.gen as GenerationNum, rawOppMon.name, rawOppMon.options);
+            let options = { ability: userMon.ability, item: userMon.item, species: userMon.species.name };
+            for (let i = 0; i < userMon.moves.length; i++) {
+                const moveName = userMon.moves[i];
+                if (moveName === "None") continue;
                 const move: Move = new Move(gen, moveName, options);
-                tempResult.damages.push({
-                    attacker: "user",
-                    damage: calculate(
+                results.push({
+                    BotUser: true,
+                    UserMon: userMon.name,
+                    TargetMon: oppMon.name,
+                    MoveNo: i,
+                    Damage: calculate(
                         gen,
                         userMon,
                         oppMon,
                         move,
                         field
-                    )
+                    ).desc()
                 });
             }
-            options = { ability: oppMon.ability.toString(), item: oppMon.item.toString(), species: oppMon.species.name };
-            for (const moveName of oppMon.moves) {
+            options = { ability: oppMon.ability, item: oppMon.item, species: oppMon.species.name };
+            for (let i = 0; i < oppMon.moves.length; i++) {
+                const moveName = oppMon.moves[i];
                 const move: Move = new Move(gen, moveName, options);
-                tempResult.damages.push({
-                    attacker: "opponent",
+                results.push({
+                    BotUser: false,
+                    UserMon: oppMon.name,
+                    TargetMon: userMon.name,
+                    MoveNo: i,
                     damage: calculate(
                         gen,
                         oppMon,
                         userMon,
                         move,
                         switchedField
-                    )
+                    ).desc()
                 });
             }
-            results.push(tempResult);
         }
     }
     return results;
 }
 
-type resultObject = 
-{
-    user:string,
-    opponent:string,
-    damages:object[]
-}
-
 type inputObject = 
 {
     Gen: number,
-    BotMons?: Pokemon[],
-    OppMons?: Pokemon[],
-    Field?: Field
+    BotMons?: inputPokemon[],
+    OppMons?: inputPokemon[],
+    Field?: Partial<State.Field>
+}
+
+type inputPokemon = 
+{
+    gen: number,
+    name: string,
+    options: object
 }
 
 server.listen(port, () => {

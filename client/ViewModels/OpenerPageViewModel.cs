@@ -254,14 +254,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         foreach (CalcRespModel result in response)
         {
-            if (result.BotUser)
+            /*if (result.BotUser)
             {
                 Weights[result.UserMon] += result.DamageRange[0];
             }
             else
             {
                 Weights[result.TargetMon] -= result.DamageRange[result.DamageRange.Count] / 2;
-            }
+            }*/
         }
     }
 
