@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 
 namespace HandsomeBot.ViewModels;
 
@@ -21,7 +22,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         TheGame.Turns = new() {
             new()
             {
-                TurnNo = 0
+                TurnNo = 0,
+                EventList = []
             }
         };
         Weights = Task.Run(CalcDamages).Result;
@@ -35,15 +37,21 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     OpenerMonNos.Insert(j, i);
                     break;
                 }
-            } 
+            }
         }
-        OpenerMonNos.RemoveRange(4, OpenerMonNos.Count-4);
+        OpenerMonNos.RemoveRange(4, OpenerMonNos.Count - 4);
         for (int i = 0; i < 4; i++)
         {
             AvailablePokemon[i] = TheGame.BotTeam[OpenerMonNos[i]].Name;
             NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]);
         }
         for (int i = 0; i < 2; i++) TheGame.Turns[0].BotStartMons[i] = OpenerMonNos[i];
+        for (int i = 0; i < 6; i++)
+        {
+            OpponentsPokemon[i] = "Opponent's " + TheGame.OppTeam[i].Name;
+            AvailablePokemon[i + 4] = OpponentsPokemon[i];
+            NameToNo.Add(OpponentsPokemon[i], i + 6);
+        }
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -245,13 +253,13 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Dictionary<string, int> NameToNo{get;set;} = new Dictionary<string, int>();
+    public Dictionary<string, int> NameToNo{get;set;} = [];
 
-    private List<string> _allItems = new();
+    private ObservableCollection<string> _allItems = [];
 
-    private List<string> _allAbilities = new();
+    private ObservableCollection<string> _allAbilities = [];
 
-    public List<string> AllItems
+    public ObservableCollection<string> AllItems
     {
         get => _allItems;
         set
@@ -261,7 +269,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public List<string> AllAbilities
+    public ObservableCollection<string> AllAbilities
     {
         get => _allAbilities;
         set
@@ -271,9 +279,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private Models.EventModel _currEvent = new();
+    private EventModel _currEvent = new();
 
-    public Models.EventModel CurrEvent
+    public EventModel CurrEvent
     {
         get => _currEvent;
         set
@@ -283,9 +291,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private List<bool> _targetsChecked = Enumerable.Repeat(false, 10).ToList();
+    private ObservableCollection<bool> _targetsChecked = new([.. Enumerable.Repeat(false, 10)]);
 
-    public List<bool> TargetsChecked
+    public ObservableCollection<bool> TargetsChecked
     {
         get => _targetsChecked;
         set
@@ -294,7 +302,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
+/*
     private string _userMonName = "";
 
     public string UserMonName
@@ -373,5 +381,5 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         UserMonName = "";
         CurrEvent = new();
         EventNumber++;
-    }
+    }*/
 }

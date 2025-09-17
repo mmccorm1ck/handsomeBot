@@ -12,7 +12,7 @@
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Label FontSize="18" HorizontalAlignment="Right" Content="Event #"/>
+                    <Label FontSize="18" HorizontalAlignment="Right" Content="Event No."/>
                     <Label FontSize="18" HorizontalAlignment="Left" Content="{Binding EventNumber}"/>
                 </StackPanel>
                 <Grid HorizontalAlignment="Center" ShowGridLines="False"
@@ -48,8 +48,10 @@
                     <CheckBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[8]}" Name="opp4Chk" IsChecked="{Binding TargetsChecked[8], Mode=TwoWay}"/>
                     <CheckBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[9]}" Name="opp5Chk" IsChecked="{Binding TargetsChecked[9], Mode=TwoWay}"/>
                 </Grid>
-                <Button HorizontalAlignment="Center" Margin="10" Command="{Binding SaveEvent}">Save Event</Button>
-                <Button HorizontalAlignment="Center" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Finish</Button>
+                <Grid HorizontalAlignment="Center" ColumnDefinitions="200,200" RowDefinitions="Auto">
+                    <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding SaveEvent}">Next Event</Button>
+                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Finish</Button>
+                </Grid>
             </StackPanel>
         </dialogHost:DialogHost.DialogContent>
     <StackPanel>
