@@ -4,6 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HandsomeBot.Models;
+using System.IO;
+using Avalonia.Media.Imaging;
+using System.Collections.ObjectModel;
 
 namespace HandsomeBot.ViewModels;
 
@@ -12,6 +15,16 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public BotTeamPageViewModel(GameModel game)
     {
         TheGame = game;
+        for (int i = 0; i < 6; i++)
+        {
+            string uri;
+            if (TheGame.BotTeam[i].PokeImage == "") uri = "Assets/empty.png";
+            else if (!File.Exists(TheGame.BotTeam[i].PokeImage)) uri = "Assets/empty.png";
+            else uri = TheGame.BotTeam[i].PokeImage;
+            FileStream image = File.Open(uri, FileMode.Open);
+            Sprites.Add(new Bitmap(image));
+            image.Close();
+        }
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -19,7 +32,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    
+
     private GameModel _theGame = new();
 
     public GameModel TheGame
@@ -31,6 +44,8 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public ObservableCollection<Bitmap?> Sprites { get; set; } = [];
 
     public void LoadTeam()
     {
@@ -49,7 +64,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public async Task LoadPasteHtml(string httpLink) // Parses HTML from pokepaste link and stores info in TheGame.BotTeam
     {
-        HttpClient client = new HttpClient();
+        HttpClient client = new();
         string response = await client.GetStringAsync(httpLink);
         string[] responses = response.Split('\n');
         int currPokemon = -1;
@@ -75,7 +90,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
             if (responses[i].Contains("img-pokemon"))
             { // Saves URL of pokemon image
-                TheGame.BotTeam[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
+                //TheGame.BotTeam[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 //Debug.WriteLine(i);
                 continue;
             }
@@ -175,6 +190,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
                 TheGame.BotTeam[currPokemon].Name = responses[i][idx..];
+                await DownloadImage(TheGame.BotTeam[currPokemon].Name, currPokemon);
             }
             if (responses[i].Contains("Ability"))
             { // Saves pokemon's ability
@@ -232,12 +248,41 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 //Debug.WriteLine(i);
                 continue;
             }
-
         }
         string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2);
         if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1);
         TheGame.Gen = int.Parse(tempGen);
         if (TheGame.Format.Contains("VGC") || TheGame.Format.Contains("Doubles")) TheGame.GameType = "Doubles";
         else TheGame.GameType = "Singles";
+    }
+
+    public async Task DownloadImage(string name, int mon)
+    {
+        string filename = "Assets/" + name + ".png";
+        if (File.Exists(filename))
+        {
+            TheGame.BotTeam[mon].PokeImage = filename;
+            FileStream image = File.Open(filename, FileMode.Open);
+            Sprites[mon] = new Bitmap(image);
+            image.Close();
+            return;
+        }
+        string url = "http://play.pokemonshowdown.com/sprites/gen5/" + name.ToLower() + ".png";
+        HttpClient client = new();
+        try
+        {
+            var response = await client.GetAsync(new Uri(url));
+            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK) return;
+            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+            await File.WriteAllBytesAsync(filename, imageBytes);
+            TheGame.BotTeam[mon].PokeImage = filename;
+            FileStream image = File.Open(filename, FileMode.Open);
+            Sprites[mon] = new Bitmap(image);
+            image.Close();
+        }
+        catch
+        {
+            return;
+        }
     }
 }

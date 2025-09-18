@@ -161,7 +161,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _move2 = "None"; // Array of pokemon's moves
     private string _move3 = "None"; // Array of pokemon's moves
     private string _move4 = "None"; // Array of pokemon's moves
-    private string _image = ""; // URL of pokemon's image
+    private string _image = ""; // URI of pokemon's image
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
