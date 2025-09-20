@@ -1,5 +1,10 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.IO;
+using System;
 
 namespace HandsomeBot.Models;
 
@@ -10,8 +15,9 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         get => _name;
         set
         {
-            _name = value;
+            _name = value.Replace("'", "");
             OnPropertyChanged();
+            Task.Run(async () => await DownloadImage());
         }
     }
     public char Gender
@@ -128,7 +134,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         set
         {
             _image = value;
-            OnPropertyChanged();
+            Notify();
         }
     }
 
@@ -138,7 +144,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _level = 50; // Pokemon's level
     private string _ability = "None"; // Pokemon's ability
     private string _nature = "None"; // Pokemon's nature
-    private EVIVModel _ev = new EVIVModel()
+    private EVIVModel _ev = new()
     {
         HP = 0,
         Atk = 0,
@@ -147,7 +153,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         SpD = 0,
         Spe = 0
     }; // Array of pokemon's EVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
-    private EVIVModel _iv = new EVIVModel()
+    private EVIVModel _iv = new()
     {
         HP = 31,
         Atk = 31,
@@ -161,7 +167,47 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _move2 = "None"; // Array of pokemon's moves
     private string _move3 = "None"; // Array of pokemon's moves
     private string _move4 = "None"; // Array of pokemon's moves
-    private string _image = ""; // URI of pokemon's image
+    private string _image = "Assets/None.png"; // URI of pokemon's image
+    private List<ImageListener> listeners = [];
+    public void Attach(ImageListener listener)
+    {
+        listeners.Add(listener);
+        Notify();
+    }
+    public void Clear()
+    {
+        listeners = [];
+    }
+    public void Notify()
+    {
+        foreach (ImageListener listener in listeners)
+        {
+            listener.Update(PokeImage);
+        }
+    }
+    public async Task DownloadImage()
+    {
+        string filename = "Assets/" + Name + ".png";
+        if (File.Exists(filename))
+        {
+            PokeImage = filename;
+            return;
+        }
+        string url = "http://play.pokemonshowdown.com/sprites/gen5/" + Name.ToLower() + ".png";
+        HttpClient client = new();
+        try
+        {
+            var response = await client.GetAsync(new Uri(url));
+            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK) return;
+            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+            File.WriteAllBytes(filename, imageBytes);
+            PokeImage = filename;
+        }
+        catch
+        {
+            PokeImage = "Assets/None.png";
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

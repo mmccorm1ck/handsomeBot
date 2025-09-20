@@ -4,8 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HandsomeBot.Models;
-using System.IO;
-using Avalonia.Media.Imaging;
 using System.Collections.ObjectModel;
 
 namespace HandsomeBot.ViewModels;
@@ -17,13 +15,8 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         TheGame = game;
         for (int i = 0; i < 6; i++)
         {
-            string uri;
-            if (TheGame.BotTeam[i].PokeImage == "") uri = "Assets/empty.png";
-            else if (!File.Exists(TheGame.BotTeam[i].PokeImage)) uri = "Assets/empty.png";
-            else uri = TheGame.BotTeam[i].PokeImage;
-            FileStream image = File.Open(uri, FileMode.Open);
-            Sprites.Add(new Bitmap(image));
-            image.Close();
+            Sprites.Add(new());
+            TheGame.BotTeam[i].Attach(Sprites[i]);
         }
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -45,7 +38,17 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<Bitmap?> Sprites { get; set; } = [];
+    private ObservableCollection<ImageListener> _sprites = [];
+
+    public ObservableCollection<ImageListener> Sprites
+    {
+        get => _sprites;
+        set
+        {
+            _sprites = value;
+            OnPropertyChanged();
+        }
+    }
 
     public void LoadTeam()
     {
@@ -58,7 +61,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             return;
         }
-        //Debug.WriteLine(GameInfo.BotTeamURL);
         Task task = Task.Run(async () => await LoadPasteHtml(TheGame.BotTeamURL));
     }
 
@@ -90,7 +92,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
             if (responses[i].Contains("img-pokemon"))
             { // Saves URL of pokemon image
-                //TheGame.BotTeam[currPokemon].PokeImage = "https://pokepast.es" + responses[i].Split(' ')[2][5..^2];
                 //Debug.WriteLine(i);
                 continue;
             }
@@ -178,7 +179,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     {
                         item = item[0..^7];
                         int idxtemp = item.LastIndexOf('>');
-                        item = item[idxtemp..];
+                        item = item[idxtemp..].Replace("'", "");
                     }
                     TheGame.BotTeam[currPokemon].Item = item;
                 }
@@ -189,13 +190,12 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 }
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
-                TheGame.BotTeam[currPokemon].Name = responses[i][idx..];
-                await DownloadImage(TheGame.BotTeam[currPokemon].Name, currPokemon);
+                TheGame.BotTeam[currPokemon].Name = responses[i][idx..].Replace("'", "");
             }
             if (responses[i].Contains("Ability"))
             { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
-                TheGame.BotTeam[currPokemon].Ability = responses[i][idx..];
+                TheGame.BotTeam[currPokemon].Ability = responses[i][idx..].Replace("'", "");
                 //Debug.WriteLine(i);
                 continue;
             }
@@ -254,35 +254,5 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         TheGame.Gen = int.Parse(tempGen);
         if (TheGame.Format.Contains("VGC") || TheGame.Format.Contains("Doubles")) TheGame.GameType = "Doubles";
         else TheGame.GameType = "Singles";
-    }
-
-    public async Task DownloadImage(string name, int mon)
-    {
-        string filename = "Assets/" + name + ".png";
-        if (File.Exists(filename))
-        {
-            TheGame.BotTeam[mon].PokeImage = filename;
-            FileStream image = File.Open(filename, FileMode.Open);
-            Sprites[mon] = new Bitmap(image);
-            image.Close();
-            return;
-        }
-        string url = "http://play.pokemonshowdown.com/sprites/gen5/" + name.ToLower() + ".png";
-        HttpClient client = new();
-        try
-        {
-            var response = await client.GetAsync(new Uri(url));
-            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK) return;
-            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
-            await File.WriteAllBytesAsync(filename, imageBytes);
-            TheGame.BotTeam[mon].PokeImage = filename;
-            FileStream image = File.Open(filename, FileMode.Open);
-            Sprites[mon] = new Bitmap(image);
-            image.Close();
-        }
-        catch
-        {
-            return;
-        }
     }
 }

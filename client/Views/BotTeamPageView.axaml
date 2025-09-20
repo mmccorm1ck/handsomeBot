@@ -27,9 +27,7 @@
             <Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Command="{Binding LoadPaste}">Load PokePaste</Button>
             <TextBox Name="format" Grid.Row="0" Grid.Column="3" Margin="0 5" Watermark="Format" Text="{Binding TheGame.Format}"/>
             <Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Margin="10" Command="{Binding LoadTeam}">Load Previous Team</Button>
-            <!--<Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Margin="10" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Validate Team</Button>
-            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10">Boop</Label>-->
-            <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Source="{Binding Sprites[0]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Source="{Binding Sprites[0].Image}"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[0].Name}"/>
@@ -75,7 +73,7 @@
                 <TextBlock Text="{Binding TheGame.BotTeam[0].Move3}"/>
                 <TextBlock Text="{Binding TheGame.BotTeam[0].Move4}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10" Source="{Binding Sprites[1]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10" Source="{Binding Sprites[1].Image}"/>
             <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[1].Name}"/>
@@ -121,7 +119,7 @@
                 <TextBlock Text="{Binding TheGame.BotTeam[1].Move3}"/>
                 <TextBlock Text="{Binding TheGame.BotTeam[1].Move4}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[2]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[2].Image}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[2].Name}"/>
@@ -167,7 +165,7 @@
                 <TextBlock Text="{Binding TheGame.BotTeam[2].Move3}"/>
                 <TextBlock Text="{Binding TheGame.BotTeam[2].Move4}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Margin="10" Source="{Binding Sprites[3]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Margin="10" Source="{Binding Sprites[3].Image}"/>
             <StackPanel Grid.Row="2" Grid.Column="3" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[3].Name}"/>
@@ -213,7 +211,7 @@
                 <TextBlock Text="{Binding TheGame.BotTeam[3].Move3}"/>
                 <TextBlock Text="{Binding TheGame.BotTeam[3].Move4}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="10" Source="{Binding Sprites[4]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="10" Source="{Binding Sprites[4].Image}"/>
             <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[4].Name}"/>
@@ -259,7 +257,7 @@
                 <TextBlock Text="{Binding TheGame.BotTeam[4].Move3}"/>
                 <TextBlock Text="{Binding TheGame.BotTeam[4].Move4}"/>
             </StackPanel>
-            <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="10" Source="{Binding Sprites[5]}"/>
+            <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="10" Source="{Binding Sprites[5].Image}"/>
             <StackPanel Grid.Row="3" Grid.Column="3" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding TheGame.BotTeam[5].Name}"/>
