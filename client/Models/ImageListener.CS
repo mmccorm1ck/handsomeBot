@@ -1,6 +1,5 @@
 using Avalonia.Media.Imaging;
 using System.IO;
-using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -56,7 +55,6 @@ public class ImageListener : INotifyPropertyChanged
         }
         Bitmap image = new(stream);
         stream.Close();
-        Debug.WriteLine("Beep");
         return image;
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change

@@ -14,6 +14,11 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public OppTeamPageViewModel(GameModel game)
     {
         TheGame = game;
+        for (int i = 0; i < 6; i++)
+        {
+            Sprites.Add(new());
+            TheGame.OppTeam[i].Attach(Sprites[i]);
+        }
         Task.Run(async () => await GetAllMons());
     }
 
@@ -35,13 +40,23 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private ObservableCollection<string> _allMons = new ObservableCollection<string>();
+    private ObservableCollection<string> _allMons = [];
     public ObservableCollection<string> AllMons
     {
         get => _allMons;
         set
         {
             _allMons = value;
+            OnPropertyChanged();
+        }
+    }
+    private ObservableCollection<ImageListener> _sprites = [];
+    public ObservableCollection<ImageListener> Sprites
+    {
+        get => _sprites;
+        set
+        {
+            _sprites = value;
             OnPropertyChanged();
         }
     }
@@ -53,7 +68,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     async public Task GetAllMons()
     {
-        HttpClient client = new HttpClient();
+        HttpClient client = new();
         string url = "http://" + TheGame.ServerUrl + "/mons?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
         string response = await client.GetStringAsync(url);
         if (response == null) return;
