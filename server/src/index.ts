@@ -64,37 +64,44 @@ function calcDamages(input: inputObject): object[] {
                 const moveName = userMon.moves[i];
                 if (moveName === "None") continue;
                 const move: Move = new Move(gen, moveName, options);
-                results.push({
-                    BotUser: true,
-                    UserMon: userMon.name,
-                    TargetMon: oppMon.name,
-                    MoveNo: i,
-                    Damage: calculate(
-                        gen,
-                        userMon,
-                        oppMon,
-                        move,
-                        field
-                    ).desc()
-                });
+                try {
+                    results.push({
+                        BotUser: true,
+                        UserMon: userMon.name,
+                        TargetMon: oppMon.name,
+                        MoveNo: i,
+                        Damage: calculate(
+                            gen,
+                            userMon,
+                            oppMon,
+                            move,
+                            field
+                        ).desc()
+                    });
+            }
+            catch {continue;}
             }
             options = { ability: oppMon.ability, item: oppMon.item, species: oppMon.species.name };
             for (let i = 0; i < oppMon.moves.length; i++) {
                 const moveName = oppMon.moves[i];
+                if (moveName === "None") continue;
                 const move: Move = new Move(gen, moveName, options);
-                results.push({
-                    BotUser: false,
-                    UserMon: oppMon.name,
-                    TargetMon: userMon.name,
-                    MoveNo: i,
-                    damage: calculate(
-                        gen,
-                        oppMon,
-                        userMon,
-                        move,
-                        switchedField
-                    ).desc()
-                });
+                try {
+                    results.push({
+                        BotUser: false,
+                        UserMon: oppMon.name,
+                        TargetMon: userMon.name,
+                        MoveNo: i,
+                        damage: calculate(
+                            gen,
+                            oppMon,
+                            userMon,
+                            move,
+                            switchedField
+                        ).desc()
+                    });
+                }
+                catch {continue;}
             }
         }
     }
