@@ -64,6 +64,10 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public void LoadPrev()
     {
         TheGame.OppTeam = TheGame.OppTeamPrev;
+        for (int i = 0; i < 6; i++)
+        {
+            TheGame.OppTeam[i].Attach(Sprites[i]);
+        }
     }
 
     async public Task GetAllMons()

@@ -53,6 +53,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public void LoadTeam()
     {
         TheGame.BotTeam = TheGame.BotTeamPrev;
+        for (int i = 0; i < 6; i++)
+        {
+            TheGame.BotTeam[i].Attach(Sprites[i]);
+        }
     }
 
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
