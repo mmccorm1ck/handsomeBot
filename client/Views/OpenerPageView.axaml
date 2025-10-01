@@ -70,9 +70,9 @@
             ColumnDefinitions="200, 200"
             RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
-            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[0].Image}"/>
             <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Content="{Binding AvailablePokemon[0]}"/>
-            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[1].Image}"/>
             <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding AvailablePokemon[1]}"/>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Pokemon in Reserve</Label>
@@ -80,9 +80,9 @@
             ColumnDefinitions="200, 200"
             RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
-            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[2].Image}"/>
             <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Content="{Binding AvailablePokemon[2]}"/>
-            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[3].Image}"/>
             <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding AvailablePokemon[3]}"/>
         </Grid>
         <Label Margin="10" FontSize="18" HorizontalAlignment="Center">Enter Opponent's Opening Pokemon</Label>
@@ -90,14 +90,14 @@
             ColumnDefinitions="200, 200"
             RowDefinitions="200, Auto"
             HorizontalAlignment="Center">
-            <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[4].Image}"/>
             <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
                 MaxDropDownHeight="500" HorizontalAlignment="Center"
-                SelectedItem="{Binding OppOpener[0], Mode=TwoWay}"/>
-            <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
+                SelectedItem="{Binding OppSelect[0].MonName}" Name="OppSlct0"/>
+            <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
             <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" ItemsSource="{Binding OpponentsPokemon}"
                 MaxDropDownHeight="500" HorizontalAlignment="Center"
-                SelectedItem="{Binding OppOpener[1], Mode=TwoWay}"/>
+                SelectedItem="{Binding OppSelect[1].MonName}" Name="OppSlct1"/>
         </Grid>
         <Button HorizontalAlignment="Center" Margin="50" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Enter Events</Button>
     </StackPanel>

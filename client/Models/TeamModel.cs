@@ -15,7 +15,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         get => _name;
         set
         {
-            _name = value.Replace("'", "");
+            _name = value;
             OnPropertyChanged();
             Task.Run(async () => await DownloadImage());
         }

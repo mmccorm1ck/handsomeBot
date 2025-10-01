@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
-using System.Reactive.Linq;
 
 namespace HandsomeBot.ViewModels;
 
@@ -19,13 +17,19 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     public OpenerPageViewModel(GameModel game)
     {
         TheGame = game;
-        TheGame.Turns = new() {
+        for (int i = 0; i < 6; i++)
+        {
+            MonsForSprites.Add(new());
+            Sprites.Add(new());
+            MonsForSprites[i].Attach(Sprites[i]);
+        }
+        TheGame.Turns = [
             new()
             {
                 TurnNo = 0,
                 EventList = []
             }
-        };
+        ];
         Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -44,13 +48,21 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             AvailablePokemon[i] = TheGame.BotTeam[OpenerMonNos[i]].Name;
             NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]);
+            MonsForSprites[i].Name = AvailablePokemon[i];
         }
-        for (int i = 0; i < 2; i++) TheGame.Turns[0].BotStartMons[i] = OpenerMonNos[i];
+        for (int i = 0; i < 2; i++)
+        {
+            TheGame.Turns[0].BotStartMons[i] = OpenerMonNos[i];
+        }
         for (int i = 0; i < 6; i++)
         {
             OpponentsPokemon[i] = "Opponent's " + TheGame.OppTeam[i].Name;
-            AvailablePokemon[i + 4] = OpponentsPokemon[i];
+            AvailablePokemon[i + 4] = TheGame.OppTeam[i].Name;
             NameToNo.Add(OpponentsPokemon[i], i + 6);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            OppSelect[i].Attach(MonsForSprites[i + 4]);
         }
     }
 
@@ -73,10 +85,24 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private ObservableCollection<ImageListener> _sprites = [];
+
+    public ObservableCollection<ImageListener> Sprites
+    {
+        get => _sprites;
+        set
+        {
+            _sprites = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<TeamModel> MonsForSprites { get; set; } = [];
+
     /* ----------------------------------------
     Weighting calculations for choosing openers
     ---------------------------------------- */
-    
+
     private float[] _weights = new float[6];
 
     public float[] Weights
@@ -234,22 +260,47 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private string[] _oppOpener = ["", ""];
+    private ObservableCollection<OppSelector> _oppSelect = [new(), new()];
 
-    public string[] OppOpener
+    public ObservableCollection<OppSelector> OppSelect
     {
-        get => _oppOpener;
+        get => _oppSelect;
         set
         {
-            _oppOpener = value;
-            for (int i = 0; i < 2; i++)
-            {
-                if (!_oppOpener[i].Equals(""))
-                {
-                    TheGame.Turns[0].OppStartMons[i] = NameToNo["Opponent's "+_oppOpener[i]];
-                }
-            }
+            _oppSelect = value;
             OnPropertyChanged();
+        }
+    }
+
+    public class OppSelector
+    {
+        private string _monName = "";
+        public string MonName
+        {
+            get => _monName;
+            set
+            {
+                _monName = value;
+                Update();
+                OnPropertyChanged();
+            }
+        }
+        private List<TeamModel> mons = [];
+        public void Attach(TeamModel model)
+        {
+            mons.Add(model);
+        }
+        private void Update()
+        {
+            foreach (TeamModel mon in mons)
+            {
+                mon.Name = MonName.Replace("Opponent's ", "");
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -302,7 +353,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-/*
+
     private string _userMonName = "";
 
     public string UserMonName
@@ -315,7 +366,11 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
+    public void SaveEvent()
+    {
+    
+    }
+/*
     public class MonSwitchSearch
     {
         int _mon;
