@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -27,9 +26,15 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             new()
             {
                 TurnNo = 0,
-                EventList = []
+                EventList = [new()]
             }
         ];
+        CurrEvent = TheGame.Turns[0].EventList[0];
+        for (int i = 0; i < 10; i++)
+        {
+            TargetsChecked.Add(new(i));
+            TargetsChecked[i].Attach(CurrEvent);
+        }
         Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -57,13 +62,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         for (int i = 0; i < 6; i++)
         {
             OpponentsPokemon[i] = "Opponent's " + TheGame.OppTeam[i].Name;
-            AvailablePokemon[i + 4] = TheGame.OppTeam[i].Name;
+            AvailablePokemon[i + 4] = OpponentsPokemon[i];
             NameToNo.Add(OpponentsPokemon[i], i + 6);
         }
         for (int i = 0; i < 2; i++)
         {
             OppSelect[i].Attach(MonsForSprites[i + 4]);
         }
+        UserMonModel.Attach(UserSprite);
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -252,10 +258,72 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     }
     public string[] AvailableEvents
     {
-    get => _availableEvents;
+        get => _availableEvents;
         set
         {
             _availableEvents = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _userMonName = "";
+
+    public string UserMonName
+    {
+        get => _userMonName;
+        set
+        {
+            _userMonName = value;
+            if (value != "" && value != null)
+            {
+                CurrEvent.UserMon = NameToNo[value];
+                UserMonModel.Name = value.Replace("Opponent's ", "");
+            }
+            else
+            {
+                CurrEvent.UserMon = -1;
+                UserMonModel.Name = "None";
+            }
+            OnPropertyChanged();
+        }
+    }
+
+    private ImageListener _userSprite = new();
+
+    public ImageListener UserSprite
+    {
+        get => _userSprite;
+        set
+        {
+            _userSprite = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public TeamModel UserMonModel = new();
+    
+    public Dictionary<string, int> NameToNo{get;set;} = [];
+
+    private ObservableCollection<string> _allItems = [];
+
+    public ObservableCollection<string> AllItems
+    {
+        get => _allItems;
+        set
+        {
+            _allItems = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<string> _allAbilities = [];
+
+    public ObservableCollection<string> AllAbilities
+    {
+        get => _allAbilities;
+        set
+        {
+            _allAbilities = value;
             OnPropertyChanged();
         }
     }
@@ -268,6 +336,18 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _oppSelect = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<TargetSelector> _targetsChecked = [];
+
+    public ObservableCollection<TargetSelector> TargetsChecked
+    {
+        get => _targetsChecked;
+        set
+        {
+            _targetsChecked = value;
             OnPropertyChanged();
         }
     }
@@ -304,57 +384,69 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Dictionary<string, int> NameToNo{get;set;} = [];
-
-    private ObservableCollection<string> _allItems = [];
-
-    private ObservableCollection<string> _allAbilities = [];
-
-    public ObservableCollection<string> AllItems
+    public class TargetSelector
     {
-        get => _allItems;
-        set
+        public TargetSelector(int target)
         {
-            _allItems = value;
-            OnPropertyChanged();
+            _targetNo = target;
+        }
+        private readonly int _targetNo;
+        private bool _selected = false;
+        public bool Selected
+        {
+            get => _selected;
+            set
+            {
+                _selected = value;
+                Update();
+                OnPropertyChanged();
+            }
+        }
+        private List<EventModel> events = [];
+        public void Attach(EventModel model)
+        {
+            events.Add(model);
+        }
+        public void Detach()
+        {
+            events = [];
+        }
+        private void Update()
+        {
+            foreach (EventModel ev in events)
+            {
+                if (Selected)
+                {
+                    if (!ev.TargetMons.Contains(_targetNo)) ev.TargetMons.Add(_targetNo);
+                }
+                else
+                {
+                    ev.TargetMons.Remove(_targetNo);
+                }
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
-    public ObservableCollection<string> AllAbilities
+    public EventModel CurrEvent { get; set; }
+
+    public void NextEvent()
     {
-        get => _allAbilities;
-        set
+        EventNumber++;
+        TheGame.Turns[0].EventList.Add(new());
+        CurrEvent = TheGame.Turns[0].EventList[EventNumber];
+        for (int i = 0; i < 10; i++)
         {
-            _allAbilities = value;
-            OnPropertyChanged();
+            TargetsChecked[i].Selected = false;
         }
+        UserMonName = "";
     }
 
-    private EventModel _currEvent = new();
-
-    public EventModel CurrEvent
-    {
-        get => _currEvent;
-        set
-        {
-            _currEvent = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private ObservableCollection<bool> _targetsChecked = new([.. Enumerable.Repeat(false, 10)]);
-
-    public ObservableCollection<bool> TargetsChecked
-    {
-        get => _targetsChecked;
-        set
-        {
-            _targetsChecked = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string _userMonName = "";
+    /*private string _userMonName = "";
 
     public string UserMonName
     {
@@ -364,23 +456,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             _userMonName = value;
             if (value != "" && value != null) CurrEvent.UserMon = NameToNo[value];
             OnPropertyChanged();
-        }
-    }
-    public void SaveEvent()
-    {
-    
-    }
-/*
-    public class MonSwitchSearch
-    {
-        int _mon;
-        public MonSwitchSearch(int Mon)
-        {
-            _mon = Mon;
-        }
-        public bool MonMatch(int i)
-        {
-            return i == _mon;
         }
     }
 
@@ -425,16 +500,34 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         TheGame.Turns[0].EventList.Add(new());
         TheGame.Turns[0].EventList[EventNumber] = CurrEvent; 
-        string historyFileName = "Data/gameHistory.json";
         var options = new JsonSerializerOptions {WriteIndented = true};
-        using (StreamWriter sw = File.CreateText(historyFileName))
-        {
-            string historyJsonString = System.Text.Json.JsonSerializer.Serialize(TheGame.Turns[0], options);
-            sw.Write(historyJsonString);
-            sw.Close();
-        }
         UserMonName = "";
         CurrEvent = new();
         EventNumber++;
+    }
+
+    private EventModel _currEvent = new();
+
+    public EventModel CurrEvent
+    {
+        get => _currEvent;
+        set
+        {
+            _currEvent = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public class MonSwitchSearch
+    {
+        int _mon;
+        public MonSwitchSearch(int Mon)
+        {
+            _mon = Mon;
+        }
+        public bool MonMatch(int i)
+        {
+            return i == _mon;
+        }
     }*/
 }
