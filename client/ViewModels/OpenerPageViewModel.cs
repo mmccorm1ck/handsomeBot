@@ -35,6 +35,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             TargetsChecked.Add(new(i));
             TargetsChecked[i].Attach(CurrEvent);
         }
+        Task.Run(GetAllAbilitiesItems);
         Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -444,6 +445,23 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             TargetsChecked[i].Selected = false;
         }
         UserMonName = "";
+    }
+    
+    async public Task GetAllAbilitiesItems()
+    {
+        HttpClient client = new();
+        string url = "http://" + TheGame.ServerUrl + "/abilities?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
+        string response = await client.GetStringAsync(url);
+        if (response == null) return;
+        ObservableCollection<string>? temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
+        if (temp == null) return;
+        AllAbilities = temp;
+        url = "http://" + TheGame.ServerUrl + "/items?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
+        response = await client.GetStringAsync(url);
+        if (response == null) return;
+        temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
+        if (temp == null) return;
+        AllItems = temp;
     }
 
     /*private string _userMonName = "";
