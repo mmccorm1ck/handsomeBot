@@ -26,13 +26,13 @@
                             MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
                             SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
                         <Label HorizontalAlignment="Center">Item:</Label>
-                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                        <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllItems}"
-                            SelectedItem="{Binding CurrEvent.ItemName, Mode=TwoWay}"/>
+                            Text="{Binding CurrEvent.ItemName}"/>
                         <Label HorizontalAlignment="Center">Ability:</Label>
-                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                        <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllAbilities}"
-                            SelectedItem="{Binding CurrEvent.AbilityName, Mode=TwoWay}"/>
+                            Text="{Binding CurrEvent.AbilityName}"/>
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
