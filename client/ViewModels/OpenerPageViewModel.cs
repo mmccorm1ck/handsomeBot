@@ -341,9 +341,9 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<TargetSelector> _targetsChecked = [];
+    private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
 
-    public ObservableCollection<TargetSelector> TargetsChecked
+    public ObservableCollection<TargetSelectorModel> TargetsChecked
     {
         get => _targetsChecked;
         set
@@ -385,65 +385,25 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public class TargetSelector
-    {
-        public TargetSelector(int target)
-        {
-            _targetNo = target;
-        }
-        private readonly int _targetNo;
-        private bool _selected = false;
-        public bool Selected
-        {
-            get => _selected;
-            set
-            {
-                _selected = value;
-                Update();
-                OnPropertyChanged();
-            }
-        }
-        private List<EventModel> events = [];
-        public void Attach(EventModel model)
-        {
-            events.Add(model);
-        }
-        public void Detach()
-        {
-            events = [];
-        }
-        private void Update()
-        {
-            foreach (EventModel ev in events)
-            {
-                if (Selected)
-                {
-                    if (!ev.TargetMons.Contains(_targetNo)) ev.TargetMons.Add(_targetNo);
-                }
-                else
-                {
-                    ev.TargetMons.Remove(_targetNo);
-                }
-            }
-        }
-        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+    private EventModel _currEvent = new();
 
-    public EventModel CurrEvent { get; set; }
+    public EventModel CurrEvent
+    {
+        get => _currEvent;
+        set
+        {
+            _currEvent = value;
+            OnPropertyChanged();
+        }
+     }
 
     public void NextEvent()
     {
+        foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach();
         EventNumber++;
         TheGame.Turns[0].EventList.Add(new());
         CurrEvent = TheGame.Turns[0].EventList[EventNumber];
-        for (int i = 0; i < 10; i++)
-        {
-            TargetsChecked[i].Selected = false;
-        }
+        foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent);
         UserMonName = "";
     }
     
@@ -464,20 +424,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         AllItems = temp;
     }
 
-    /*private string _userMonName = "";
-
-    public string UserMonName
-    {
-        get => _userMonName;
-        set
-        {
-            _userMonName = value;
-            if (value != "" && value != null) CurrEvent.UserMon = NameToNo[value];
-            OnPropertyChanged();
-        }
-    }
-
-    public void SaveEvent()
+    /*public void SaveEvent()
     {
         if (UserMonName == "" || CurrEvent.EventType == "") return;
         if (TheGame.Turns[0].OppEndMons[0] == -1 || TheGame.Turns[0].OppEndMons[1] == -1) TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
@@ -522,18 +469,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         UserMonName = "";
         CurrEvent = new();
         EventNumber++;
-    }
-
-    private EventModel _currEvent = new();
-
-    public EventModel CurrEvent
-    {
-        get => _currEvent;
-        set
-        {
-            _currEvent = value;
-            OnPropertyChanged();
-        }
     }
 
     public class MonSwitchSearch
