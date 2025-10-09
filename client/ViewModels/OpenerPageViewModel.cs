@@ -68,7 +68,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         for (int i = 0; i < 2; i++)
         {
-            OppSelect[i].Attach(MonsForSprites[i + 4]);
+            OppSelect[i].Attach(MonsForSprites[i + 4], TheGame.Turns[0], NameToNo);
         }
         UserMonModel.Attach(UserSprite);
     }
@@ -91,20 +91,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    private ObservableCollection<ImageListener> _sprites = [];
-
-    public ObservableCollection<ImageListener> Sprites
-    {
-        get => _sprites;
-        set
-        {
-            _sprites = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public ObservableCollection<TeamModel> MonsForSprites { get; set; } = [];
 
     /* ----------------------------------------
     Weighting calculations for choosing openers
@@ -212,6 +198,91 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    /* -------------
+    Handling sprites
+    ------------- */
+
+    private ObservableCollection<ImageListener> _sprites = [];
+
+    public ObservableCollection<ImageListener> Sprites
+    {
+        get => _sprites;
+        set
+        {
+            _sprites = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<TeamModel> MonsForSprites { get; set; } = [];
+
+    private ImageListener _userSprite = new();
+
+    public ImageListener UserSprite
+    {
+        get => _userSprite;
+        set
+        {
+            _userSprite = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public TeamModel UserMonModel = new();
+    
+    private ObservableCollection<OppSelector> _oppSelect = [new(0), new(1)];
+
+    public ObservableCollection<OppSelector> OppSelect
+    {
+        get => _oppSelect;
+        set
+        {
+            _oppSelect = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public class OppSelector(int position)
+    {
+        private string _monName = "";
+        public string MonName
+        {
+            get => _monName;
+            set
+            {
+                _monName = value;
+                Update();
+                OnPropertyChanged();
+            }
+        }
+        private readonly int _position = position;
+        private Dictionary<string, int> _nameToNo = [];
+        private List<TeamModel> _mons = [];
+        private List<TurnModel> _turns = [];
+        public void Attach(TeamModel mon, TurnModel turn, Dictionary<string, int> nameToNo)
+        {
+            _mons.Add(mon);
+            _turns.Add(turn);
+            _nameToNo = nameToNo;
+        }
+        private void Update()
+        {
+            foreach (TeamModel mon in _mons)
+            {
+                mon.Name = MonName.Replace("Opponent's ", "");
+            }
+            foreach (TurnModel turn in _turns)
+            {
+                turn.OppStartMons[_position] = _nameToNo[MonName];
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
     /* -----------------------
     Handling event information
     ----------------------- */
@@ -289,20 +360,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ImageListener _userSprite = new();
-
-    public ImageListener UserSprite
-    {
-        get => _userSprite;
-        set
-        {
-            _userSprite = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public TeamModel UserMonModel = new();
-    
     public Dictionary<string, int> NameToNo{get;set;} = [];
 
     private ObservableCollection<string> _allItems = [];
@@ -329,18 +386,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<OppSelector> _oppSelect = [new(), new()];
-
-    public ObservableCollection<OppSelector> OppSelect
-    {
-        get => _oppSelect;
-        set
-        {
-            _oppSelect = value;
-            OnPropertyChanged();
-        }
-    }
-
     private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
 
     public ObservableCollection<TargetSelectorModel> TargetsChecked
@@ -350,38 +395,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             _targetsChecked = value;
             OnPropertyChanged();
-        }
-    }
-
-    public class OppSelector
-    {
-        private string _monName = "";
-        public string MonName
-        {
-            get => _monName;
-            set
-            {
-                _monName = value;
-                Update();
-                OnPropertyChanged();
-            }
-        }
-        private List<TeamModel> mons = [];
-        public void Attach(TeamModel model)
-        {
-            mons.Add(model);
-        }
-        private void Update()
-        {
-            foreach (TeamModel mon in mons)
-            {
-                mon.Name = MonName.Replace("Opponent's ", "");
-            }
-        }
-        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
