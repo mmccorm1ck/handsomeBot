@@ -20,6 +20,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
         set
         {
             _eventType = value;
+            Notify();
             OnPropertyChanged();
         }
     }
@@ -75,6 +76,23 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _itemName = "";
     private int _userMon;
     private List<int> _targetMons = [];
+    private List<EventTypeListener> listeners = [];
+    public void Attach(EventTypeListener listener)
+    {
+        listeners.Add(listener);
+        Notify();
+    }
+    public void Clear()
+    {
+        listeners = [];
+    }
+    public void Notify()
+    {
+        foreach (EventTypeListener listener in listeners)
+        {
+            listener.Update(EventType);
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

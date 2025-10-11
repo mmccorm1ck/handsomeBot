@@ -71,6 +71,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OppSelect[i].Attach(MonsForSprites[i + 4], TheGame.Turns[0], NameToNo);
         }
         UserMonModel.Attach(UserSprite);
+        CurrEvent.Attach(EventType);
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -408,15 +409,29 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             _currEvent = value;
             OnPropertyChanged();
         }
-     }
+    }
+
+    private EventTypeListener _eventType = new();
+
+    public EventTypeListener EventType
+    {
+        get => _eventType;
+        set
+        {
+            _eventType = value;
+            OnPropertyChanged();
+        }
+    }
 
     public void NextEvent()
     {
         foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach();
         EventNumber++;
+        CurrEvent.Clear();
         TheGame.Turns[0].EventList.Add(new());
         CurrEvent = TheGame.Turns[0].EventList[EventNumber];
         foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent);
+        CurrEvent.Attach(EventType);
         UserMonName = "";
     }
     

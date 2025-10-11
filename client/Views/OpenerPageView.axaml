@@ -25,36 +25,17 @@
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
                             MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
                             SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
-                        <Label HorizontalAlignment="Center">Item:</Label>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.ItemEvent}">Item:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllItems}"
-                            Text="{Binding CurrEvent.ItemName}"/>
-                        <Label HorizontalAlignment="Center">Ability:</Label>
+                            Text="{Binding CurrEvent.ItemName}" IsVisible="{Binding EventType.ItemEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.AbilityEvent}">Ability:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllAbilities}"
-                            Text="{Binding CurrEvent.AbilityName}"/>
+                            Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
-                <!--<Grid HorizontalAlignment="Center" ShowGridLines="False"
-                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto">
-                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">User Pokemon</Label>
-                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event Type</Label>
-                    <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
-                        SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
-                    <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"
-                        SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
-                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center">Item:</Label>
-                    <ComboBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllItems}"
-                        SelectedItem="{Binding CurrEvent.ItemName, Mode=TwoWay}"/>
-                    <Label Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center">Ability:</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllAbilities}"
-                        SelectedItem="{Binding CurrEvent.AbilityName, Mode=TwoWay}"/>
-                </Grid>-->
                 <Label HorizontalAlignment="Center">Target(s):</Label>
                 <Grid HorizontalAlignment="Center" ShowGridLines="True"
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
