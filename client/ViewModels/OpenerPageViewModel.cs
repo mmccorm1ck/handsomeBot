@@ -72,6 +72,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         UserMonModel.Attach(UserSprite);
         CurrEvent.Attach(EventType);
+        if (TheGame.Gen < 9) FieldList[2] = "Hail";
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -313,11 +314,16 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     private string[] _availablePokemon = new string[10]; // List of pokemon that can trigger events;
     private string[] _availableEvents = [ // List of possible events in turn 0
         "Ability Activation",
-        "Item Activation",
+        "Ability Change",
         "Ability Reveal",
+        "Item Activation",
         "Item Reveal",
-        "Stat Change",
+        "Item Change",
+        "Stat Level Change",
         "Forme Reveal",
+        "Forme Change",
+        "Field Change",
+        "Type Change",
         "Switch"
     ];
     public string[] AvailablePokemon
@@ -338,6 +344,48 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public string[] TypeList { get; set; } = [
+        "Normal",
+        "Fighting",
+        "Flying",
+        "Poison",
+        "Ground",
+        "Rock",
+        "Bug",
+        "Ghost",
+        "Steel",
+        "Fire",
+        "Water",
+        "Grass",
+        "Electric",
+        "Psychic",
+        "Ice",
+        "Dragon",
+        "Dark",
+        "Fairy",
+        "???",
+        "Stellar"
+    ];
+
+    public string[] StatList { get; set; } = [
+        "Atk",
+        "Def",
+        "SpA",
+        "SpD",
+        "Spe"
+    ];
+
+    public string[] FieldList { get; set; } = [
+        "Rain",
+        "Sun",
+        "Snow",
+        "Sandstorm",
+        "Electric Terrain",
+        "Psychic Terrain",
+        "Grassy Terrain",
+        "Misty Terrain"
+    ];
 
     private string _userMonName = "";
 

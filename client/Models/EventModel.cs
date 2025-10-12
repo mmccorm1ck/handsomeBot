@@ -51,6 +51,33 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public string FieldChange
+    {
+        get => _fieldChange;
+        set
+        {
+            _fieldChange = value;
+            OnPropertyChanged();
+        }
+    }
+    public string StatChange
+    {
+        get => _statChange;
+        set
+        {
+            _statChange = value;
+            OnPropertyChanged();
+        }
+    }
+    public string TypeChange
+    {
+        get => _typeChange;
+        set
+        {
+            _typeChange = value;
+            OnPropertyChanged();
+        }
+    }
     public int UserMon
     {
         get => _userMon;
@@ -74,6 +101,9 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _moveName = "";
     private string _abilityName = "";
     private string _itemName = "";
+    private string _fieldChange = "";
+    private string _statChange = "";
+    private string _typeChange = "";
     private int _userMon;
     private List<int> _targetMons = [];
     private List<EventTypeListener> listeners = [];

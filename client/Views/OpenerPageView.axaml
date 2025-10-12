@@ -33,6 +33,18 @@
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllAbilities}"
                             Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FieldEvent}">Field Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding FieldList}"
+                            SelectedItem="{Binding CurrEvent.FieldChange}" IsVisible="{Binding EventType.FieldEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatEvent}">Stat Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding StatList}"
+                            SelectedItem="{Binding CurrEvent.StatChange}" IsVisible="{Binding EventType.StatEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.TypeEvent}">Type Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding TypeList}"
+                            SelectedItem="{Binding CurrEvent.TypeChange}" IsVisible="{Binding EventType.TypeEvent}"/>
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
