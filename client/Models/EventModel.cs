@@ -78,6 +78,15 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public string FormeName
+    {
+        get => _formeName;
+        set
+        {
+            _formeName = value;
+            OnPropertyChanged();
+        }
+    }
     public int UserMon
     {
         get => _userMon;
@@ -104,6 +113,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _fieldChange = "";
     private string _statChange = "";
     private string _typeChange = "";
+    private string _formeName = "";
     private int _userMon;
     private List<int> _targetMons = [];
     private List<EventTypeListener> listeners = [];
