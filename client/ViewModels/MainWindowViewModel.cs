@@ -15,7 +15,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     public MainWindowViewModel()
     {
         TheGame = LoadData();
-        CurrentPage = new SettingsPageViewModel(TheGame);
+        CurrentPage = new SettingsPageViewModel(TheGame, AllOptions);
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -24,7 +24,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private GameModel _theGame = new() { };
+    private GameModel _theGame = new();
 
     public GameModel TheGame
     {
@@ -32,6 +32,17 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _theGame = value;
+            OnPropertyChanged();
+        }
+    }
+    private AllOptionsModel _allOptions = new();
+
+    public AllOptionsModel AllOptions
+    {
+        get => _allOptions;
+        set
+        {
+            _allOptions = value;
             OnPropertyChanged();
         }
     }
@@ -132,16 +143,29 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     void InstanceCreator()
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
-        var instance = Activator.CreateInstance(targetPage.ModelType, TheGame);
+        var instance = Activator.CreateInstance(targetPage.ModelType, TheGame, AllOptions);
         Dispatcher.UIThread.Post(() => PageLoader(instance, targetPage));
     }
 
-    void PageLoader(object? instance, PageNumberTemplate? targetPage)
+    async void PageLoader(object? instance, PageNumberTemplate? targetPage)
     {
         if (instance is null || targetPage is null)
         {
             MainDialogOpen = false;
             return;
+        }
+        if (nextPageNumber == 2)
+        {
+            try
+            {
+                await AllOptions.UpdateInfo(TheGame);
+            }
+            catch
+            {
+                DialogMessage = "Could not connect to server, check address and server status";
+                DialogButtonVisible = true;
+                return;
+            }
         }
         CurrentPage = (ViewModelBase)instance;
         CurrentButtonLabel = targetPage.ButtonLabel;

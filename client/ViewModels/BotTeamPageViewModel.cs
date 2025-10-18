@@ -10,7 +10,7 @@ namespace HandsomeBot.ViewModels;
 
 public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public BotTeamPageViewModel(GameModel game)
+    public BotTeamPageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game;
         for (int i = 0; i < 6; i++)

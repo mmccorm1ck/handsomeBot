@@ -6,7 +6,7 @@ namespace HandsomeBot.ViewModels;
 
 public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public SettingsPageViewModel(GameModel game)
+    public SettingsPageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game;
     }
