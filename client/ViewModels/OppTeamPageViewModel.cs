@@ -11,15 +11,16 @@ namespace HandsomeBot.ViewModels;
 
 public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public OppTeamPageViewModel(GameModel game)
+    public OppTeamPageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game;
+        AllOptions = options;
         for (int i = 0; i < 6; i++)
         {
             Sprites.Add(new());
             TheGame.OppTeam[i].Attach(Sprites[i]);
         }
-        Task.Run(async () => await GetAllMons());
+        //Task.Run(async () => await GetAllMons());
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -40,13 +41,13 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    private ObservableCollection<string> _allMons = [];
-    public ObservableCollection<string> AllMons
+    private AllOptionsModel _allOptions = new();
+    public AllOptionsModel AllOptions
     {
-        get => _allMons;
+        get => _allOptions;
         set
         {
-            _allMons = value;
+            _allOptions = value;
             OnPropertyChanged();
         }
     }
@@ -70,7 +71,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    async public Task GetAllMons()
+    /*async public Task GetAllMons()
     {
         HttpClient client = new();
         string url = "http://" + TheGame.ServerUrl + "/mons?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
@@ -81,5 +82,5 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         ObservableCollection<string> temp = [];
         foreach (string mon in mons.Keys) temp.Add(mon);
         AllMons = temp;
-    }
+    }*/
 }
