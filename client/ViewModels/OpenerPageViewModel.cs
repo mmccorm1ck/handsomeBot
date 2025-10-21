@@ -14,9 +14,10 @@ namespace HandsomeBot.ViewModels;
 
 public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public OpenerPageViewModel(GameModel game)
+    public OpenerPageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game;
+        AllOptions = options;
         for (int i = 0; i < 6; i++)
         {
             MonsForSprites.Add(new());
@@ -36,7 +37,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             TargetsChecked.Add(new(i));
             TargetsChecked[i].Attach(CurrEvent);
         }
-        Task.Run(GetAllOptionInfo);
+        //Task.Run(GetAllOptionInfo);
         Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -91,6 +92,18 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _theGame = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private AllOptionsModel _allOptions = new();
+
+    public AllOptionsModel AllOptions
+    {
+        get => _allOptions;
+        set
+        {
+            _allOptions = value;
             OnPropertyChanged();
         }
     }
@@ -313,7 +326,16 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
     private string[] _availablePokemon = new string[10]; // List of pokemon that can trigger events;
-    private string[] _availableEvents = [ // List of possible events in turn 0
+    public string[] AvailablePokemon
+    {
+    get => _availablePokemon;
+        set
+        {
+            _availablePokemon = value;
+            OnPropertyChanged();
+        }
+    }
+    public string[] AvailableEvents { get; set; } = [ // List of possible events in turn 0
         "Ability Activation",
         "Ability Change",
         "Ability Reveal",
@@ -327,25 +349,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         "Type Change",
         "Switch"
     ];
-    public string[] AvailablePokemon
-    {
-    get => _availablePokemon;
-        set
-        {
-            _availablePokemon = value;
-            OnPropertyChanged();
-        }
-    }
-    public string[] AvailableEvents
-    {
-        get => _availableEvents;
-        set
-        {
-            _availableEvents = value;
-            OnPropertyChanged();
-        }
-    }
-
     public string[] TypeList { get; set; } = [
         "Normal",
         "Fighting",
@@ -400,7 +403,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             {
                 CurrEvent.UserMon = NameToNo[value];
                 UserMonModel.Name = value.Replace("Opponent's ", "");
-                if (FormeDict.TryGetValue(UserMonModel.Name, out List<string>? temp)) FormeList = new(temp);
+                if (AllOptions.AllFormes.TryGetValue(UserMonModel.Name, out List<string>? temp)) FormeList = new(temp);
                 else FormeList = [UserMonModel.Name];
             }
             else
@@ -415,7 +418,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public Dictionary<string, int> NameToNo { get; set; } = [];
 
-    public Dictionary<string, List<string>> FormeDict { get; set; } = [];
+    //public Dictionary<string, List<string>> FormeDict { get; set; } = [];
 
     private ObservableCollection<string> _formeList = [];
 
@@ -429,7 +432,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<string> _allItems = [];
+    /*private ObservableCollection<string> _allItems = [];
 
     public ObservableCollection<string> AllItems
     {
@@ -451,7 +454,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             _allAbilities = value;
             OnPropertyChanged();
         }
-    }
+    }*/
 
     private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
 
@@ -501,7 +504,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         UserMonName = "";
     }
 
-    async public Task GetAllOptionInfo()
+    /*async public Task GetAllOptionInfo()
     {
         HttpClient client = new();
         string url = "http://" + TheGame.ServerUrl + "/abilities?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
@@ -549,7 +552,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         public List<string>? otherFormes { get; set; }
     }
 
-    /*public void SaveEvent()
+    public void SaveEvent()
     {
         if (UserMonName == "" || CurrEvent.EventType == "") return;
         if (TheGame.Turns[0].OppEndMons[0] == -1 || TheGame.Turns[0].OppEndMons[1] == -1) TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
