@@ -12,29 +12,63 @@
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Label FontSize="18">Event #</Label>
-                    <Label FontSize="18" Content="{Binding EventNumber}"/>
+                    <Label FontSize="18" HorizontalAlignment="Right" Content="Event No."/>
+                    <Label FontSize="18" HorizontalAlignment="Left" Content="{Binding EventNumber}"/>
                 </StackPanel>
-                <Grid HorizontalAlignment="Center" ShowGridLines="False"
-                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto">
-                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Pokemon</Label>
-                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Event</Label>
-                    <ComboBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="pokemonCbx" ItemsSource="{Binding AvailablePokemon}"/>
-                        <!-- <ComboBoxItem>Pokemon1</ComboBoxItem>
-                        <ComboBoxItem>Pokemon2</ComboBoxItem>
-                        <ComboBoxItem>PokemonA</ComboBoxItem>
-                        <ComboBoxItem>PokemonB</ComboBoxItem> -->
-                    <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" SelectedIndex="0"
-                        MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"/>
-                        <!-- <ComboBoxItem>Ability Activation</ComboBoxItem>
-                        <ComboBoxItem>Switch</ComboBoxItem>
-                        <ComboBoxItem>Move</ComboBoxItem>
-                        <ComboBoxItem>Terastallize</ComboBoxItem>
-                        <ComboBoxItem>Mega Evolution</ComboBoxItem>
-                        <ComboBoxItem>Dynamax</ComboBoxItem>
-                        <ComboBoxItem>Gigantamax</ComboBoxItem>
-                        <ComboBoxItem>Z-Move</ComboBoxItem> -->
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel>
+                        <Label HorizontalAlignment="Center">Event Type</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"
+                            SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
+                        <Label HorizontalAlignment="Center">User Pokemon</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
+                            SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.ItemEvent}">Item:</Label>
+                        <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
+                            MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllOptions.AllItems}"
+                            Text="{Binding CurrEvent.ItemName}" IsVisible="{Binding EventType.ItemEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.AbilityEvent}">Ability:</Label>
+                        <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
+                            MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllOptions.AllAbilities}"
+                            Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FieldEvent}">Field Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding FieldList}"
+                            SelectedItem="{Binding CurrEvent.FieldChange}" IsVisible="{Binding EventType.FieldEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatEvent}">Stat Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding StatList}"
+                            SelectedItem="{Binding CurrEvent.StatChange}" IsVisible="{Binding EventType.StatEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.TypeEvent}">Type Change:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding TypeList}"
+                            SelectedItem="{Binding CurrEvent.TypeChange}" IsVisible="{Binding EventType.TypeEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FormeEvent}">Forme:</Label>
+                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                            MaxDropDownHeight="100" Name="formeCbx" ItemsSource="{Binding FormeList}"
+                            SelectedItem="{Binding CurrEvent.FormeName}" IsVisible="{Binding EventType.FormeEvent}"/>
+                    </StackPanel>
+                    <Image Margin="10" Source="{Binding UserSprite.Image}"/>
+                </StackPanel>
+                <Label HorizontalAlignment="Center">Target(s):</Label>
+                <Grid HorizontalAlignment="Center" ShowGridLines="True"
+                    ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <CheckBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[0]}" Name="bot0Chk" IsChecked="{Binding TargetsChecked[0].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[1]}" Name="bot1Chk" IsChecked="{Binding TargetsChecked[1].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[2]}" Name="bot2Chk" IsChecked="{Binding TargetsChecked[2].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[3]}" Name="bot3Chk" IsChecked="{Binding TargetsChecked[3].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[4]}" Name="opp0Chk" IsChecked="{Binding TargetsChecked[4].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[5]}" Name="opp1Chk" IsChecked="{Binding TargetsChecked[5].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[6]}" Name="opp2Chk" IsChecked="{Binding TargetsChecked[6].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[7]}" Name="opp3Chk" IsChecked="{Binding TargetsChecked[7].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[8]}" Name="opp4Chk" IsChecked="{Binding TargetsChecked[8].Selected, Mode=TwoWay}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[9]}" Name="opp5Chk" IsChecked="{Binding TargetsChecked[9].Selected, Mode=TwoWay}"/>
+                </Grid>
+                <Grid HorizontalAlignment="Center" ColumnDefinitions="200,200" RowDefinitions="Auto">
+                    <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding NextEvent}">Next Event</Button>
+                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Finish</Button>
                 </Grid>
             </StackPanel>
         </dialogHost:DialogHost.DialogContent>
@@ -60,18 +94,18 @@
                 ColumnDefinitions="100, 100"
                 RowDefinitions="100, Auto, 100, Auto, 100, Auto"
                 HorizontalAlignment="Center" >
-                <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon1</Label>
-                <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon2</Label>
-                <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon3</Label>
-                <Label Grid.Row="2" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon4</Label>
-                <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon5</Label>
-                <Label Grid.Row="4" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon6</Label>
+                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[0].Image}"/>
+                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[0].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[1].Image}"/>
+                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[1].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[2].Image}"/>
+                <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[2].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="10" Source="{Binding Sprites[3].Image}"/>
+                <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[3].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="10" Source="{Binding Sprites[4].Image}"/>
+                <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[4].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
+                <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[5].Name}"/>
             </Grid>
             <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">VS</Label>
             <Grid Grid.Row="1" Grid.Column="2"
@@ -79,18 +113,18 @@
                 ColumnDefinitions="100, 100"
                 RowDefinitions="100, Auto, 100, Auto, 100, Auto"
                 HorizontalAlignment="Center" >
-                <Label Grid.Row="0" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon1</Label>
-                <Label Grid.Row="0" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon2</Label>
-                <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon3</Label>
-                <Label Grid.Row="2" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon4</Label>
-                <Label Grid.Row="4" Grid.Column="0" Margin="10">Image</Label>
-                <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Pokemon5</Label>
-                <Label Grid.Row="4" Grid.Column="1" Margin="10">Image</Label>
-                <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10">Pokemon6</Label>
+                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[6].Image}"/>
+                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[0].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[7].Image}"/>
+                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[1].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[8].Image}"/>
+                <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[2].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="10" Source="{Binding Sprites[9].Image}"/>
+                <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[3].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="10" Source="{Binding Sprites[10].Image}"/>
+                <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[4].Name}"/>
+                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[11].Image}"/>
+                <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[5].Name}"/>
             </Grid>
             <Label Grid.Row="2" Grid.Column="0" Margin="10">Image</Label>
             <Label Grid.Row="3" Grid.Column="0" Margin="10" HorizontalAlignment="Center">Pokemon1</Label>
