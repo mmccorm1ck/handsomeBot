@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace HandsomeBot.Models;
 public class EventModel() : INotifyPropertyChanged // Class to hold info about an event during a game
 {
-    public int EventNo
+    public int EventNo // Event number in that turn
     {
         get => _eventNo;
         set
@@ -14,17 +14,17 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string EventType
+    public string EventType // Type of event from drop-down menu
     {
         get => _eventType;
         set
         {
             _eventType = value;
-            Notify();
+            Notify(); // Update event listeners
             OnPropertyChanged();
         }
     }
-    public string MoveName
+    public string MoveName // Name of move used
     {
         get => _moveName;
         set
@@ -33,7 +33,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string AbilityName
+    public string AbilityName // Name of ability involved
     {
         get => _abilityName;
         set
@@ -42,7 +42,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string ItemName
+    public string ItemName // Name of item involved
     {
         get => _itemName;
         set
@@ -51,7 +51,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string FieldChange
+    public string FieldChange // Name of field change
     {
         get => _fieldChange;
         set
@@ -60,7 +60,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string StatChange
+    public string StatChange // Stat changed
     {
         get => _statChange;
         set
@@ -69,7 +69,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string TypeChange
+    public string TypeChange // Type changed to
     {
         get => _typeChange;
         set
@@ -78,7 +78,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public string FormeName
+    public string FormeName // Name of forme changed to/revealed
     {
         get => _formeName;
         set
@@ -87,7 +87,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public int UserMon
+    public int UserMon // Pokemon that caused the event
     {
         get => _userMon;
         set
@@ -96,7 +96,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public List<int> TargetMons
+    public List<int> TargetMons // Mons that were targeted
     {
         get => _targetMons;
         set
@@ -116,17 +116,17 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _formeName = "";
     private int _userMon;
     private List<int> _targetMons = [];
-    private List<EventTypeListener> listeners = [];
-    public void Attach(EventTypeListener listener)
+    private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility
+    public void Attach(EventTypeListener listener) // Add new event listener
     {
         listeners.Add(listener);
         Notify();
     }
-    public void Clear()
+    public void Clear() // Remove all event listeners
     {
         listeners = [];
     }
-    public void Notify()
+    public void Notify() // Send event type to listeners when changed
     {
         foreach (EventTypeListener listener in listeners)
         {

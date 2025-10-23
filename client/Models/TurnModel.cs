@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace HandsomeBot.Models;
 public class TurnModel() : INotifyPropertyChanged // Class to hold info about a turn during a game
 {
-    public int TurnNo
+    public int TurnNo // Turn number in the game, with turn 0 being when mons are first sent out
     {
         get => _turnNo;
         set
@@ -14,7 +14,7 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public List<Models.EventModel> EventList
+    public List<Models.EventModel> EventList // List of events from that turn
     {
         get => _eventList;
         set
@@ -23,7 +23,7 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public List<int> BotStartMons
+    public List<int> BotStartMons // Bot's pokemon on the field at the beginning of the turn
     {
         get => _botStartMons;
         set
@@ -32,7 +32,7 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public List<int> BotEndMons
+    public List<int> BotEndMons // Bot's pokemon on the field at the end of the turn
     {
         get => _botEndMons;
         set
@@ -41,7 +41,7 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public List<int> OppStartMons
+    public List<int> OppStartMons // Opponent's pokemon on the field at the beginning of the turn
     {
         get => _oppStartMons;
         set
@@ -50,7 +50,7 @@ public class TurnModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public List<int> OppEndMons
+    public List<int> OppEndMons // Opponent's pokemon on the field at the end of the turn
     {
         get => _oppEndMons;
         set

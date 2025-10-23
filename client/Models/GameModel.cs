@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace HandsomeBot.Models;
 public class GameModel() : INotifyPropertyChanged // Class to hold info about a game
 {
-    public string ServerUrl
+    public string ServerUrl // URL to connect to the calc server
     {
         get => _serverUrl;
         set
@@ -14,7 +14,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public string Format
+    public string Format // String representation of game format
     {
         get => _format;
         set
@@ -23,7 +23,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public string GameType
+    public string GameType // Doubles or Singles
     {
         get => _gameType;
         set
@@ -32,7 +32,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public int Gen
+    public int Gen // Game generation number
     {
         get => _gen;
         set
@@ -41,7 +41,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public string BotTeamURL
+    public string BotTeamURL // Pokepaste URL for bot's team
     {
         get => _botTeamURL;
         set
@@ -50,7 +50,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> BotTeam
+    public ObservableCollection<TeamModel> BotTeam // Bot't team info
     {
         get => _botTeam;
         set
@@ -59,7 +59,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> OppTeam
+    public ObservableCollection<TeamModel> OppTeam // Opponent's team info
     {
         get => _oppTeam;
         set
@@ -68,7 +68,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> BotTeamPrev
+    public ObservableCollection<TeamModel> BotTeamPrev // Bot's team from previous game, for use in best of 3 etc
     {
         get => _botTeamPrev;
         set
@@ -77,7 +77,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TeamModel> OppTeamPrev
+    public ObservableCollection<TeamModel> OppTeamPrev // Opponent's team from previous game, for use in best of 3 etc
     {
         get => _oppTeamPrev;
         set
@@ -86,7 +86,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ArenaModel CurrentArena
+    public ArenaModel CurrentArena // Current field effects
     {
         get => _currentArena;
         set
@@ -95,7 +95,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<TurnModel> Turns
+    public ObservableCollection<TurnModel> Turns // List of turn events
     {
         get => _turns;
         set

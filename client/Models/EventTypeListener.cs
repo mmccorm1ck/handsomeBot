@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.Models;
 
-public class EventTypeListener : INotifyPropertyChanged
+public class EventTypeListener : INotifyPropertyChanged // Listener to update which options are shown based on event type selected
 {
     private bool _moveEvent = false;
     private bool _itemEvent = false;
@@ -13,7 +13,7 @@ public class EventTypeListener : INotifyPropertyChanged
     private bool _statusEvent = false;
     private bool _typeEvent = false;
     private bool _statEvent = false;
-    public bool MoveEvent
+    public bool MoveEvent // Show list of moves
     {
         get => _moveEvent;
         set
@@ -22,7 +22,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool ItemEvent
+    public bool ItemEvent // Show list of items
     {
         get => _itemEvent;
         set
@@ -31,7 +31,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool AbilityEvent
+    public bool AbilityEvent // Show list of abilities
     {
         get => _abilityEvent;
         set
@@ -40,7 +40,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool FormeEvent
+    public bool FormeEvent // Show list of formes
     {
         get => _formeEvent;
         set
@@ -49,7 +49,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool FieldEvent
+    public bool FieldEvent // Show list of field events
     {
         get => _fieldEvent;
         set
@@ -58,7 +58,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool StatusEvent
+    public bool StatusEvent // Show list of statuses
     {
         get => _statusEvent;
         set
@@ -67,7 +67,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool TypeEvent
+    public bool TypeEvent // Show list of types
     {
         get => _typeEvent;
         set
@@ -76,7 +76,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public bool StatEvent
+    public bool StatEvent // Show list of stats
     {
         get => _statEvent;
         set
@@ -85,7 +85,7 @@ public class EventTypeListener : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public void Update(string eventType)
+    public void Update(string eventType) // Update event type
     {
         Reset();
         switch (eventType)
@@ -123,7 +123,7 @@ public class EventTypeListener : INotifyPropertyChanged
                 break;
         }
     }
-    public void Reset()
+    public void Reset() // Reset all options to false
     {
         MoveEvent = false;
         ItemEvent = false;

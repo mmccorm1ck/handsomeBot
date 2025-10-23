@@ -17,7 +17,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         {
             _name = value;
             OnPropertyChanged();
-            Task.Run(async () => await DownloadImage());
+            Task.Run(async () => await DownloadImage()); // Check if sprite needs to be downloaded when name changes
         }
     }
     public char Gender
@@ -134,7 +134,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         set
         {
             _image = value;
-            Notify();
+            Notify(); // Update image listeners when sprite path changes
         }
     }
 
@@ -168,44 +168,44 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _move3 = "None"; // Array of pokemon's moves
     private string _move4 = "None"; // Array of pokemon's moves
     private string _image = "Assets/None.png"; // URI of pokemon's image
-    private List<ImageListener> listeners = [];
-    public void Attach(ImageListener listener)
+    private List<ImageListener> listeners = []; // List of image listeners
+    public void Attach(ImageListener listener) // Add new image listener
     {
         listeners.Add(listener);
         Notify();
     }
-    public void Clear()
+    public void Clear() // Remove all image listeners
     {
         listeners = [];
     }
-    public void Notify()
+    public void Notify() // Update image listeners with new sprite path
     {
         foreach (ImageListener listener in listeners)
         {
             listener.Update(PokeImage);
         }
     }
-    public async Task DownloadImage()
+    public async Task DownloadImage() // Downloads sprite image
     {
         string filename = "Assets/" + Name + ".png";
-        if (File.Exists(filename))
+        if (File.Exists(filename)) // Check if sprite has already been downloaded
         {
-            PokeImage = filename;
+            PokeImage = filename; // Just update image path
             return;
         }
-        string url = "http://play.pokemonshowdown.com/sprites/gen5/" + Name.ToLower() + ".png";
+        string url = "http://play.pokemonshowdown.com/sprites/gen5/" + Name.ToLower() + ".png"; // Sprites are downloaded from pokemon showdown's gen 5 style sprites
         HttpClient client = new();
         try
         {
-            var response = await client.GetAsync(new Uri(url));
-            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK) return;
-            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
-            File.WriteAllBytes(filename, imageBytes);
-            PokeImage = filename;
+            var response = await client.GetAsync(new Uri(url)); // Open connection
+            if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK) return; // Return if unable to connect
+            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync(); // Read in image as byte array
+            File.WriteAllBytes(filename, imageBytes); // Write byte array to file
+            PokeImage = filename; // Update image path
         }
         catch
         {
-            PokeImage = "Assets/None.png";
+            PokeImage = "Assets/None.png"; // On exception, set path to blank image
         }
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change

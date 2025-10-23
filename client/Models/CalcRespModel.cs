@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace HandsomeBot.Models;
 public class CalcRespModel() : INotifyPropertyChanged // Class to hold info about an event during a game
 {
-    public bool BotUser
+    public bool BotUser // Whether the move user was on the bot's team or not
     {
         get => _botUser;
         set
@@ -13,7 +13,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public string UserMon
+    public string UserMon // The mon that used the move
     {
         get => _userMon;
         set
@@ -22,7 +22,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public string TargetMon
+    public string TargetMon // The target of the move
     {
         get => _targetMon;
         set
@@ -31,7 +31,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public int MoveNo
+    public int MoveNo // The move number out of the mon's available moves
     {
         get => _moveNo;
         set
@@ -40,7 +40,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
-    public string Damage
+    public string Damage // The string describing how much damage would be dealt
     {
         get => _damage;
         set

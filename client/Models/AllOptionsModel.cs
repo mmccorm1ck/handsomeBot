@@ -9,13 +9,13 @@ using System.Linq;
 
 namespace HandsomeBot.Models;
 
-public class AllOptionsModel() : INotifyPropertyChanged
+public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists of options for dropdown menus. These need to be dynamic as they change between game generations
 {
     private ObservableCollection<string> _allItems = [];
     private ObservableCollection<string> _allAbilities = [];
     private ObservableCollection<string> _allMons = [];
     private Dictionary<string, List<string>> _allFormes = [];
-    public ObservableCollection<string> AllItems
+    public ObservableCollection<string> AllItems // All in-game items
     {
         get => _allItems;
         set
@@ -24,7 +24,7 @@ public class AllOptionsModel() : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<string> AllAbilities
+    public ObservableCollection<string> AllAbilities // All pokemon abilities
     {
         get => _allAbilities;
         set
@@ -33,7 +33,7 @@ public class AllOptionsModel() : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public ObservableCollection<string> AllMons
+    public ObservableCollection<string> AllMons // All pokemon names
     {
         get => _allMons;
         set
@@ -42,7 +42,7 @@ public class AllOptionsModel() : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public Dictionary<string, List<string>> AllFormes
+    public Dictionary<string, List<string>> AllFormes // Dictionary of all alternate formes for each mon
     {
         get => _allFormes;
         set
@@ -55,45 +55,45 @@ public class AllOptionsModel() : INotifyPropertyChanged
     {
         HttpClient client = new();
         string url = "http://" + game.ServerUrl + "/abilities?{%22Gen%22:" + game.Gen.ToString() + "}";
-        string response = await client.GetStringAsync(url);
+        string response = await client.GetStringAsync(url); // Get list of all in-game abilities from server
         if (response == null) return;
         ObservableCollection<string>? temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
         if (temp == null) return;
-        AllAbilities = temp;
+        AllAbilities = temp; // Assign list of abilities to AllAbilities
         url = "http://" + game.ServerUrl + "/items?{%22Gen%22:" + game.Gen.ToString() + "}";
-        response = await client.GetStringAsync(url);
+        response = await client.GetStringAsync(url); // Get list of all in-game items from server
         if (response == null) return;
         temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
         if (temp == null) return;
-        AllItems = temp;
+        AllItems = temp; // Assign list of items to AllAbilities
         url = "http://" + game.ServerUrl + "/mons?{%22Gen%22:" + game.Gen.ToString() + "}";
-        response = await client.GetStringAsync(url);
+        response = await client.GetStringAsync(url); // Get list of all pokemon info from server
         if (response == null) return;
         Dictionary<string, MonFormes>? allMonInfo = JsonSerializer.Deserialize<Dictionary<string, MonFormes>>(response);
         if (allMonInfo == null) return;
-        AllMons = [.. allMonInfo.Keys];
-        foreach (string name in AllMons)
+        AllMons = [.. allMonInfo.Keys]; // Assign all pokemon names to AllMons
+        foreach (string name in AllMons) // Loop over all pokemon
         {
-            if (AllFormes.ContainsKey(name)) continue;
-            if (allMonInfo[name] == null)
+            if (AllFormes.ContainsKey(name)) continue; // Skip pokemon that already have an entry in AllFormes
+            if (allMonInfo[name] == null) // If no additional info
             {
-                AllFormes.Add(name, [name]);
+                AllFormes.Add(name, [name]); // Only form is itself
                 continue;
             }
-            List<string>? formes = allMonInfo[name].otherFormes;
-            if (formes == null)
+            List<string>? formes = allMonInfo[name].otherFormes; // Try to get list of any other formes for that mon
+            if (formes == null) // If none found
             {
-                AllFormes.Add(name, [name]);
+                AllFormes.Add(name, [name]); // Only forme is itself
                 continue;
             }
-            List<string> formesWithName = [.. formes.Prepend(name)];
-            foreach (string formeName in formesWithName)
+            List<string> formesWithName = [.. formes.Prepend(name)]; // List of alternate formes plus base forme
+            foreach (string formeName in formesWithName) // For each forme
             {
-                if (!AllFormes.TryAdd(formeName, formesWithName)) AllFormes[formeName] = formesWithName;
+                if (!AllFormes.TryAdd(formeName, formesWithName)) AllFormes[formeName] = formesWithName; // Try to add a new entry for each forme, otherwise update the existing one
             }               
         }
     }
-    public class MonFormes()
+    public class MonFormes() // Class to decode forme info from server into 
     {
         public List<string>? otherFormes { get; set; }
     }

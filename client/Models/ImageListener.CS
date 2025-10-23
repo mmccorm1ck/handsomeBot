@@ -5,21 +5,21 @@ using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.Models;
 
-public class ImageListener : INotifyPropertyChanged
+public class ImageListener : INotifyPropertyChanged // Listener for updating sprite images to be displayed
 {
     private string _imageUri = "Assets/None.png";
-    public string ImageUri
+    public string ImageUri // Path to saved image in memory
     {
         get => _imageUri;
         set
         {
             _imageUri = value;
-            LoadImage();
+            LoadImage(); // Load new sprite when updated
         }
     }
-    public string PrevUri = "";
-    private Bitmap _image = OpenImage("Assets/None.png");
-    public Bitmap Image
+    public string PrevUri = ""; // For checking if image has been updated
+    private Bitmap _image = OpenImage("Assets/None.png"); // Blank image by default
+    public Bitmap Image // The sprite to display
     {
         get => _image;
         set
@@ -29,31 +29,31 @@ public class ImageListener : INotifyPropertyChanged
         }
     }
 
-    public void Update(string uri)
+    public void Update(string uri) // Called to update sprite
     {
         ImageUri = uri;
     }
-    public void LoadImage()
+    public void LoadImage() // Load a new sprite
     {
-        if (ImageUri == PrevUri) return;
+        if (ImageUri == PrevUri) return; // Do nothing if image path has not changed
         PrevUri = ImageUri;
         string uri;
-        if (!File.Exists(ImageUri)) uri = "Assets/None.png";
+        if (!File.Exists(ImageUri)) uri = "Assets/None.png"; // Blank image if cannot find sprite
         else uri = ImageUri;
-        Image = OpenImage(uri);
+        Image = OpenImage(uri); // Load new sprite
     }
-    public static Bitmap OpenImage(string uri)
+    public static Bitmap OpenImage(string uri) // Opens the sprite
     {
         FileStream stream;
         try
         {
-            stream = File.Open(uri, FileMode.Open);
+            stream = File.Open(uri, FileMode.Open); // Open stream to read in image
         }
         catch
         {
-            stream = File.Open("Assets/None1.png", FileMode.Open);
+            stream = File.Open("Assets/None1.png", FileMode.Open); // Open blank image if specified image not found
         }
-        Bitmap image = new(stream);
+        Bitmap image = new(stream); // Set image to loaded sprite
         stream.Close();
         return image;
     }

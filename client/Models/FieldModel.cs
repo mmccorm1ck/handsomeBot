@@ -23,7 +23,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
         attackerSide = new Side(inputModel.BotSide);
         defenderSide = new Side(inputModel.OppSide);
     }
-    public string gameType
+    public string gameType // Doubles or singles
     {
         get => _gameType;
         set
@@ -32,7 +32,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public string? weather
+    public string? weather // Current weather on field, null if none
     {
         get => _weather;
         set
@@ -41,7 +41,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public string? terrain
+    public string? terrain // Current terrain on field, null if none
     {
         get => _terrain;
         set
@@ -50,7 +50,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isMagicRoom
+    public bool isMagicRoom // If magic room is active
     {
         get => _isMagicRoom;
         set
@@ -59,7 +59,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isWonderRoom
+    public bool isWonderRoom // If wonder room is active
     {
         get => _isWonderRoom;
         set
@@ -68,7 +68,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isGravity
+    public bool isGravity // If gravity is active
     {
         get => _isGravity;
         set
@@ -77,7 +77,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isAuraBreak
+    public bool isAuraBreak // If aura break is active
     {
         get => _isAuraBreak;
         set
@@ -86,7 +86,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isFairyAura
+    public bool isFairyAura // If fairy aura is active
     {
         get => _isFairyAura;
         set
@@ -95,7 +95,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isDarkAura
+    public bool isDarkAura // If dark aura is active
     {
         get => _isDarkAura;
         set
@@ -104,7 +104,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isBeadsOfRuin
+    public bool isBeadsOfRuin // If BOR is active
     {
         get => _isBeadsOfRuin;
         set
@@ -113,7 +113,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isSwordOfRuin
+    public bool isSwordOfRuin // If SOR is active
     {
         get => _isSwordOfRuin;
         set
@@ -122,7 +122,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isTabletOfRuin
+    public bool isTabletOfRuin // If TOR is active
     {
         get => _isTabletOfRuin;
         set
@@ -131,7 +131,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public bool isVesselOfRuin
+    public bool isVesselOfRuin // If VOR is active
     {
         get => _isVesselOfRuin;
         set
@@ -140,7 +140,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public Side attackerSide
+    public Side attackerSide // Info about attacker side-specific field effects
     {
         get => _attackerSide;
         set
@@ -149,7 +149,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             OnPropertyChanged();
         }
     }
-    public Side defenderSide
+    public Side defenderSide // Info about defender side-specific field effects
     {
         get => _defenderSide;
         set
@@ -173,7 +173,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
     private bool _isVesselOfRuin;
     private Side _attackerSide = new();
     private Side _defenderSide = new();
-    public class Side()
+    public class Side() // Class holding info about side-specific effects
     {
         public Side(ArenaSideModel inputSide) : this()
         {
@@ -196,7 +196,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
             isBattery = inputSide.Battery;
             isPowerSpot = inputSide.PowerSpot;
         }
-        public int spikes
+        public int spikes // Level of spikes active, 0 if none
         {
             get => _spikes;
             set
@@ -204,7 +204,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _spikes = value;
             }
         }
-        public bool steelsurge
+        public bool steelsurge // If steelsurge is active
         {
             get => _steelsurge;
             set
@@ -212,7 +212,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _steelsurge = value;
             }
         }
-        public bool vinelash
+        public bool vinelash // If vinelash is active
         {
             get => _vinelash;
             set
@@ -220,7 +220,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _vinelash = value;
             }
         }
-        public bool wildfire
+        public bool wildfire // If wildfire is active
         {
             get => _wildfire;
             set
@@ -228,7 +228,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _wildfire = value;
             }
         }
-        public bool cannonade
+        public bool cannonade // If cannonade is active
         {
             get => _cannonade;
             set
@@ -236,7 +236,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _cannonade = value;
             }
         }
-        public bool volcalith
+        public bool volcalith // If volcalith is active
         {
             get => _volcalith;
             set
@@ -244,7 +244,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _volcalith = value;
             }
         }
-        public bool isSR
+        public bool isSR // If stealth rocks is active
         {
             get => _isSR;
             set
@@ -252,7 +252,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isSR = value;
             }
         }
-        public bool isReflect
+        public bool isReflect // If reflect is active
         {
             get => _isReflect;
             set
@@ -260,7 +260,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isReflect = value;
             }
         }
-        public bool isLightScreen
+        public bool isLightScreen // If light screen is active
         {
             get => _isLightScreen;
             set
@@ -268,7 +268,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isLightScreen = value;
             }
         }
-        public bool isProtected
+        public bool isProtected // If target is protected
         {
             get => _isProtected;
             set
@@ -276,7 +276,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isProtected = value;
             }
         }
-        public bool isSeeded
+        public bool isSeeded // If target is seeded
         {
             get => _isSeeded;
             set
@@ -284,7 +284,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isSeeded = value;
             }
         }
-        public bool isForesight
+        public bool isForesight // If foresight is hitting this turn
         {
             get => _isForesight;
             set
@@ -292,7 +292,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isForesight = value;
             }
         }
-        public bool isTailwind
+        public bool isTailwind // If tailwind is active
         {
             get => _isTailwind;
             set
@@ -300,7 +300,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isTailwind = value;
             }
         }
-        public bool isHelpingHand
+        public bool isHelpingHand // If helping hand is active
         {
             get => _isHelpingHand;
             set
@@ -308,7 +308,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isHelpingHand = value;
             }
         }
-        public bool isFlowerGift
+        public bool isFlowerGift // If flower gift is active
         {
             get => _isFlowerGift;
             set
@@ -316,7 +316,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isFlowerGift = value;
             }
         }
-        public bool isFriendGuard
+        public bool isFriendGuard // If friend guard is active
         {
             get => _isFriendGuard;
             set
@@ -324,7 +324,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isFriendGuard = value;
             }
         }
-        public bool isAuroraVeil
+        public bool isAuroraVeil // If aurora veil is active
         {
             get => _isAuroraVeil;
             set
@@ -332,7 +332,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isAuroraVeil = value;
             }
         }
-        public bool isBattery
+        public bool isBattery // If battery is active
         {
             get => _isBattery;
             set
@@ -340,7 +340,7 @@ public class FieldModel() : INotifyPropertyChanged // Class to convert field inf
                 _isBattery = value;
             }
         }
-        public bool isPowerSpot
+        public bool isPowerSpot // If power spot is active
         {
             get => _isPowerSpot;
             set

@@ -30,7 +30,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             OnPropertyChanged();
         }
     }
-    public Options options
+    public Options options // Battle modifiers
     {
         get => _options;
         set
@@ -42,7 +42,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
     private int _gen = -1;
     private string _name = "None";
     private Options _options = new() {};
-    public class Options()
+    public class Options() // Class to hold battle modifiers
     {
         public Options(TeamModel inputModel) : this()
         {
@@ -160,7 +160,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         private List<string>? _moves;
         }
 
-    public class EVIV()
+    public class EVIV() // Class to hold info about EV and IV values
     {
         public EVIV(EVIVModel inputModel) : this()
         {
@@ -227,7 +227,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         private int _spe;
     }
 
-    static private List<string> ParseMoves(TeamModel inputModel)
+    static private List<string> ParseMoves(TeamModel inputModel) // Convert individual moves into List format
     {
         List<string> moves = [];
         if (inputModel.Move1 != "None") moves.Add(inputModel.Move1);
