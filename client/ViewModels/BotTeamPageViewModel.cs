@@ -91,19 +91,16 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (responses[i].Contains("Format"))
             { // Saves format of pokepaste
                 TheGame.Format = responses[i].Split(' ')[1][0..^4];
-                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("img-pokemon"))
             { // Saves URL of pokemon image
-                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Nature"))
             { // Saves pokemon's nature
                 TheGame.BotTeam[currPokemon].Nature = responses[i].Split(' ')[0];
                 currMove = 0; // Prepares to load moves
-                //Debug.WriteLine(i);
                 continue;
             }
             if (currMove > -1)
@@ -145,7 +142,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                                 break;
                         }
                     }
-                    //Debug.WriteLine(i);
                     continue;
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
@@ -166,7 +162,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         currMove = -1;
                         break;
                 }
-                //Debug.WriteLine(i);
                 continue;
             }
             if (!responses[i].Contains("<span"))
@@ -200,14 +195,12 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             { // Saves pokemon's ability
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Ability = responses[i][idx..].Replace("'", "");
-                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Level"))
             { // Saves pokemon's level
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Level = Int32.Parse(responses[i][idx..]);
-                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("Tera Type"))
@@ -215,7 +208,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 responses[i] = responses[i][0..^7];
                 int idx = responses[i].LastIndexOf('>') + 1;
                 TheGame.BotTeam[currPokemon].Tera = responses[i][idx..];
-                //Debug.WriteLine(i);
                 continue;
             }
             if (responses[i].Contains("EVs"))
@@ -249,7 +241,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                             break;
                     }
                 }
-                //Debug.WriteLine(i);
                 continue;
             }
         }

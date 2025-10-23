@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace HandsomeBot.ViewModels;
 
@@ -37,7 +36,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             TargetsChecked.Add(new(i));
             TargetsChecked[i].Attach(CurrEvent);
         }
-        //Task.Run(GetAllOptionInfo);
         Weights = Task.Run(CalcDamages).Result;
         CalcStrategy();
         for (int i = 0; i < 6; i++)
@@ -418,8 +416,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public Dictionary<string, int> NameToNo { get; set; } = [];
 
-    //public Dictionary<string, List<string>> FormeDict { get; set; } = [];
-
     private ObservableCollection<string> _formeList = [];
 
     public ObservableCollection<string> FormeList
@@ -431,30 +427,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    /*private ObservableCollection<string> _allItems = [];
-
-    public ObservableCollection<string> AllItems
-    {
-        get => _allItems;
-        set
-        {
-            _allItems = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private ObservableCollection<string> _allAbilities = [];
-
-    public ObservableCollection<string> AllAbilities
-    {
-        get => _allAbilities;
-        set
-        {
-            _allAbilities = value;
-            OnPropertyChanged();
-        }
-    }*/
 
     private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
 
@@ -503,112 +475,4 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         CurrEvent.Attach(EventType);
         UserMonName = "";
     }
-
-    /*async public Task GetAllOptionInfo()
-    {
-        HttpClient client = new();
-        string url = "http://" + TheGame.ServerUrl + "/abilities?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
-        string response = await client.GetStringAsync(url);
-        if (response == null) return;
-        ObservableCollection<string>? temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
-        if (temp == null) return;
-        AllAbilities = temp;
-        url = "http://" + TheGame.ServerUrl + "/items?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
-        response = await client.GetStringAsync(url);
-        if (response == null) return;
-        temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
-        if (temp == null) return;
-        AllItems = temp;
-        url = "http://" + TheGame.ServerUrl + "/mons?{%22Gen%22:" + TheGame.Gen.ToString() + "}";
-        response = await client.GetStringAsync(url);
-        if (response == null) return;
-        Dictionary<string, MonFormes>? allMons = JsonSerializer.Deserialize<Dictionary<string, MonFormes>>(response);
-        if (allMons == null) return;
-        List<string> monNames = [.. allMons.Keys];
-        foreach (string name in monNames)
-        {
-            if (FormeDict.ContainsKey(name)) continue;
-            if (allMons[name] == null)
-            {
-                FormeDict.Add(name, [name]);
-                continue;
-            }
-            List<string>? formes = allMons[name].otherFormes;
-            if (formes == null)
-            {
-                FormeDict.Add(name, [name]);
-                continue;
-            }
-            List<string> formesWithName = [.. formes.Prepend(name)];
-            foreach (string formeName in formesWithName)
-            {
-                if (!FormeDict.TryAdd(formeName, formesWithName)) FormeDict[formeName] = formesWithName;
-            }               
-        }
-    }
-
-    public class MonFormes()
-    {
-        public List<string>? otherFormes { get; set; }
-    }
-
-    public void SaveEvent()
-    {
-        if (UserMonName == "" || CurrEvent.EventType == "") return;
-        if (TheGame.Turns[0].OppEndMons[0] == -1 || TheGame.Turns[0].OppEndMons[1] == -1) TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
-        if (TheGame.Turns[0].BotEndMons[0] == -1 || TheGame.Turns[0].BotEndMons[1] == -1) TheGame.Turns[0].BotEndMons = TheGame.Turns[0].BotStartMons;
-        CurrEvent.TargetMons = [];
-        for (int i = 0; i < 10; i++)
-        {
-            if (TargetsChecked[i])
-            {
-                CurrEvent.TargetMons.Add(i);
-                TargetsChecked[i] = false;
-            }
-        }
-        if (!CurrEvent.EventType.Contains("Item"))
-        {
-            CurrEvent.ItemName = "";
-        }
-        if (!CurrEvent.EventType.Contains("Ability"))
-        {
-            CurrEvent.AbilityName = "";
-        }
-        if (CurrEvent.EventType.Contains("Switch"))
-        {
-            if (CurrEvent.TargetMons.Count != 1) return;
-            var search = new MonSwitchSearch(CurrEvent.UserMon);
-            if (CurrEvent.UserMon < 4)
-            {
-                int i = TheGame.Turns[0].BotEndMons.FindIndex(search.MonMatch);
-                Console.WriteLine(i);
-                if (i == -1) return;
-                TheGame.Turns[0].BotEndMons[i] = CurrEvent.TargetMons[0];
-            } else 
-            {
-                int i = TheGame.Turns[0].OppEndMons.FindIndex(search.MonMatch);
-                if (i == -1) return;
-                TheGame.Turns[0].OppEndMons[i] = CurrEvent.TargetMons[0];
-            }
-        }
-        TheGame.Turns[0].EventList.Add(new());
-        TheGame.Turns[0].EventList[EventNumber] = CurrEvent; 
-        var options = new JsonSerializerOptions {WriteIndented = true};
-        UserMonName = "";
-        CurrEvent = new();
-        EventNumber++;
-    }
-
-    public class MonSwitchSearch
-    {
-        int _mon;
-        public MonSwitchSearch(int Mon)
-        {
-            _mon = Mon;
-        }
-        public bool MonMatch(int i)
-        {
-            return i == _mon;
-        }
-    }*/
 }
