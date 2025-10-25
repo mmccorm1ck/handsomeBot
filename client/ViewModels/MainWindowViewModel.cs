@@ -15,7 +15,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     public MainWindowViewModel()
     {
         TheGame = LoadData();
-        CurrentPage = new SettingsPageViewModel(TheGame, AllOptions);
+        CurrentPage = new SettingsPageViewModel(TheGame, AllOptions); // Initialise with settings page
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -26,7 +26,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private GameModel _theGame = new();
 
-    public GameModel TheGame
+    public GameModel TheGame // Holds all game date
     {
         get => _theGame;
         set
@@ -37,7 +37,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     }
     private AllOptionsModel _allOptions = new();
 
-    public AllOptionsModel AllOptions
+    public AllOptionsModel AllOptions // Holds lists of options for dropdown menus
     {
         get => _allOptions;
         set
@@ -52,7 +52,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private string _currentButtonLabel = "Save Settings"; // Label to display on the change page button
 
-    public ViewModelBase CurrentPage
+    public ViewModelBase CurrentPage // Holds currently displayed page
     {
         get => _currentPage;
         set
@@ -62,7 +62,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public string CurrentButtonLabel
+    public string CurrentButtonLabel // Label for next page button
     {
         get => _currentButtonLabel;
         set
@@ -74,7 +74,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private bool _mainDialogOpen = false;
 
-    public bool MainDialogOpen
+    public bool MainDialogOpen // Sets whether the pop-up is shown
     {
         get => _mainDialogOpen;
         set
@@ -86,7 +86,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private bool _dialogButtonVisible = false;
 
-    public bool DialogButtonVisible
+    public bool DialogButtonVisible // Sets whether the pop-up has a button to close it with
     {
         get => _dialogButtonVisible;
         set
@@ -98,7 +98,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private string _dialogMessage = "";
 
-    public string DialogMessage
+    public string DialogMessage // Sets the message shown on the pop-up
     {
         get => _dialogMessage;
         set
@@ -107,7 +107,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    string dataFileName = "Data/data.json";
+    string dataFileName = "Data/data.json"; // Path to where TheGame is stored
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {
@@ -136,25 +136,25 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         DialogButtonVisible = false;
         DialogMessage = "Calculating...";
-        MainDialogOpen = true;
+        MainDialogOpen = true; // Shows loading pop-up while loading next page
         Task.Run(() => InstanceCreator());
     }
 
-    void InstanceCreator()
+    void InstanceCreator() // Creates instance of next page to be opened
     {
         PageNumberTemplate targetPage = PageNumberList[nextPageNumber];
         var instance = Activator.CreateInstance(targetPage.ModelType, TheGame, AllOptions);
         Dispatcher.UIThread.Post(() => PageLoader(instance, targetPage));
     }
 
-    async void PageLoader(object? instance, PageNumberTemplate? targetPage)
+    async void PageLoader(object? instance, PageNumberTemplate? targetPage) // Updates display with new page instance
     {
-        if (instance is null || targetPage is null)
+        if (instance is null || targetPage is null) // Return if null instance
         {
             MainDialogOpen = false;
             return;
         }
-        if (nextPageNumber == 2)
+        if (nextPageNumber == 2) // Load options data from server if next page is OppTeamView
         {
             try
             {
@@ -162,31 +162,31 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             }
             catch
             {
-                DialogMessage = "Could not connect to server, check address and server status";
+                DialogMessage = "Could not connect to server, check address and server status"; // Show error if fetch from server fails
                 DialogButtonVisible = true;
                 return;
             }
         }
-        CurrentPage = (ViewModelBase)instance;
+        CurrentPage = (ViewModelBase)instance; // Updates page being displayed
         CurrentButtonLabel = targetPage.ButtonLabel;
-        if (nextPageNumber == 4)
+        if (nextPageNumber == 4) // Save team info to prev if battle started
         {
             TheGame.BotTeamPrev = TheGame.BotTeam;
             TheGame.OppTeamPrev = TheGame.OppTeam;
-            nextPageNumber = 1;
+            nextPageNumber = 1; // Next page button will reset to BotTeamView
             return;
         }
         SaveData();
         nextPageNumber++;
-        MainDialogOpen = false;
+        MainDialogOpen = false; // Close pop-up
     }
-    GameModel LoadData()
+    GameModel LoadData() // Load TheGame data
     {
-        GameModel temp = new() { };
+        GameModel temp = new() { }; // Initialise empty gameModel for early returns
         string dataJsonString = "";
         try
         {
-            using (StreamReader sr = File.OpenText(dataFileName))
+            using (StreamReader sr = File.OpenText(dataFileName)) // Try to read file
             {
                 dataJsonString = sr.ReadToEnd();
                 sr.Close();
@@ -194,16 +194,16 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
         catch
         {
-            return temp;
+            return temp; // Return empty gameModel on fail
         }
         if (dataJsonString == "")
         {
-            return temp;
+            return temp; // Return empty gameModel on empty file
         }
-        temp = JsonSerializer.Deserialize<GameModel>(dataJsonString)!;
+        temp = JsonSerializer.Deserialize<GameModel>(dataJsonString)!; // Read file into gameModel
         return temp;
     }
-    void SaveData()
+    void SaveData() // Saves TheGame data
     {
         var options = new JsonSerializerOptions {WriteIndented = true};
         using (StreamWriter sw = File.CreateText(dataFileName))

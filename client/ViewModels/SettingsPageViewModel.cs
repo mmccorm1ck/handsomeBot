@@ -19,7 +19,7 @@ public class SettingsPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     private GameModel _theGame = new();
 
-    public GameModel TheGame
+    public GameModel TheGame // Holds all game data
     {
         get => _theGame;
         set

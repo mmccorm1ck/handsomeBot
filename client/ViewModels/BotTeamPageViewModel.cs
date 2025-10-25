@@ -12,11 +12,11 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 {
     public BotTeamPageViewModel(GameModel game, AllOptionsModel options)
     {
-        TheGame = game;
+        TheGame = game; // Load game info
         for (int i = 0; i < 6; i++)
         {
             Sprites.Add(new());
-            TheGame.BotTeam[i].Attach(Sprites[i]);
+            TheGame.BotTeam[i].Attach(Sprites[i]); // Attach image listener for each mon in team
         }
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -28,7 +28,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     private GameModel _theGame = new();
 
-    public GameModel TheGame
+    public GameModel TheGame // Game info
     {
         get => _theGame;
         set
@@ -40,7 +40,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     private ObservableCollection<ImageListener> _sprites = [];
 
-    public ObservableCollection<ImageListener> Sprites
+    public ObservableCollection<ImageListener> Sprites // Image listeners for updating sprites
     {
         get => _sprites;
         set
@@ -50,18 +50,18 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public void LoadTeam()
+    public void LoadTeam() // Load team from previous game for best of 3 etc
     {
         TheGame.BotTeam = TheGame.BotTeamPrev;
         for (int i = 0; i < 6; i++)
         {
-            TheGame.BotTeam[i].Attach(Sprites[i]);
+            TheGame.BotTeam[i].Attach(Sprites[i]); // Reattach image listeners
         }
     }
 
     public void LoadPaste() // Triggered by load button on UI, calls async task to load team info
     {
-        if (TheGame.BotTeamURL == "")
+        if (TheGame.BotTeamURL == "") // If URL hasn't been entered
         {
             return;
         }
@@ -244,10 +244,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 continue;
             }
         }
-        string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2);
-        if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1);
+        string tempGen = TheGame.Format.Split("gen")[1].Substring(0, 2); // Get gen number from format
+        if (!Char.IsDigit(tempGen, 1)) tempGen = tempGen.Substring(0, 1); // Future proofing for 2 digit gen numbers
         TheGame.Gen = int.Parse(tempGen);
-        if (TheGame.Format.Contains("VGC") || TheGame.Format.Contains("Doubles")) TheGame.GameType = "Doubles";
+        if (TheGame.Format.Contains("VGC") || TheGame.Format.Contains("Doubles")) TheGame.GameType = "Doubles"; // Set game type from format
         else TheGame.GameType = "Singles";
     }
 }

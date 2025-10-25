@@ -27,7 +27,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     private GameModel _theGame = new();
 
-    public GameModel TheGame
+    public GameModel TheGame // Holds all game data
     {
         get => _theGame;
         set
@@ -37,7 +37,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
     private AllOptionsModel _allOptions = new();
-    public AllOptionsModel AllOptions
+    public AllOptionsModel AllOptions // Holds all option lists, used for list of pokemon names
     {
         get => _allOptions;
         set
@@ -47,7 +47,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
     private ObservableCollection<ImageListener> _sprites = [];
-    public ObservableCollection<ImageListener> Sprites
+    public ObservableCollection<ImageListener> Sprites // Image listeners for updating sprites
     {
         get => _sprites;
         set
@@ -57,12 +57,12 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public void LoadPrev()
+    public void LoadPrev() // Loads team from previous game, used for best of 3 etc
     {
         TheGame.OppTeam = TheGame.OppTeamPrev;
         for (int i = 0; i < 6; i++)
         {
-            TheGame.OppTeam[i].Attach(Sprites[i]);
+            TheGame.OppTeam[i].Attach(Sprites[i]); // Reattach image listeners
         }
     }
 }
