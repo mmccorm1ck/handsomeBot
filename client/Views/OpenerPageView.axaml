@@ -19,7 +19,7 @@
                     <StackPanel>
                         <Label HorizontalAlignment="Center">Event Type</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AvailableEvents}"
+                            MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AllOptions.AvailableOpeningEvents}"
                             SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
                         <Label HorizontalAlignment="Center">User Pokemon</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
@@ -35,15 +35,15 @@
                             Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FieldEvent}">Field Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding FieldList}"
+                            MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding AllOptions.FieldList}"
                             SelectedItem="{Binding CurrEvent.FieldChange}" IsVisible="{Binding EventType.FieldEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatEvent}">Stat Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding StatList}"
+                            MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding AllOptions.StatList}"
                             SelectedItem="{Binding CurrEvent.StatChange}" IsVisible="{Binding EventType.StatEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.TypeEvent}">Type Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding TypeList}"
+                            MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding AllOptions.TypeList}"
                             SelectedItem="{Binding CurrEvent.TypeChange}" IsVisible="{Binding EventType.TypeEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FormeEvent}">Forme:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"

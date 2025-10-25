@@ -51,6 +51,85 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
             OnPropertyChanged();
         }
     }
+    public string[] AvailableEvents { get; set; } = [ // List of possible events
+        "Move",
+        "Switch",
+        "KO",
+        "Ability Activation",
+        "Ability Change",
+        "Ability Reveal",
+        "Item Activation",
+        "Item Reveal",
+        "Item Change",
+        "Status Change",
+        "Status Activation",
+        "Stat Level Change",
+        "Forme Reveal",
+        "Forme Change",
+        "Field Change",
+        "Terastallize",
+        "Type Change",
+        "Mega Evolution",
+        "Dynamax",
+        "Gigantamax",
+        "Z-Move"
+    ];
+    public string[] AvailableOpeningEvents { get; set; } = [ // List of possible events in turn 0
+        "Ability Activation",
+        "Ability Change",
+        "Ability Reveal",
+        "Item Activation",
+        "Item Reveal",
+        "Item Change",
+        "Stat Level Change",
+        "Forme Reveal",
+        "Forme Change",
+        "Field Change",
+        "Type Change",
+        "Switch"
+    ];
+    public string[] TypeList { get; set; } = [ // List of types that a mon could change to
+        "Normal",
+        "Fighting",
+        "Flying",
+        "Poison",
+        "Ground",
+        "Rock",
+        "Bug",
+        "Ghost",
+        "Steel",
+        "Fire",
+        "Water",
+        "Grass",
+        "Electric",
+        "Psychic",
+        "Ice",
+        "Dragon",
+        "Dark",
+        "Fairy",
+        "???",
+        "Stellar"
+    ];
+    public string[] StatList { get; set; } = [ // List of stats that could change
+        "Atk",
+        "Def",
+        "SpA",
+        "SpD",
+        "Spe",
+        "Acc",
+        "Eva",
+        "Crt"
+    ];
+    public string[] FieldList { get; set; } = [ // List of field effects that could happen on turn 0
+        "Rain",
+        "Sun",
+        "Snow",
+        "Sandstorm",
+        "Electric Terrain",
+        "Psychic Terrain",
+        "Grassy Terrain",
+        "Misty Terrain"
+    ];
     async public Task UpdateInfo(GameModel game)
     {
         HttpClient client = new();

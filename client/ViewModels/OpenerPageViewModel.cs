@@ -72,7 +72,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         UserMonModel.Attach(UserSprite); // Attach UserSprite image listener to user mon model
         CurrEvent.Attach(EventType); // Attach event type listener to current event
-        if (TheGame.Gen < 9) FieldList[2] = "Hail"; // Replace snow with hail if gen is less than 9
+        if (TheGame.Gen < 9) AllOptions.FieldList[2] = "Hail"; // Replace snow with hail if gen is less than 9
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -383,62 +383,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public string[] AvailableEvents { get; set; } = [ // List of possible events in turn 0
-        "Ability Activation",
-        "Ability Change",
-        "Ability Reveal",
-        "Item Activation",
-        "Item Reveal",
-        "Item Change",
-        "Stat Level Change",
-        "Forme Reveal",
-        "Forme Change",
-        "Field Change",
-        "Type Change",
-        "Switch"
-    ];
-    public string[] TypeList { get; set; } = [ // List of types that a mon could change to
-        "Normal",
-        "Fighting",
-        "Flying",
-        "Poison",
-        "Ground",
-        "Rock",
-        "Bug",
-        "Ghost",
-        "Steel",
-        "Fire",
-        "Water",
-        "Grass",
-        "Electric",
-        "Psychic",
-        "Ice",
-        "Dragon",
-        "Dark",
-        "Fairy",
-        "???",
-        "Stellar"
-    ];
-
-    public string[] StatList { get; set; } = [ // List of stats that could change
-        "Atk",
-        "Def",
-        "SpA",
-        "SpD",
-        "Spe"
-    ];
-
-    public string[] FieldList { get; set; } = [ // List of field effects that could happen on turn 0
-        "Rain",
-        "Sun",
-        "Snow",
-        "Sandstorm",
-        "Electric Terrain",
-        "Psychic Terrain",
-        "Grassy Terrain",
-        "Misty Terrain"
-    ];
-
     private string _userMonName = "";
 
     public string UserMonName // Name of pokemon triggering event

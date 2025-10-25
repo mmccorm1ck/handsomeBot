@@ -148,29 +148,6 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public string[] AvailableEvents { get; set; } = [ // List of possible events
-        "Move",
-        "Switch",
-        "KO",
-        "Ability Activation",
-        "Ability Change",
-        "Ability Reveal",
-        "Item Activation",
-        "Item Reveal",
-        "Item Change",
-        "Status Change",
-        "Status Activation",
-        "Stat Level Change",
-        "Forme Reveal",
-        "Forme Change",
-        "Field Change",
-        "Terastallize",
-        "Type Change",
-        "Mega Evolution",
-        "Dynamax",
-        "Gigantamax",
-        "Z-Move"
-    ];
     public string[] TypeList { get; set; } = [
         "Normal",
         "Fighting",
