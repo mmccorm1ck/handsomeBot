@@ -174,7 +174,6 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             TheGame.BotTeamPrev = TheGame.BotTeam;
             TheGame.OppTeamPrev = TheGame.OppTeam;
             nextPageNumber = 1; // Next page button will reset to BotTeamView
-            return;
         }
         SaveData();
         nextPageNumber++;
@@ -203,14 +202,12 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
         temp = JsonSerializer.Deserialize<GameModel>(dataJsonString)!; // Read file into gameModel
         return temp;
     }
+    readonly JsonSerializerOptions writeOptions = new() { WriteIndented = true }; // Options for serialising data for writing
     void SaveData() // Saves TheGame data
     {
-        var options = new JsonSerializerOptions {WriteIndented = true};
-        using (StreamWriter sw = File.CreateText(dataFileName))
-        {
-            string dataJsonString = JsonSerializer.Serialize(TheGame, options);
-            sw.Write(dataJsonString);
-            sw.Close();
-        }
+        using StreamWriter sw = File.CreateText(dataFileName); // Open file for writing
+        string dataJsonString = JsonSerializer.Serialize(TheGame, writeOptions); // Serialise data for writing
+        sw.Write(dataJsonString);
+        sw.Close();
     }
 }
