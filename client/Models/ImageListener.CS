@@ -51,7 +51,7 @@ public class ImageListener : INotifyPropertyChanged // Listener for updating spr
         }
         catch
         {
-            stream = File.Open("Assets/None1.png", FileMode.Open); // Open blank image if specified image not found
+            stream = File.Open("Assets/None.png", FileMode.Open); // Open blank image if specified image not found
         }
         Bitmap image = new(stream); // Set image to loaded sprite
         stream.Close();
