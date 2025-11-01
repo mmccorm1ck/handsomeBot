@@ -92,6 +92,7 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
         {
             case "Move":
             case "Move Reveal":
+            case "Z-Move":
                 MoveEvent = true;
                 break;
             case "Item Activation":
@@ -108,10 +109,12 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
             case "Forme Change":
                 FormeEvent = true;
                 break;
-            case "Field Change":
+            case "Field Effect Change":
+            case "Field Effect Ended":
                 FieldEvent = true;
                 break;
             case "Stat Level Change":
+            case "Stat Level Reset":
                 StatEvent = true;
                 break;
             case "Type Change":
@@ -119,6 +122,8 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
                 TypeEvent = true;
                 break;
             case "Status Change":
+            case "Status Activation":
+            case "Status Ended":
                 StatusEvent = true;
                 break;
         }

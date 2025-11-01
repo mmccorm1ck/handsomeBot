@@ -69,6 +69,15 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public string StatusChange // Status changed
+    {
+        get => _statusChange;
+        set
+        {
+            _statusChange = value;
+            OnPropertyChanged();
+        }
+    }
     public string TypeChange // Type changed to
     {
         get => _typeChange;
@@ -112,9 +121,10 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _itemName = "";
     private string _fieldChange = "";
     private string _statChange = "";
+    private string _statusChange = "";
     private string _typeChange = "";
     private string _formeName = "";
-    private int _userMon;
+    private int _userMon = -1;
     private List<int> _targetMons = [];
     private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility
     public void Attach(EventTypeListener listener) // Add new event listener
