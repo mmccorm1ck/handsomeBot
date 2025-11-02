@@ -69,6 +69,15 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public string StatAdjustment // Stat change amount
+    {
+        get => _statAdjustment;
+        set
+        {
+            _statAdjustment = value;
+            OnPropertyChanged();
+        }
+    }
     public string StatusChange // Status changed
     {
         get => _statusChange;
@@ -121,6 +130,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _itemName = "";
     private string _fieldChange = "";
     private string _statChange = "";
+    private string _statAdjustment = "";
     private string _statusChange = "";
     private string _typeChange = "";
     private string _formeName = "";

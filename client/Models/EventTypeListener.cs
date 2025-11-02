@@ -114,7 +114,6 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
                 FieldEvent = true;
                 break;
             case "Stat Level Change":
-            case "Stat Level Reset":
                 StatEvent = true;
                 break;
             case "Type Change":

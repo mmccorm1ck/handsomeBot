@@ -65,7 +65,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Status Activation",
         "Status Ended",
         "Stat Level Change",
-        "Stat Level Reset",
+        "Stat Levels Reset",
         "Forme Reveal",
         "Forme Change",
         "Field Effect Change",
@@ -200,6 +200,23 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Acc",
         "Eva",
         "Crt"
+    ];
+    public string[] StatAdjustments { get; set; } = [
+        "Returned to Normal",
+        "Rose",
+        "Rose Sharply",
+        "Rose Drastically (+3)",
+        "Rose Drastically (+4)",
+        "Rose Drastically (+5)",
+        "Rose Drastically (+6)",
+        "Won't go any Higher",
+        "Fell",
+        "Harshly Fell",
+        "Severely Fell (-3)",
+        "Severely Fell (-4)",
+        "Severely Fell (-5)",
+        "Severely Fell (-6)",
+        "Won't go any Lower"
     ];
     public string[] FieldList { get; set; } = [ // List of field effects that could happen on turn 0
         "Rain",
