@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using DynamicData;
 
 namespace HandsomeBot.ViewModels;
 
@@ -11,12 +13,13 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     public BattlePageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game; // Load game data
-        AllOptions = options; // Load drop-dow options
+        AllOptions = options; // Load drop-down options
         for (int i = 0; i < 6; i++) // Attach image listeners to bot team
         {
             Sprites.Add(new());
             TheGame.BotTeam[i].Clear();
             TheGame.BotTeam[i].Attach(Sprites[i]);
+            NameToNo.Add(TheGame.BotTeam[i].Name, i); // Add opponent's pokemon to NameToNo dictionary
         }
         for (int i = 0; i < 6; i++) // Attach image listeners to opponent team
         {
@@ -37,19 +40,37 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             TargetsChecked.Add(new(i));
             TargetsChecked[i].Attach(CurrEvent);
         }
-        for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
-        {
-            TheGame.Turns[1].BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
-            TheGame.Turns[1].OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
-        }
         for (int i = 0; i < 6; i++)
         {
             OpponentsPokemon[i] = "Opponent's " + TheGame.OppTeam[i].Name; // Add opponent's pokemon to opponent list
             AvailablePokemon[i + 4] = OpponentsPokemon[i]; // Add opponent's pokemon to list of mons in battle
             NameToNo.Add(OpponentsPokemon[i], i + 6); // Add opponent's pokemon to NameToNo dictionary
         }
+        TheGame.Turns[0].BotEndMons = TheGame.Turns[0].BotStartMons;
+        TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
+        foreach (EventModel ev in TheGame.Turns[0].EventList)
+        {
+            if (ev.EventType == "Switch")
+            {
+                if (TheGame.Turns[0].BotEndMons.Contains(ev.UserMon)) TheGame.Turns[0].BotEndMons.Replace(ev.UserMon, ev.TargetMons[0]);
+                else if (TheGame.Turns[0].OppEndMons.Contains(ev.UserMon)) TheGame.Turns[0].OppEndMons.Replace(ev.UserMon, ev.TargetMons[0]);
+            }
+        }
+        for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
+        {
+            TheGame.Turns[1].BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
+            TheGame.Turns[1].OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
+        }
         UserMonModel.Attach(UserSprite); // Attach UserSprite image listener to user mon model
         CurrEvent.Attach(EventType); // Attach event type listener to current event
+        NextMove = new(TheGame, AllOptions, NameToNo); // Initialise next move model
+        for (int i = 0; i < 2; i++)
+        {
+            ActiveMons[i].Name = TheGame.BotTeam[TheGame.Turns[1].BotStartMons[i]].Name;
+            ActiveMons[i].Attach(ActiveSprites[i]);
+            NextMove.Moves[i].TargetMon.Attach(TargetSprites[i]);
+        }
+        Task.Run(NextMove.UpdateNextMove);
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
@@ -83,6 +104,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public NextMoveModel NextMove { get; set; }
+
     /* -------------
     Handling sprites
     ------------- */
@@ -95,6 +118,42 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         set
         {
             _sprites = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<ImageListener> _activeSprites = [new(), new()];
+
+    public ObservableCollection<ImageListener> ActiveSprites
+    {
+        get => _activeSprites;
+        set
+        {
+            _activeSprites = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<TeamModel> _activeMons = [new(), new()];
+
+    public ObservableCollection<TeamModel> ActiveMons
+    {
+        get => _activeMons;
+        set
+        {
+            _activeMons = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<ImageListener> _targetSprites = [new(), new()];
+
+    public ObservableCollection<ImageListener> TargetSprites
+    {
+        get => _targetSprites;
+        set
+        {
+            _targetSprites = value;
             OnPropertyChanged();
         }
     }
@@ -230,7 +289,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         EventNumber++; // Increment event number
         CurrEvent.Clear(); // Detach event type listener
         TheGame.Turns[0].EventList.Add(new()); // Add new event model to turn model
-        CurrEvent = TheGame.Turns[0].EventList[EventNumber]; // Maeke current event a copy of new event model
+        CurrEvent = TheGame.Turns[0].EventList[EventNumber]; // Make current event a copy of new event model
         foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
