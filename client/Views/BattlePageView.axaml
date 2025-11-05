@@ -102,17 +102,41 @@
                 ColumnDefinitions="100, 100"
                 RowDefinitions="100, Auto, 100, Auto, 100, Auto"
                 HorizontalAlignment="Center" >
-                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[0].Image}"/>
+                <Panel Grid.Row="0" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[0].BorderColour}" IsVisible="{Binding Sprites[0].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[0].Image}"/>
+                </Panel>
                 <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[0].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[1].Image}"/>
+                <Panel Grid.Row="0" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[1].BorderColour}" IsVisible="{Binding Sprites[1].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[1].Image}"/>
+                </Panel>
                 <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[1].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[2].Image}"/>
+                <Panel Grid.Row="2" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[2].BorderColour}" IsVisible="{Binding Sprites[2].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[2].Image}"/>
+                </Panel>
                 <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[2].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="10" Source="{Binding Sprites[3].Image}"/>
+                <Panel Grid.Row="2" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[3].BorderColour}" IsVisible="{Binding Sprites[3].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[3].Image}"/>
+                </Panel>
                 <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[3].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="10" Source="{Binding Sprites[4].Image}"/>
+                <Panel Grid.Row="4" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[4].BorderColour}" IsVisible="{Binding Sprites[4].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[4].Image}"/>
+                </Panel>
                 <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[4].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
+                <Panel Grid.Row="4" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[5].BorderColour}" IsVisible="{Binding Sprites[5].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
+                </Panel>
                 <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.BotTeam[5].Name}"/>
             </Grid>
             <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">VS</Label>
@@ -121,17 +145,41 @@
                 ColumnDefinitions="100, 100"
                 RowDefinitions="100, Auto, 100, Auto, 100, Auto"
                 HorizontalAlignment="Center" >
-                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Source="{Binding Sprites[6].Image}"/>
+                <Panel Grid.Row="0" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[6].BorderColour}" IsVisible="{Binding Sprites[6].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[6].Image}"/>
+                </Panel>
                 <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[0].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Source="{Binding Sprites[7].Image}"/>
+                <Panel Grid.Row="0" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[7].BorderColour}" IsVisible="{Binding Sprites[7].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[7].Image}"/>
+                </Panel>
                 <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[1].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[8].Image}"/>
+                <Panel Grid.Row="2" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[8].BorderColour}" IsVisible="{Binding Sprites[8].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[8].Image}"/>
+                </Panel>
                 <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[2].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="10" Source="{Binding Sprites[9].Image}"/>
+                <Panel Grid.Row="2" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[9].BorderColour}" IsVisible="{Binding Sprites[9].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[9].Image}"/>
+                </Panel>
                 <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[3].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="10" Source="{Binding Sprites[10].Image}"/>
+                <Panel Grid.Row="4" Grid.Column="0">
+                    <Border BorderBrush="{Binding Sprites[10].BorderColour}" IsVisible="{Binding Sprites[10].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[10].Image}"/>
+                </Panel>
                 <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[4].Name}"/>
-                <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[11].Image}"/>
+                <Panel Grid.Row="4" Grid.Column="1">
+                    <Border BorderBrush="{Binding Sprites[11].BorderColour}" IsVisible="{Binding Sprites[11].BorderVisible}"
+                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[11].Image}"/>
+                </Panel>
                 <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding TheGame.OppTeam[5].Name}"/>
             </Grid>
             <Image Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[0].Image}"/>

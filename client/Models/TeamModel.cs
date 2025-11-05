@@ -137,6 +137,34 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             Notify(); // Update image listeners when sprite path changes
         }
     }
+    public int RemainingHP
+    {
+        get => _remainingHP;
+        set
+        {
+            _remainingHP = value;
+            OnPropertyChanged();
+        }
+    }
+    public List<string> VolStatus
+    {
+        get => _volStatus;
+        set
+        {
+            _volStatus = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string NonVolStatus
+    {
+        get => _nonVolStatus;
+        set
+        {
+            _nonVolStatus = value;
+            Notify(); // Update image listeners when status changes
+        }
+    }
 
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
@@ -168,6 +196,9 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _move3 = "None"; // Array of pokemon's moves
     private string _move4 = "None"; // Array of pokemon's moves
     private string _image = "Assets/None.png"; // URI of pokemon's image
+    private int _remainingHP = 100;
+    private List<string> _volStatus = [];
+    private string _nonVolStatus = "";
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
@@ -182,7 +213,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     {
         foreach (ImageListener listener in listeners)
         {
-            listener.Update(PokeImage);
+            listener.Update(PokeImage, NonVolStatus);
         }
     }
     public async Task DownloadImage() // Downloads sprite image

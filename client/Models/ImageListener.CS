@@ -28,10 +28,60 @@ public class ImageListener : INotifyPropertyChanged // Listener for updating spr
             OnPropertyChanged();
         }
     }
-
-    public void Update(string uri) // Called to update sprite
+    private string _borderColour = "White";
+    public string BorderColour
+    {
+        get => _borderColour;
+        set
+        {
+            _borderColour = value;
+            OnPropertyChanged();
+        }
+    }
+    private bool _borderVisible = false;
+    public bool BorderVisible
+    {
+        get => _borderVisible;
+        set
+        {
+            _borderVisible = value;
+            OnPropertyChanged();
+        }
+    }
+    public void Update(string uri, string status) // Called to update sprite
     {
         ImageUri = uri;
+        switch (status)
+        {
+            case "Burn":
+                BorderColour = "Orange";
+                BorderVisible = true;
+                break;
+            case "Freeze":
+            case "Frostbite":
+                BorderColour = "LightBlue";
+                BorderVisible = true;
+                break;
+            case "Paralysis":
+                BorderColour = "Yellow";
+                BorderVisible = true;
+                break;
+            case "Poison":
+                BorderColour = "Purple";
+                BorderVisible = true;
+                break;
+            case "Badly Poisoned":
+                BorderColour = "DarkViolet";
+                BorderVisible = true;
+                break;
+            case "Sleep":
+                BorderColour = "Blue";
+                BorderVisible = true;
+                break;
+            default:
+                BorderVisible = false;
+                break;
+        }
     }
     public void LoadImage() // Load a new sprite
     {
