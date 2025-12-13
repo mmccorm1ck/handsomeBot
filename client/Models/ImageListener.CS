@@ -48,7 +48,17 @@ public class ImageListener : INotifyPropertyChanged // Listener for updating spr
             OnPropertyChanged();
         }
     }
-    public void Update(string uri, string status) // Called to update sprite
+    private string _textColour = "LightBlue";
+    public string TextColour
+    {
+        get => _textColour;
+        set
+        {
+            _textColour = value;
+            OnPropertyChanged();
+        }
+    }
+    public void Update(string uri, string status, string position) // Called to update sprite
     {
         ImageUri = uri;
         switch (status)
@@ -82,6 +92,13 @@ public class ImageListener : INotifyPropertyChanged // Listener for updating spr
                 BorderVisible = false;
                 break;
         }
+        TextColour = position switch
+        {
+            "Active" => "LightGreen",
+            "KO" => "LightRed",
+            "Not Brought" => "Gray",
+            _ => "LightBlue"
+        };
     }
     public void LoadImage() // Load a new sprite
     {
