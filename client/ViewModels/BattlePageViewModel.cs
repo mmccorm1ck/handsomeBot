@@ -38,7 +38,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
                 EventList = [new()]
             }
         );
-        CurrEvent = TheGame.Turns[1].EventList[0]; // Set current event to first in list
+        CurrTurn = TheGame.Turns[1];
+        CurrEvent = CurrTurn.EventList[0]; // Set current event to first in list
         for (int i = 0; i < 10; i++) // Attach target check listeners to current event
         {
             TargetsChecked.Add(new(i));
@@ -62,8 +63,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
         for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
         {
-            TheGame.Turns[1].BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
-            TheGame.Turns[1].OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
+            CurrTurn.BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
+            CurrTurn.OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
             TheGame.MonsSeen.Add(TheGame.Turns[1].OppStartMons[i]);
             TheGame.BotTeam[TheGame.Turns[1].BotStartMons[i]].Position = "Active";
             TheGame.OppTeam[TheGame.Turns[1].OppStartMons[i]].Position = "Active";
@@ -183,6 +184,18 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     Handling event information
     ----------------------- */
 
+    private TurnModel _currTurn = new();
+
+    public TurnModel CurrTurn
+    {
+        get => CurrTurn;
+        set
+        {
+            _currTurn = value;
+            OnPropertyChanged();
+        }
+    }
+
     public Dictionary<string, int> NameToNo { get; set; } = []; // To convert from pokemon name to number for storage
 
     private EventModel _currEvent = new();
@@ -295,8 +308,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach(); // Detach all target selectors
         EventNumber++; // Increment event number
         CurrEvent.Clear(); // Detach event type listener
-        TheGame.Turns[0].EventList.Add(new()); // Add new event model to turn model
-        CurrEvent = TheGame.Turns[0].EventList[EventNumber]; // Make current event a copy of new event model
+        CurrTurn.EventList.Add(new()); // Add new event model to turn model
+        CurrEvent = CurrTurn.EventList[EventNumber]; // Make current event a copy of new event model
         foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
