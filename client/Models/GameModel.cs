@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -95,6 +96,22 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public List<int> MonsBrought // List of mons brought to battle
+    {
+        get => _monsBrought;
+        set
+        {
+            _monsBrought = value;
+        }
+    }
+    public List<int> MonsSeen // List of opponent mons seen so far in battle
+    {
+        get => _monsSeen;
+        set
+        {
+            _monsSeen = value;
+        }
+    }
     public ObservableCollection<TurnModel> Turns // List of turn events
     {
         get => _turns;
@@ -126,6 +143,8 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
         new(), new(), new(), new(), new(), new()
     };
     private ArenaModel _currentArena = new();
+    private List<int> _monsBrought = [];
+    private List<int> _monsSeen = [];
     private ObservableCollection<TurnModel> _turns = [];
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
