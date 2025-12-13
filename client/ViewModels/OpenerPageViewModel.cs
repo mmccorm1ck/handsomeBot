@@ -8,8 +8,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
-using DynamicData;
 
 namespace HandsomeBot.ViewModels;
 
@@ -33,6 +31,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
         ];
         CurrEvent = TheGame.Turns[0].EventList[0]; // Set current event to first in list
+        TheGame.MonsBrought = [];
+        TheGame.MonsSeen = [];
         for (int i = 0; i < 10; i++) // Attach target check listeners to current event
         {
             TargetsChecked.Add(new(i));
