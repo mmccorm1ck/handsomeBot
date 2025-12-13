@@ -22,6 +22,8 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             MonsForSprites.Add(new());
             Sprites.Add(new());
             MonsForSprites[i].Attach(Sprites[i]);
+            TheGame.BotTeam[i].Position = "Reserve";
+            TheGame.OppTeam[i].Position = "Reserve";
         }
         TheGame.Turns = [ // Create empty entry for opening turn
             new()
