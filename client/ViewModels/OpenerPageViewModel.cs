@@ -290,7 +290,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
             foreach (TurnModel turn in _turns)
             {
-                turn.OppStartMons[_position] = _nameToNo[MonName]; // Set opponent's opening mons to new mon number
+                turn.OppStartMons[_position] = _nameToNo[MonName] - 6; // Set opponent's opening mons to new mon number
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
