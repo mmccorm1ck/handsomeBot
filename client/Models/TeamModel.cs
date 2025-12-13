@@ -166,6 +166,16 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public string Position
+    {
+        get => _position;
+        set
+        {
+            _position = value;
+            Notify();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -199,6 +209,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _remainingHP = 100;
     private List<string> _volStatus = [];
     private string _nonVolStatus = "";
+    private string _position = "Reserve";
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
@@ -213,7 +224,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     {
         foreach (ImageListener listener in listeners)
         {
-            listener.Update(PokeImage, NonVolStatus);
+            listener.Update(PokeImage, NonVolStatus, Position);
         }
     }
     public async Task DownloadImage() // Downloads sprite image
