@@ -97,6 +97,10 @@
             HorizontalAlignment="Center" >
             <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Bot</Label>
             <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="10">Opponent</Label>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="10">
+                <Label HorizontalAlignment="Right" Content="Turn"/>
+                <Label HorizontalAlignment="Left" Content="{Binding CurrTurn.TurnNo}"/>
+            </StackPanel>
             <Grid Grid.Row="1" Grid.Column="0"
                 ShowGridLines="False" Margin="5"
                 ColumnDefinitions="150, 150"

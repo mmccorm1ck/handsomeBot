@@ -188,7 +188,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public TurnModel CurrTurn
     {
-        get => CurrTurn;
+        get => _currTurn;
         set
         {
             _currTurn = value;
