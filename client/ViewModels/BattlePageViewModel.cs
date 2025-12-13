@@ -19,7 +19,11 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             Sprites.Add(new());
             TheGame.BotTeam[i].Clear();
             TheGame.BotTeam[i].Attach(Sprites[i]);
-            NameToNo.Add(TheGame.BotTeam[i].Name, i); // Add opponent's pokemon to NameToNo dictionary
+            NameToNo.Add(TheGame.BotTeam[i].Name, i); // Add bot's pokemon to NameToNo dictionary
+            if (!TheGame.MonsBrought.Contains(i))
+            {
+                TheGame.BotTeam[i].Position = "Not Brought";
+            }
         }
         for (int i = 0; i < 6; i++) // Attach image listeners to opponent team
         {
@@ -60,6 +64,9 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             TheGame.Turns[1].BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
             TheGame.Turns[1].OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
+            TheGame.MonsSeen.Add(TheGame.Turns[1].OppStartMons[i]);
+            TheGame.BotTeam[TheGame.Turns[1].BotStartMons[i]].Position = "Active";
+            TheGame.OppTeam[TheGame.Turns[1].OppStartMons[i]].Position = "Active";
         }
         UserMonModel.Attach(UserSprite); // Attach UserSprite image listener to user mon model
         CurrEvent.Attach(EventType); // Attach event type listener to current event

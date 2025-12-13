@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using HandsomeBot.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
+using DynamicData;
 
 namespace HandsomeBot.ViewModels;
 
@@ -55,6 +57,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             AvailablePokemon[i] = TheGame.BotTeam[OpenerMonNos[i]].Name; // Add selected mons to list of mons in battle
             NameToNo.Add(AvailablePokemon[i], OpenerMonNos[i]); // Add selected mons to NameToNo dictionary
             MonsForSprites[i].Name = AvailablePokemon[i]; // Set sprites to selected mons
+            TheGame.MonsBrought.Add(OpenerMonNos[i]);
         }
         for (int i = 0; i < 2; i++) // Set opening mons in event model to top 2 selected mons
         {
