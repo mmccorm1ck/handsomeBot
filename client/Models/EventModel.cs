@@ -114,7 +114,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public List<int> TargetMons // Mons that were targeted
+    public List<TargetModel> TargetMons // Mons that were targeted
     {
         get => _targetMons;
         set
@@ -135,7 +135,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _typeChange = "";
     private string _formeName = "";
     private int _userMon = -1;
-    private List<int> _targetMons = [];
+    private List<TargetModel> _targetMons = [];
     private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility
     public void Attach(EventTypeListener listener) // Add new event listener
     {

@@ -57,8 +57,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             if (ev.EventType == "Switch")
             {
-                if (TheGame.Turns[0].BotEndMons.Contains(ev.UserMon)) TheGame.Turns[0].BotEndMons.Replace(ev.UserMon, ev.TargetMons[0]);
-                else if (TheGame.Turns[0].OppEndMons.Contains(ev.UserMon)) TheGame.Turns[0].OppEndMons.Replace(ev.UserMon, ev.TargetMons[0]);
+                if (TheGame.Turns[0].BotEndMons.Contains(ev.UserMon)) TheGame.Turns[0].BotEndMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
+                else if (TheGame.Turns[0].OppEndMons.Contains(ev.UserMon)) TheGame.Turns[0].OppEndMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
             }
         }
         for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
