@@ -15,6 +15,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
     private ObservableCollection<string> _allAbilities = [];
     private ObservableCollection<string> _allMons = [];
     private Dictionary<string, List<string>> _allFormes = [];
+    private Dictionary<string, MoveInfoModel> _allMoves = [];
     public ObservableCollection<string> AllItems // All in-game items
     {
         get => _allItems;
@@ -48,6 +49,15 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         set
         {
             _allFormes = value;
+            OnPropertyChanged();
+        }
+    }
+    public Dictionary<string, MoveInfoModel> AllMoves
+    {
+        get => _allMoves;
+        set
+        {
+            _allMoves = value;
             OnPropertyChanged();
         }
     }
@@ -253,6 +263,12 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         temp = JsonSerializer.Deserialize<ObservableCollection<string>>(response);
         if (temp == null) return;
         AllItems = temp; // Assign list of items to AllAbilities
+        url = "http://" + game.ServerUrl + "/moves?{%22Gen%22:" + game.Gen.ToString() + "}";
+        response = await client.GetStringAsync(url); // Get list of all moves and move info from server
+        if (response == null) return;
+        Dictionary<string, MoveInfoModel>? allMoveInfo = JsonSerializer.Deserialize<Dictionary<string, MoveInfoModel>>(response);
+        if (allMoveInfo == null) return;
+        AllMoves = allMoveInfo; // Assign dictionary of moves to AllMoves
         url = "http://" + game.ServerUrl + "/mons?{%22Gen%22:" + game.Gen.ToString() + "}";
         response = await client.GetStringAsync(url); // Get list of all pokemon info from server
         if (response == null) return;
