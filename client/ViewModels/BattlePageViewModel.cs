@@ -40,11 +40,6 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         );
         CurrTurn = TheGame.Turns[1];
         CurrEvent = CurrTurn.EventList[0]; // Set current event to first in list
-        /*for (int i = 0; i < 10; i++) // Attach target check listeners to current event
-        {
-            TargetsChecked.Add(new(i));
-            TargetsChecked[i].Attach(CurrEvent);
-        }*/
         for (int i = 0; i < 6; i++)
         {
             OpponentsPokemon[i] = "Opponent's " + TheGame.OppTeam[i].Name; // Add opponent's pokemon to opponent list
@@ -222,18 +217,6 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    /*private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
-
-    public ObservableCollection<TargetSelectorModel> TargetsChecked // TargetSelectors for updating target list in current event 
-    {
-        get => _targetsChecked;
-        set
-        {
-            _targetsChecked = value;
-            OnPropertyChanged();
-        }
-    }*/
-
     public class TargetImageModel(TargetModel target, ImageListener image,
         AllOptionsModel allOptions, string[] availablePokemon)
     {
@@ -340,12 +323,10 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void NextEvent() // Increment current event in list
     {
-        //foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach(); // Detach all target selectors
         EventNumber++; // Increment event number
         CurrEvent.Clear(); // Detach event type listener
         CurrTurn.EventList.Add(new()); // Add new event model to turn model
         CurrEvent = CurrTurn.EventList[EventNumber]; // Make current event a copy of new event model
-        //foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
         TargetList = [];
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
