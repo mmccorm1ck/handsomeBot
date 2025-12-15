@@ -15,6 +15,7 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
         {
             _monName = value;
             _monNo = _nameToNo[value];
+            _targetMonModel.Name = _monName;
             OnPropertyChanged();
         }
     }
@@ -51,10 +52,6 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
     public void Clear()
     {
         _targetMonModel.Clear();
-    }
-    public void Notify()
-    {
-        _targetMonModel.Notify();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
