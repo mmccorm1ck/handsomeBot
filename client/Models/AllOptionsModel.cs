@@ -230,6 +230,14 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Grassy Terrain",
         "Misty Terrain"
     ];
+    public string[] MoveResults { get; set; } = [
+        "Hit",
+        "Super Effective",
+        "Not Very Effective",
+        "Immune",
+        "Miss",
+        "Failed"
+    ];
     async public Task UpdateInfo(GameModel game)
     {
         HttpClient client = new();
