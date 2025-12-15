@@ -25,6 +25,10 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
                 TheGame.BotTeam[i].Position = "Not Brought";
             }
         }
+        for (int i = 0; i < 4; i++)
+        {
+            AvailablePokemon[i] = TheGame.BotTeam[TheGame.MonsBrought[i]].Name;
+        }
         for (int i = 0; i < 6; i++) // Attach image listeners to opponent team
         {
             Sprites.Add(new());

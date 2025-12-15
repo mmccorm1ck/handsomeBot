@@ -56,6 +56,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             MonsForSprites[i].Name = AvailablePokemon[i]; // Set sprites to selected mons
             TheGame.MonsBrought.Add(OpenerMonNos[i]);
         }
+        TheGame.MonsBrought.Sort();
         for (int i = 0; i < 2; i++) // Set opening mons in event model to top 2 selected mons
         {
             TheGame.Turns[0].BotStartMons[i] = OpenerMonNos[i];
