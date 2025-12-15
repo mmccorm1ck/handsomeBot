@@ -60,7 +60,7 @@
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
-                <Label HorizontalAlignment="Center">Target(s):</Label>
+                <!--<Label HorizontalAlignment="Center">Target(s):</Label>
                 <Grid HorizontalAlignment="Center" ShowGridLines="True"
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                     <CheckBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[0]}" Name="bot0Chk" IsChecked="{Binding TargetsChecked[0].Selected, Mode=TwoWay}"/>
@@ -73,7 +73,7 @@
                     <CheckBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[7]}" Name="opp3Chk" IsChecked="{Binding TargetsChecked[7].Selected, Mode=TwoWay}"/>
                     <CheckBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[8]}" Name="opp4Chk" IsChecked="{Binding TargetsChecked[8].Selected, Mode=TwoWay}"/>
                     <CheckBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[9]}" Name="opp5Chk" IsChecked="{Binding TargetsChecked[9].Selected, Mode=TwoWay}"/>
-                </Grid>
+                </Grid>-->
                 <Grid HorizontalAlignment="Center" ColumnDefinitions="200,200" RowDefinitions="Auto">
                     <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding NextEvent}">Next Event</Button>
                     <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Finish</Button>

@@ -35,11 +35,11 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         CurrEvent = TheGame.Turns[0].EventList[0]; // Set current event to first in list
         TheGame.MonsBrought = [];
         TheGame.MonsSeen = [];
-        for (int i = 0; i < 10; i++) // Attach target check listeners to current event
+        /*for (int i = 0; i < 10; i++) // Attach target check listeners to current event
         {
             TargetsChecked.Add(new(i));
             TargetsChecked[i].Attach(CurrEvent);
-        }
+        }*/
         Weights = Task.Run(CalcDamages).Result; // Run damage calculations for first stage of choosing openers
         CalcStrategy(); // Calculate strategic weights for second stage of choosing openers
         for (int i = 0; i < 6; i++) // Loop over bot's team
@@ -332,7 +332,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
+    /*private ObservableCollection<TargetSelectorModel> _targetsChecked = [];
 
     public ObservableCollection<TargetSelectorModel> TargetsChecked // TargetSelectors for updating target list in current event 
     {
@@ -342,7 +342,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             _targetsChecked = value;
             OnPropertyChanged();
         }
-    }
+    }*/
 
     private ObservableCollection<string> _formeList = [];
 
@@ -415,12 +415,12 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void NextEvent() // Increment current event in list
     {
-        foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach(); // Detach all target selectors
+        //foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach(); // Detach all target selectors
         EventNumber++; // Increment event number
         CurrEvent.Clear(); // Detach event type listener
         TheGame.Turns[0].EventList.Add(new()); // Add new event model to turn model
         CurrEvent = TheGame.Turns[0].EventList[EventNumber]; // Maeke current event a copy of new event model
-        foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
+        //foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
     }
