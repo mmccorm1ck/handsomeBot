@@ -234,10 +234,13 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }*/
 
-    public class TargetImageModel(TargetModel target, ImageListener image)
+    public class TargetImageModel(TargetModel target, ImageListener image,
+        AllOptionsModel allOptions, string[] availablePokemon)
     {
-        public TargetModel Target = target;
-        public ImageListener Image = image;
+        public TargetModel Target { get; set; } = target;
+        public ImageListener Image { get; } = image;
+        public string[] AvailablePokemon { get; } = availablePokemon;
+        public AllOptionsModel AllOptions { get; } = allOptions;
     }
 
     private ObservableCollection<TargetImageModel> _targetList = [];
@@ -323,7 +326,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void AddTarget()
     {
-        TargetList.Add(new(new(NameToNo), new()));
+        TargetList.Add(new(new(NameToNo), new(), AllOptions, AvailablePokemon));
         TargetList[^1].Target.Attach(TargetList[^1].Image);
         CurrEvent.TargetMons.Add(TargetList[^1].Target);
     }
