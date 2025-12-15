@@ -60,8 +60,8 @@
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
-                <!--<Label HorizontalAlignment="Center">Target(s):</Label>
-                <Grid HorizontalAlignment="Center" ShowGridLines="True"
+                <Label HorizontalAlignment="Center">Target(s):</Label>
+                <!--<Grid HorizontalAlignment="Center" ShowGridLines="True"
                     ColumnDefinitions="200, 200" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                     <CheckBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[0]}" Name="bot0Chk" IsChecked="{Binding TargetsChecked[0].Selected, Mode=TwoWay}"/>
                     <CheckBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Content="{Binding AvailablePokemon[1]}" Name="bot1Chk" IsChecked="{Binding TargetsChecked[1].Selected, Mode=TwoWay}"/>

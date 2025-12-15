@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -114,7 +115,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
-    public List<TargetModel> TargetMons // Mons that were targeted
+    public ObservableCollection<TargetModel> TargetMons // Mons that were targeted
     {
         get => _targetMons;
         set
@@ -135,7 +136,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _typeChange = "";
     private string _formeName = "";
     private int _userMon = -1;
-    private List<TargetModel> _targetMons = [];
+    private ObservableCollection<TargetModel> _targetMons = [];
     private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility
     public void Attach(EventTypeListener listener) // Add new event listener
     {

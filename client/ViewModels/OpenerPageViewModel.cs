@@ -344,6 +344,24 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }*/
 
+    public class TargetImageModel(TargetModel target, ImageListener image)
+    {
+        public TargetModel Target = target;
+        public ImageListener Image = image;
+    }
+
+    private ObservableCollection<TargetImageModel> _targetList = [];
+
+    public ObservableCollection<TargetImageModel> TargetList
+    {
+        get => _targetList;
+        set
+        {
+            _targetList = value;
+            OnPropertyChanged();
+        }
+    }
+
     private ObservableCollection<string> _formeList = [];
 
     public ObservableCollection<string> FormeList // List of pokemon's alternate formes, updated from AllOptions
@@ -413,6 +431,20 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    public void AddTarget()
+    {
+        TargetList.Add(new(new(NameToNo), new()));
+        TargetList[^1].Target.Attach(TargetList[^1].Image);
+        CurrEvent.TargetMons.Add(TargetList[^1].Target);
+    }
+
+    public void RemoveTarget()
+    {
+        if (TargetList.Count == 0) return;
+        CurrEvent.TargetMons.RemoveAt(CurrEvent.TargetMons.Count - 1);
+        TargetList.RemoveAt(TargetList.Count - 1);
+    }
+
     public void NextEvent() // Increment current event in list
     {
         //foreach (TargetSelectorModel selector in TargetsChecked) selector.Detach(); // Detach all target selectors
@@ -421,6 +453,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         TheGame.Turns[0].EventList.Add(new()); // Add new event model to turn model
         CurrEvent = TheGame.Turns[0].EventList[EventNumber]; // Maeke current event a copy of new event model
         //foreach (TargetSelectorModel selector in TargetsChecked) selector.Attach(CurrEvent); // Reattach target selectors
+        TargetList = [];
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
     }
