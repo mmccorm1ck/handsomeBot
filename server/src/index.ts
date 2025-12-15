@@ -1,4 +1,4 @@
-import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES} from "@Smogon/calc";
+import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES} from "@Smogon/calc";
 import 'dotenv/config';
 import { createServer } from "http";
 
@@ -43,6 +43,10 @@ const handleRequest = (url:string) => {
     }
     else if (params[0] === '/abilities') {
         result = ABILITIES[genNum];
+        valid = true;
+    }
+    else if (params[0] === '/moves') {
+        result = MOVES[genNum];
         valid = true;
     }
     return { valid, result };
