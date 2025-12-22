@@ -39,18 +39,18 @@ public class NextMoveModel() // Class to make next move decision
             {
                 case "Move":
                 case "Move Reveal":
-                case "Z-Move":
-                    ParseMove();
+                    ParseMove(eventModel);
                     break;
                 case "Item Activation":
                 case "Item Reveal":
                 case "Item Change":
-                    ParseItem();
+                case "Z-Move":
+                    ParseItem(eventModel);
                     break;
                 case "Ability Activation":
                 case "Ability Reveal":
                 case "Ability Change":
-                    ParseAbility();
+                    ParseAbility(eventModel);
                     break;
                 case "Forme Reveal":
                 case "Forme Change":
@@ -59,90 +59,167 @@ public class NextMoveModel() // Class to make next move decision
                 case "Mega Evolution":
                 case "Transformation":
                 case "Illusioin Reveal":
-                    ParseForme();
+                    ParseForme(eventModel);
                     break;
                 case "Field Effect Change":
                 case "Field Effect Ended":
-                    ParseField();
+                    ParseField(eventModel);
                     break;
                 case "Stat Level Change":
                 case "Stat Levels Reset":
-                    ParseStat();
+                    ParseStat(eventModel);
                     break;
                 case "Type Change":
                 case "Terastallize":
-                    ParseType();
+                    ParseType(eventModel);
                     break;
                 case "Status Change":
                 case "Status Activation":
                 case "Status Ended":
-                    ParseStatus();
+                    ParseStatus(eventModel);
                     break;
                 case "Switch":
-                    ParseSwitch();
+                    ParseSwitch(eventModel);
                     break;
                 case "HP Loss":
                 case "Recoil Damage":
-                    ParseDamage();
+                    ParseDamage(eventModel);
                     break;
                 case "KO":
-                    ParseKO();
+                    ParseKO(eventModel);
                     break;
             }
         }
     }
 
-    private void ParseMove()
+    private void ParseMove(EventModel eventModel)
+    {
+        if (allOptions.AllMoves[eventModel.MoveName].isZ != null)
+        {
+            ParseItem(eventModel);
+            return;
+        }
+        if (allOptions.AllMoves[eventModel.MoveName].isMax != null)
+        {
+            ParseForme(eventModel);
+            return;
+        }
+        if (eventModel.UserMon > 5)
+        {
+            SaveMove(eventModel);
+        }
+    }
+
+    private void SaveMove(EventModel eventModel)
+    {
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == "None")
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].Move1 = eventModel.MoveName;
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == eventModel.MoveName)
+        {
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == "None")
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].Move2 = eventModel.MoveName;
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == eventModel.MoveName)
+        {
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == "None")
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].Move3 = eventModel.MoveName;
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == eventModel.MoveName)
+        {
+            return;
+        }
+        if (theGame.OppTeam[eventModel.UserMon - 6].Move4 == "None")
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].Move4 = eventModel.MoveName;
+        }
+    }
+
+    private void ParseAbility(EventModel eventModel)
+    {
+        if (eventModel.UserMon > 5)
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].Ability = eventModel.AbilityName;
+        }
+        else if (eventModel.EventType == "Ability Change")
+        {
+            theGame.BotTeam[eventModel.UserMon].Ability = eventModel.AbilityName;
+        }
+    }
+
+    private void ParseItem(EventModel eventModel)
+    {
+        if (eventModel.UserMon > 5)
+        {
+            if (eventModel.EventType == "Z-Move")
+            {
+                theGame.OppTeam[eventModel.UserMon = 6].Item = "Normalium Z"; // Placeholder before determining correct crystal
+            }
+            else
+            {
+                theGame.OppTeam[eventModel.UserMon - 6].Item = eventModel.ItemName;
+            }
+        }
+        if (eventModel.EventType == "Z-Move" ||
+            (eventModel.EventType == "Item Activation" && allOptions.SingleUseItems.Contains(eventModel.ItemName)))
+        {
+            if (eventModel.UserMon > 5)
+            {
+                theGame.OppTeam[eventModel.UserMon - 6].ItemRemoved = true;
+            }
+            else
+            {
+                theGame.BotTeam[eventModel.UserMon].ItemRemoved = true;
+            }
+        }
+    }
+
+    private void ParseForme(EventModel eventModel)
     {
         
     }
 
-    private void ParseAbility()
-    {
-        
-    }
-
-    private void ParseItem()
-    {
-        
-    }
-
-    private void ParseForme()
-    {
-        
-    }
-
-    private void ParseField()
+    private void ParseField(EventModel eventModel)
     {
         
     }   
 
-    private void ParseStat()
+    private void ParseStat(EventModel eventModel)
     {
         
     } 
 
-    private void ParseStatus()
+    private void ParseStatus(EventModel eventModel)
     {
         
     }
 
-    private void ParseType()
+    private void ParseType(EventModel eventModel)
     {
         
     }
 
-    private void ParseSwitch()
+    private void ParseSwitch(EventModel eventModel)
     {
         
     }
 
-    private void ParseDamage()
+    private void ParseDamage(EventModel eventModel)
     {
         
     }
 
-    private void ParseKO()
+    private void ParseKO(EventModel eventModel)
     {
         
     }
