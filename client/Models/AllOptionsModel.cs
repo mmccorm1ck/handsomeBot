@@ -248,6 +248,32 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Miss",
         "Failed"
     ];
+    public List<string> SingleUseItems {get;} =
+    [
+        "Absorb Bulb",
+        "Adrenaline Orb",
+        "Air Balloon",
+        "Berserk Gene",
+        "Blunder Policy",
+        "Cell Battery",
+        "Eject Button",
+        "Eject Pack",
+        "Electric Seed",
+        "Focus Sash",
+        "Grassy Seed",
+        "Luminous Moss",
+        "Mental Herb",
+        "Mirror Herb",
+        "Misty Seed",
+        "Power Herb",
+        "Psychic Seed",
+        "Red Card",
+        "Room Service",
+        "Snowball",
+        "Throat Spray",
+        "Weakness Policy",
+        "White Herb"
+    ];
     async public Task UpdateInfo(GameModel game)
     {
         HttpClient client = new();
