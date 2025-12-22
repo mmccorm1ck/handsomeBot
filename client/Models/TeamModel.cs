@@ -176,6 +176,16 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public bool ItemRemoved
+    {
+        get => _itemRemoved;
+        set
+        {
+            _itemRemoved = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -210,6 +220,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private List<string> _volStatus = [];
     private string _nonVolStatus = "";
     private string _position = "Reserve";
+    private bool _itemRemoved = false;
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
