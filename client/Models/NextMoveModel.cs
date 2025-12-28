@@ -57,11 +57,13 @@ public class NextMoveModel() // Class to make next move decision
                 case "Dynamax":
                 case "Gigantamax":
                 case "Mega Evolution":
-                case "Transformation":
                     ParseForme(eventModel);
                     break;
                 case "Illusion Reveal":
                     ParseZoro(eventModel);
+                    break;
+                case "Transformation":
+                    ParseTransform(eventModel);
                     break;
                 case "Field Effect Change":
                 case "Field Effect Ended":
@@ -109,6 +111,10 @@ public class NextMoveModel() // Class to make next move decision
         if (eventModel.UserMon > 5)
         {
             SaveMove(eventModel);
+        }
+        if (eventModel.MoveName == "Transform")
+        {
+            ParseTransform(eventModel);
         }
     }
 
@@ -161,6 +167,10 @@ public class NextMoveModel() // Class to make next move decision
         else if (eventModel.EventType == "Ability Change")
         {
             theGame.BotTeam[eventModel.UserMon].Ability = eventModel.AbilityName;
+        }
+        if (eventModel.AbilityName == "Imposter")
+        {
+            ParseTransform(eventModel);
         }
     }
 
@@ -232,6 +242,11 @@ public class NextMoveModel() // Class to make next move decision
     }
 
     private void ParseZoro(EventModel eventModel)
+    {
+        
+    }
+
+    private void ParseTransform(EventModel eventModel)
     {
         
     }
