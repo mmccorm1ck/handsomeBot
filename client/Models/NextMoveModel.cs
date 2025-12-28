@@ -58,8 +58,10 @@ public class NextMoveModel() // Class to make next move decision
                 case "Gigantamax":
                 case "Mega Evolution":
                 case "Transformation":
-                case "Illusioin Reveal":
                     ParseForme(eventModel);
+                    break;
+                case "Illusion Reveal":
+                    ParseZoro(eventModel);
                     break;
                 case "Field Effect Change":
                 case "Field Effect Ended":
@@ -147,6 +149,11 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseAbility(EventModel eventModel)
     {
+        if (eventModel.AbilityName == "Illusion")
+        {
+            ParseZoro(eventModel);
+            return;
+        }
         if (eventModel.UserMon > 5)
         {
             theGame.OppTeam[eventModel.UserMon - 6].Ability = eventModel.AbilityName;
@@ -220,6 +227,11 @@ public class NextMoveModel() // Class to make next move decision
     }
 
     private void ParseKO(EventModel eventModel)
+    {
+        
+    }
+
+    private void ParseZoro(EventModel eventModel)
     {
         
     }
