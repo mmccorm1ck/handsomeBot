@@ -186,6 +186,36 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public int TurnDynamaxed
+    {
+        get => _turnDynamaxed;
+        set
+        {
+            _turnDynamaxed = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool GMax
+    {
+        get => _gMax;
+        set
+        {
+            _gMax = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string BaseForme
+    {
+        get => _baseForme;
+        set
+        {
+            _baseForme = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -221,6 +251,9 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _nonVolStatus = "";
     private string _position = "Reserve";
     private bool _itemRemoved = false;
+    private int _turnDynamaxed = -1;
+    private bool _gMax = false;
+    private string _baseForme = "";
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
