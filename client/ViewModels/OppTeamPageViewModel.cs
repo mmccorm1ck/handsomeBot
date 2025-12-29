@@ -13,6 +13,10 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         AllOptions = options;
         for (int i = 0; i < 6; i++)
         {
+            if (TheGame.OppTeam[i].BaseForme != "")
+            {
+                TheGame.OppTeam[i].Name = TheGame.OppTeam[i].BaseForme;
+            }
             Sprites.Add(new());
             TheGame.OppTeam[i].Attach(Sprites[i]);
         }
