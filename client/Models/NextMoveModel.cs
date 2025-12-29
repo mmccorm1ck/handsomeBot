@@ -54,6 +54,7 @@ public class NextMoveModel() // Class to make next move decision
                     break;
                 case "Forme Reveal":
                 case "Forme Change":
+                case "Return to Base Forme":
                 case "Dynamax":
                 case "Gigantamax":
                 case "Mega Evolution":
@@ -203,7 +204,47 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseForme(EventModel eventModel)
     {
-        
+        TeamModel tempMon;
+        if (eventModel.UserMon > 5)
+        {
+            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        else
+        {
+            tempMon = theGame.BotTeam[eventModel.UserMon];
+        }
+
+        if (!allOptions.AllFormes[tempMon.Name].Contains(eventModel.FormeName))
+        {
+            return;
+        }
+        if (eventModel.EventType == "Return to Base Forme" && tempMon.BaseForme != "")
+        {
+            tempMon.Name = tempMon.BaseForme;
+            return;
+        }
+        if (eventModel.EventType == "Forme Reveal")
+        {
+            tempMon.Name = eventModel.FormeName;
+            tempMon.BaseForme = eventModel.FormeName;
+            return;
+        }
+        tempMon.BaseForme = tempMon.Name;
+        tempMon.Name = eventModel.FormeName;
+
+        if (eventModel.EventType == "Dynamax")
+        {
+            tempMon.TurnDynamaxed = theGame.Turns[^2].TurnNo;
+        }
+        if (eventModel.EventType == "Gigantamax")
+        {
+            tempMon.TurnDynamaxed = theGame.Turns[^2].TurnNo;
+            tempMon.GMax = true;
+        }
+        if (eventModel.EventType == "Mega Evolution" && eventModel.UserMon > 5)
+        {
+            tempMon.Item = "Abomasite"; // Place holder for correct mega stone
+        }
     }
 
     private void ParseField(EventModel eventModel)

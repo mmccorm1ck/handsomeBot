@@ -78,6 +78,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Stat Levels Reset",
         "Forme Reveal",
         "Forme Change",
+        "Return to Base Forme",
         "Field Effect Change",
         "Field Effect Ended",
         "Terastallize",
