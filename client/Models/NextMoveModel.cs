@@ -332,4 +332,21 @@ public class NextMoveModel() // Class to make next move decision
     {
 
     }
+    public Dictionary<string, int> StatAdjustmentDictionary = new()
+    {
+        {"Rose", 1},
+        {"Rose Sharply", 2},
+        {"Rose Drastically (+3)", 3},
+        {"Rose Drastically (+4)", 4},
+        {"Rose Drastically (+5)", 5},
+        {"Rose Drastically (+6)", 6},
+        {"Won't go any Higher", 0},
+        {"Fell", -1},
+        {"Harshly Fell", -2},
+        {"Severely Fell (-3)", -3},
+        {"Severely Fell (-4)", -4},
+        {"Severely Fell (-5)", -5},
+        {"Severely Fell (-6)", -6},
+        {"Won't go any Lower", 0}
+    };
 }
