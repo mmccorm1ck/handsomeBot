@@ -83,6 +83,15 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public EVIVModel StatChanges
+    {
+        get => _statChanges;
+        set
+        {
+            _statChanges = value;
+            OnPropertyChanged();
+        }
+    }
     public string Tera
     {
         get => _tera;
@@ -222,15 +231,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _level = 50; // Pokemon's level
     private string _ability = "None"; // Pokemon's ability
     private string _nature = "None"; // Pokemon's nature
-    private EVIVModel _ev = new()
-    {
-        HP = 0,
-        Atk = 0,
-        Def = 0,
-        SpA = 0,
-        SpD = 0,
-        Spe = 0
-    }; // Array of pokemon's EVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
+    private EVIVModel _ev = new(); // Array of pokemon's EVs
     private EVIVModel _iv = new()
     {
         HP = 31,
@@ -239,7 +240,8 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         SpA = 31,
         SpD = 31,
         Spe = 31
-    }; // Array of pokemon's IVs in order: HP, ATK, DEF, SpATK, SpDEF, SPE
+    }; // Array of pokemon's IVs
+    private EVIVModel _statChanges = new(); // Array of pokemon's stat changes
     private string _tera = "None"; // Pokemon's tera type
     private string _move1 = "None"; // Array of pokemon's moves
     private string _move2 = "None"; // Array of pokemon's moves
