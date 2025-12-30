@@ -263,6 +263,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             tempMon = theGame.BotTeam[eventModel.UserMon];
         }
+
         if (eventModel.EventType == "Stat Levels Reset")
         {
             tempMon.StatChanges = new();
@@ -274,12 +275,44 @@ public class NextMoveModel() // Class to make next move decision
             return;
         }
         tempMon.StatChanges.IncrementStat(eventModel.StatChange,
-            StatAdjustmentDictionary[eventModel.StatAdjustment]);
+            _statAdjustmentDictionary[eventModel.StatAdjustment]);
     } 
 
     private void ParseStatus(EventModel eventModel)
     {
-        
+        TeamModel tempMon;
+        if (eventModel.UserMon > 5)
+        {
+            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        else
+        {
+            tempMon = theGame.BotTeam[eventModel.UserMon];
+        }
+
+        if (_nonVolStatuses.Contains(eventModel.StatusChange))
+        {
+            if (eventModel.EventType == "Status Ended")
+            {
+                tempMon.NonVolStatus = "";
+                return;
+            }
+            if (tempMon.NonVolStatus != "")
+            {
+                return;
+            }
+            tempMon.NonVolStatus = eventModel.StatusChange;
+            return;
+        }
+        if (tempMon.VolStatus.Contains(eventModel.StatusChange))
+        {
+            if (eventModel.EventType == "Status Ended")
+            {
+                tempMon.VolStatus.Remove(eventModel.StatusChange);
+            }
+            return;
+        }
+        tempMon.VolStatus.Add(eventModel.StatusChange);
     }
 
     private void ParseType(EventModel eventModel)
@@ -352,7 +385,7 @@ public class NextMoveModel() // Class to make next move decision
     {
 
     }
-    public Dictionary<string, int> StatAdjustmentDictionary = new()
+    private Dictionary<string, int> _statAdjustmentDictionary = new()
     {
         {"Rose", 1},
         {"Rose Sharply", 2},
@@ -369,4 +402,13 @@ public class NextMoveModel() // Class to make next move decision
         {"Severely Fell (-6)", -6},
         {"Won't go any Lower", 0}
     };
+    private List<string> _nonVolStatuses = [
+        "Burn",
+        "Freeze",
+        "Paralysis",
+        "Poison",
+        "Badly Poisoned",
+        "Sleep",
+        "Frostbite"
+    ];
 }
