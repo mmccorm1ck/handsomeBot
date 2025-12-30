@@ -101,6 +101,15 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public bool TeraActive
+    {
+        get => _teraActive;
+        set
+        {
+            _teraActive = value;
+            OnPropertyChanged();
+        }
+    }
     public string Move1
     {
         get => _move1;
@@ -225,6 +234,16 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public string TypeChange
+    {
+        get => _typeChange;
+        set
+        {
+            _typeChange = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -243,6 +262,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     }; // Array of pokemon's IVs
     private EVIVModel _statChanges = new(); // Array of pokemon's stat changes
     private string _tera = "None"; // Pokemon's tera type
+    private bool _teraActive = false;
     private string _move1 = "None"; // Array of pokemon's moves
     private string _move2 = "None"; // Array of pokemon's moves
     private string _move3 = "None"; // Array of pokemon's moves
@@ -256,6 +276,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _turnDynamaxed = -1;
     private bool _gMax = false;
     private string _baseForme = "";
+    private string _typeChange = "";
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
