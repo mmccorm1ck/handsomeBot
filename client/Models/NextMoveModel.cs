@@ -254,7 +254,27 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseStat(EventModel eventModel)
     {
-        
+        TeamModel tempMon;
+        if (eventModel.UserMon > 5)
+        {
+            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        else
+        {
+            tempMon = theGame.BotTeam[eventModel.UserMon];
+        }
+        if (eventModel.EventType == "Stat Levels Reset")
+        {
+            tempMon.StatChanges = new();
+            return;
+        }
+        if (eventModel.StatAdjustment == "Returned to Normal")
+        {
+            tempMon.StatChanges.SetStat(eventModel.StatChange, 0);
+            return;
+        }
+        tempMon.StatChanges.IncrementStat(eventModel.StatChange,
+            StatAdjustmentDictionary[eventModel.StatAdjustment]);
     } 
 
     private void ParseStatus(EventModel eventModel)
