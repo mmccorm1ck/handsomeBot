@@ -341,7 +341,21 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseSwitch(EventModel eventModel)
     {
-        
+        if (eventModel.UserMon > 5 && eventModel.TargetMons[0].MonNo > 5)
+        {
+            theGame.Turns[^2].OppEndMons[theGame.Turns[^2].OppEndMons.IndexOf(eventModel.UserMon - 6)] =
+                eventModel.TargetMons[0].MonNo - 6;
+            if (!theGame.MonsSeen.Contains(eventModel.TargetMons[0].MonNo - 6))
+            {
+                theGame.MonsSeen.Add(eventModel.TargetMons[0].MonNo - 6);
+            }
+            return;
+        }
+        if (eventModel.UserMon < 6 && eventModel.TargetMons[0].MonNo < 6)
+        {
+            theGame.Turns[^2].BotEndMons[theGame.Turns[^2].BotEndMons.IndexOf(eventModel.UserMon)] =
+                eventModel.TargetMons[0].MonNo;
+        }
     }
 
     private void ParseDamage(EventModel eventModel)
