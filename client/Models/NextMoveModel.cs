@@ -317,7 +317,26 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseType(EventModel eventModel)
     {
-        
+        TeamModel tempMon;
+        if (eventModel.UserMon > 5)
+        {
+            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        else
+        {
+            tempMon = theGame.BotTeam[eventModel.UserMon];
+        }
+
+        if (eventModel.EventType == "Terastallize")
+        {
+            tempMon.TeraActive = true;
+            if (eventModel.UserMon > 5 && tempMon.Tera == "None")
+            {
+                tempMon.Tera = eventModel.TypeChange;
+            }
+            return;
+        }
+        tempMon.TypeChange = eventModel.TypeChange;
     }
 
     private void ParseSwitch(EventModel eventModel)
