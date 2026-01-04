@@ -244,6 +244,16 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public bool ZoroSuspect
+    {
+        get => _zoroSuspect;
+        set
+        {
+            _zoroSuspect = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -277,6 +287,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private bool _gMax = false;
     private string _baseForme = "";
     private string _typeChange = "";
+    private bool _zoroSuspect = false;
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
     {
