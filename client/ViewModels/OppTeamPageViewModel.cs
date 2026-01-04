@@ -11,6 +11,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         TheGame = game;
         AllOptions = options;
+        TheGame.ZoroPresent = false;
         for (int i = 0; i < 6; i++)
         {
             if (TheGame.OppTeam[i].BaseForme != "")
@@ -19,6 +20,10 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             }
             Sprites.Add(new());
             TheGame.OppTeam[i].Attach(Sprites[i]);
+            if (TheGame.OppTeam[i].Name.Contains("Zoroark") || TheGame.OppTeam[i].Name.Contains("Zorua"))
+            {
+                TheGame.ZoroPresent = true;
+            }
         }
     }
 

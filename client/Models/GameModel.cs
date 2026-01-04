@@ -121,6 +121,15 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public bool ZoroPresent
+    {
+        get => _zoroPresent;
+        set
+        {
+            _zoroPresent = value;
+            OnPropertyChanged();
+        }
+    }
     private string _serverUrl = "";
     private string _format = "";
     private string _gameType = "Singles";
@@ -146,6 +155,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
     private List<int> _monsBrought = [];
     private List<int> _monsSeen = [];
     private ObservableCollection<TurnModel> _turns = [];
+    private bool _zoroPresent = false;
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
