@@ -249,7 +249,33 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseField(EventModel eventModel)
     {
-        
+        if (_bothSideFieldEffects.Contains(eventModel.FieldChange))
+        {
+            if (eventModel.EventType == "Field Effect Ended")
+            {
+                theGame.CurrentArena.RemoveEffect(eventModel.FieldChange);
+                return;
+            }
+            theGame.CurrentArena.AddEffect(eventModel.FieldChange);
+            return;
+        }
+        if (_userSideFieldEffects.Contains(eventModel.FieldChange))
+        {
+            if (eventModel.EventType == "Field Effect Ended")
+            {
+                theGame.CurrentArena.BotSide.RemoveEffect(eventModel.FieldChange);
+                return;
+            }
+            theGame.CurrentArena.BotSide.AddEffect(eventModel.FieldChange);
+            return;
+        }
+        if (eventModel.EventType == "Field Effect Ended")
+        {
+            theGame.CurrentArena.OppSide.RemoveEffect(eventModel.FieldChange);
+            return;
+        }
+        theGame.CurrentArena.OppSide.AddEffect(eventModel.FieldChange);
+        return;
     }
 
     private void ParseStat(EventModel eventModel)
@@ -360,7 +386,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseDamage(EventModel eventModel)
     {
-        
+
     }
 
     private void ParseKO(EventModel eventModel)
@@ -430,12 +456,12 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseTransform(EventModel eventModel)
     {
-        
+
     }
 
     private void UpdateSpeeds()
     {
-        
+
     }
 
     public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
