@@ -250,7 +250,7 @@ public class NextMoveModel() // Class to make next move decision
     private void ParseField(EventModel eventModel)
     {
         
-    }   
+    }
 
     private void ParseStat(EventModel eventModel)
     {
@@ -276,7 +276,7 @@ public class NextMoveModel() // Class to make next move decision
         }
         tempMon.StatChanges.IncrementStat(eventModel.StatChange,
             _statAdjustmentDictionary[eventModel.StatAdjustment]);
-    } 
+    }
 
     private void ParseStatus(EventModel eventModel)
     {
@@ -379,7 +379,53 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseZoro(EventModel eventModel)
     {
-        
+        if (eventModel.UserMon < 6)
+        {
+            return;
+        }
+        if (!theGame.ZoroPresent)
+        {
+            return;
+        }
+
+        if (eventModel.EventType != "Illusion Reveal" &&
+            !(eventModel.EventType.Contains("Ability") && eventModel.AbilityName == "Illusion"))
+        {
+            return;
+        }
+        int zoroNum;
+        for (zoroNum = 0; zoroNum < 6; zoroNum++)
+        {
+            if (!theGame.OppTeam[zoroNum].Name.Contains("Zoroark") && !theGame.OppTeam[zoroNum].Name.Contains("Zorua"))
+            {
+                continue;
+            }
+            theGame.Turns[^2].OppEndMons[theGame.Turns[^2].OppEndMons.IndexOf(eventModel.UserMon - 6)] = zoroNum;
+            if (!theGame.MonsSeen.Contains(zoroNum))
+            {
+                theGame.MonsSeen.Add(zoroNum);
+            }
+            break;
+        }
+        List<EventModel> eventList = theGame.Turns[^2].EventList;
+        for (int i = eventModel.EventNo; i <= 0; i--)
+        {
+            foreach (TargetModel target in eventList[i].TargetMons)
+            {
+                if (target.MonNo == eventModel.UserMon)
+                {
+                    target.MonName = theGame.OppTeam[zoroNum].Name;
+                    if (eventList[i].EventType == "Switch")
+                    {
+                        return;
+                    }
+                }
+            }
+            if (eventList[i].UserMon == eventModel.UserMon)
+            {
+                eventList[i].UserMon = zoroNum;
+            }
+        }
     }
 
     private void ParseTransform(EventModel eventModel)
@@ -420,7 +466,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseCalc(List<CalcRespModel> damages)
     {
-        
+
     }
 
     private void ChooseNextMove(List<CalcRespModel> damages)
