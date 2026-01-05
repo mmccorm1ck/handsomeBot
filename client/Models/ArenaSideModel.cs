@@ -14,6 +14,42 @@ public class ArenaSideModel() : INotifyPropertyChanged // Class to store arena s
             OnPropertyChanged();
         }
     }
+    public int ToxSpikes
+    {
+        get => _toxSpikes;
+        set
+        {
+            _toxSpikes = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool SeaOfFlames
+    {
+        get => _seaOfFlames;
+        set
+        {
+            _seaOfFlames = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool Moor
+    {
+        get => _moor;
+        set
+        {
+            _moor = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool Rainbow
+    {
+        get => _rainbow;
+        set
+        {
+            _rainbow = value;
+            OnPropertyChanged();
+        }
+    }
     public bool Steelsurge
     {
         get => _steelsurge;
@@ -177,6 +213,10 @@ public class ArenaSideModel() : INotifyPropertyChanged // Class to store arena s
         }
     }
     private int _spikes = 0;
+    private int _toxSpikes = 0;
+    private bool _seaOfFlames = false;
+    private bool _moor = false;
+    private bool _rainbow = false;
     private bool _steelsurge = false;
     private bool _vinelash = false;
     private bool _wildfire = false;
@@ -195,6 +235,120 @@ public class ArenaSideModel() : INotifyPropertyChanged // Class to store arena s
     private bool _auroraVeil = false;
     private bool _battery = false;
     private bool _powerSpot = false;
+    public void AddEffect(string effect)
+    {
+        switch (effect)
+        {
+            case "Tailwind":
+                Tailwind = true;
+                break;
+            case "Sea of Flames":
+                SeaOfFlames = true;
+                break;
+            case "Moor":
+                Moor = true;
+                break;
+            case "Rainbow":
+                Rainbow = true;
+                break;
+            case "Reflect":
+                Reflect = true;
+                break;
+            case "Light Screen":
+                LightScreen = true;
+                break;
+            case "Aurora Veil":
+                AuroraVeil = true;
+                break;
+            case "Stealth Rock":
+                SR = true;
+                break;
+            case "Spikes (1)":
+                Spikes = 1;
+                break;
+            case "Spikes (2)":
+                Spikes = 2;
+                break;
+            case "Spikes (3)":
+                Spikes = 3;
+                break;
+            case "Toxic Spikes (1)":
+                ToxSpikes = 1;
+                break;
+            case "Toxic Spikes (2)":
+                ToxSpikes = 2;
+                break;
+            case "G-Max Steelsurge":
+                Steelsurge = true;
+                break;
+            case "G-Max Vine Lash":
+                Vinelash = true;
+                break;
+            case "G-Max Wildfire":
+                Wildfire = true;
+                break;
+            case "G-Max Cannonade":
+                Cannonade = true;
+                break;
+            case "G-Max Volcalith":
+                Volcalith = true;
+                break;
+        }
+    }
+    public void RemoveEffect(string effect)
+    {
+        switch (effect)
+        {
+            case "Tailwind":
+                Tailwind = false;
+                break;
+            case "Sea of Flames":
+                SeaOfFlames = false;
+                break;
+            case "Moor":
+                Moor = false;
+                break;
+            case "Rainbow":
+                Rainbow = false;
+                break;
+            case "Reflect":
+                Reflect = false;
+                break;
+            case "Light Screen":
+                LightScreen = false;
+                break;
+            case "Aurora Veil":
+                AuroraVeil = false;
+                break;
+            case "Stealth Rock":
+                SR = false;
+                break;
+            case "Spikes (1)":
+            case "Spikes (2)":
+            case "Spikes (3)":
+                Spikes = 0;
+                break;
+            case "Toxic Spikes (1)":
+            case "Toxic Spikes (2)":
+                ToxSpikes = 0;
+                break;
+            case "G-Max Steelsurge":
+                Steelsurge = false;
+                break;
+            case "G-Max Vine Lash":
+                Vinelash = false;
+                break;
+            case "G-Max Wildfire":
+                Wildfire = false;
+                break;
+            case "G-Max Cannonade":
+                Cannonade = false;
+                break;
+            case "G-Max Volcalith":
+                Volcalith = false;
+                break;
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
