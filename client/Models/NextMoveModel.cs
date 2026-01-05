@@ -519,4 +519,11 @@ public class NextMoveModel() // Class to make next move decision
         "Mud Sport",
         "Water Sport",
     ];
+    private readonly List<string> _userSideFieldEffects = [
+        "Tailwind",
+        "Rainbow",
+        "Reflect",
+        "Light Screen",
+        "Aurora Veil"
+    ];
 }
