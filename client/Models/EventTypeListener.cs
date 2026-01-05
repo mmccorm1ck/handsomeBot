@@ -13,6 +13,7 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
     private bool _statusEvent = false;
     private bool _typeEvent = false;
     private bool _statEvent = false;
+    private bool _damageEvent = false;
     public bool MoveEvent // Show list of moves
     {
         get => _moveEvent;
@@ -85,6 +86,15 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
             OnPropertyChanged();
         }
     }
+    public bool DamageEvent
+    {
+        get => _damageEvent;
+        set
+        {
+            _damageEvent = value;
+            OnPropertyChanged();
+        }
+    }
     public void Update(string eventType) // Update event type
     {
         Reset();
@@ -107,6 +117,7 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
                 break;
             case "Forme Reveal":
             case "Forme Change":
+            case "Mega Evolution":
                 FormeEvent = true;
                 break;
             case "Field Effect Change":
@@ -125,6 +136,10 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
             case "Status Ended":
                 StatusEvent = true;
                 break;
+            case "HP Loss":
+            case "Recoil Damage":
+                DamageEvent = true;
+                break;
         }
     }
     public void Reset() // Reset all options to false
@@ -137,6 +152,7 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
         StatEvent = false;
         TypeEvent = false;
         StatusEvent = false;
+        DamageEvent = false;
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
