@@ -386,7 +386,14 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseDamage(EventModel eventModel)
     {
-
+        if (eventModel.UserMon < 6)
+        {
+            theGame.BotTeam[eventModel.UserMon].RemainingHP = eventModel.RemainingHP;
+        }
+        else
+        {
+            theGame.OppTeam[eventModel.UserMon - 6].RemainingHP = eventModel.RemainingHP;
+        }
     }
 
     private void ParseKO(EventModel eventModel)
