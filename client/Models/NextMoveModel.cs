@@ -473,7 +473,7 @@ public class NextMoveModel() // Class to make next move decision
     {
 
     }
-    private Dictionary<string, int> _statAdjustmentDictionary = new()
+    private readonly Dictionary<string, int> _statAdjustmentDictionary = new()
     {
         {"Rose", 1},
         {"Rose Sharply", 2},
@@ -490,7 +490,7 @@ public class NextMoveModel() // Class to make next move decision
         {"Severely Fell (-6)", -6},
         {"Won't go any Lower", 0}
     };
-    private List<string> _nonVolStatuses = [
+    private readonly List<string> _nonVolStatuses = [
         "Burn",
         "Freeze",
         "Paralysis",
@@ -498,5 +498,25 @@ public class NextMoveModel() // Class to make next move decision
         "Badly Poisoned",
         "Sleep",
         "Frostbite"
+    ];
+    private readonly List<string> _bothSideFieldEffects = [
+        "Rain",
+        "Harsh Sunlight",
+        "Snow",
+        "Hail",
+        "Sandstorm",
+        "Extremely Harsh Sunlight",
+        "Heavy Rain",
+        "Strong Winds",
+        "Electric Terrain",
+        "Psychic Terrain",
+        "Grassy Terrain",
+        "Misty Terrain",
+        "Magic Room",
+        "Trick Room",
+        "Wonder Room",
+        "Gravity",
+        "Mud Sport",
+        "Water Sport",
     ];
 }
