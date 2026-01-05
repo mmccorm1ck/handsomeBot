@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.Models;
+
 public class EventModel() : INotifyPropertyChanged // Class to hold info about an event during a game
 {
     public int EventNo // Event number in that turn
@@ -103,6 +104,25 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
         set
         {
             _formeName = value;
+            OnPropertyChanged();
+        }
+    }
+    public string RemainingHPString
+    {
+        get => _remainingHP.ToString();
+        set
+        {
+            if (value == "")
+            {
+                _remainingHP = 0;
+            }
+            else if (int.TryParse(value, out int temp))
+            {
+                if (0 <= temp && temp <= 100)
+                {
+                    _remainingHP = temp;
+                }
+            }
             OnPropertyChanged();
         }
     }

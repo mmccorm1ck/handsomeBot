@@ -57,6 +57,9 @@
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
                             MaxDropDownHeight="100" Name="formeCbx" ItemsSource="{Binding FormeList}"
                             SelectedItem="{Binding CurrEvent.FormeName}" IsVisible="{Binding EventType.FormeEvent}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.DamageEvent}">Remaining HP:</Label>
+                        <TextBox HorizontalAlignment="Center" Name="damageTbx" 
+                            Text="{Binding CurrEvent.RemainingHPString, Mode=TwoWay}" IsVisible="{Binding EventType.DamageEvent}"/>
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
