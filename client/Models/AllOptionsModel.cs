@@ -91,7 +91,8 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Transformation",
         "Illusion Reveal",
         "HP Loss",
-        "Recoil Damage"
+        "Recoil Damage",
+        "HP Restored"
     ];
     public string[] AvailableOpeningEvents { get; set; } = [ // List of possible events in turn 0
         "Ability Activation",

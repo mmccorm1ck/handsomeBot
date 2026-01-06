@@ -88,6 +88,7 @@ public class NextMoveModel() // Class to make next move decision
                     break;
                 case "HP Loss":
                 case "Recoil Damage":
+                case "HP Restored":
                     ParseDamage(eventModel);
                     break;
                 case "KO":
