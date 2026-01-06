@@ -486,7 +486,61 @@ public class NextMoveModel() // Class to make next move decision
 
     private void UpdateSpeeds()
     {
+        int turnPos = 100;
+        Dictionary<int, List<int>> speedOrders = [];
+        foreach (EventModel eventModel in theGame.Turns[^2].EventList)
+        {
+            int priority = DecidePriority(eventModel);
+            if (priority > turnPos)
+            {
+                continue;
+            }
+            turnPos = priority;
+            if (!speedOrders[priority].Contains(eventModel.UserMon))
+            {
+                speedOrders[priority].Add(eventModel.UserMon);
+            }
+        }
+    }
 
+    private int DecidePriority(EventModel eventModel)
+    {
+        if (!_priorities.Keys.Contains(eventModel.EventType))
+        {
+            return 1000;
+        }
+        int priority = _priorities[eventModel.EventType];
+        if (eventModel.EventType != "Move")
+        {
+            return priority;
+        }
+        MoveInfoModel moveInfo = allOptions.AllMoves[eventModel.MoveName];
+        TeamModel userMon;
+        if (eventModel.UserMon < 6)
+        {
+            userMon = theGame.BotTeam[eventModel.UserMon];
+        }
+        else
+        {
+            userMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        if (moveInfo.priotity != null)
+        {
+            priority += (int)moveInfo.priotity;
+        }
+        if (moveInfo.category == "Status" && userMon.Ability == "Prankster")
+        {
+            priority ++;
+        }
+        if (moveInfo.type == "Flying" && userMon.Ability == "Gale Wings" && userMon.RemainingHP == 100)
+        {
+            priority ++;
+        }
+        if (_healingMoves.Contains(eventModel.MoveName) && userMon.Ability == "Triage")
+        {
+            priority += 3;
+        }
+        return priority;
     }
 
     public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
@@ -576,5 +630,50 @@ public class NextMoveModel() // Class to make next move decision
         "Reflect",
         "Light Screen",
         "Aurora Veil"
+    ];
+    private readonly Dictionary<string, int> _priorities = new()
+    {
+        {"Switch", 20},
+        {"Ability Activation", 15},
+        {"Mega Evolution", 10},
+        {"Dynamax", 10},
+        {"Gigantamax", 10},
+        {"Terastallize", 10},
+        {"Move", 0}
+    };
+    private readonly List<string> _healingMoves = [
+        "Absorb",
+        "Bitter Blade",
+        "Drain Punch",
+        "Draining Kiss",
+        "Dream Eater",
+        "Floral Healing",
+        "Giga Drain",
+        "Heal Order",
+        "Heal Pulse",
+        "Healing Wish",
+        "Horn Leech",
+        "Leech Life",
+        "Lunar Blessing",
+        "Lunar Dance",
+        "Macha Gotcha",
+        "Mega Drain",
+        "Milk Drink",
+        "Moonlight",
+        "Morning Sun",
+        "Oblivion Wing",
+        "Parabolic Charge",
+        "Purify",
+        "Recover",
+        "Rest",
+        "Revival Blessing",
+        "Roost",
+        "Shore Up",
+        "Slack Off",
+        "Soft-Boiled",
+        "Strength Sap",
+        "Swallow",
+        "Synthesis",
+        "Wish"
     ];
 }
