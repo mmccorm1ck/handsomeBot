@@ -376,12 +376,14 @@ public class NextMoveModel() // Class to make next move decision
             {
                 theGame.MonsSeen.Add(eventModel.TargetMons[0].MonNo - 6);
             }
+            theGame.OppTeam[eventModel.UserMon - 6].Transform = null;
             return;
         }
         if (eventModel.UserMon < 6 && eventModel.TargetMons[0].MonNo < 6)
         {
             theGame.Turns[^2].BotEndMons[theGame.Turns[^2].BotEndMons.IndexOf(eventModel.UserMon)] =
                 eventModel.TargetMons[0].MonNo;
+            theGame.BotTeam[eventModel.UserMon].Transform = null;
         }
     }
 
@@ -464,7 +466,22 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseTransform(EventModel eventModel)
     {
-
+        if (eventModel.TargetMons.Count < 1)
+        {
+            return;
+        }
+        if (eventModel.UserMon < 6)
+        {
+            theGame.BotTeam[eventModel.UserMon] = eventModel.TargetMons[0].MonNo < 6 ?
+                theGame.BotTeam[eventModel.TargetMons[0].MonNo] :
+                theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6];
+        }
+        else
+        {
+            theGame.OppTeam[eventModel.UserMon - 6] = eventModel.TargetMons[0].MonNo < 6 ?
+                theGame.BotTeam[eventModel.TargetMons[0].MonNo] :
+                theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6];
+        }
     }
 
     private void UpdateSpeeds()
