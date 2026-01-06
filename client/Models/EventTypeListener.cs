@@ -138,6 +138,7 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
                 break;
             case "HP Loss":
             case "Recoil Damage":
+            case "HP Restored":
                 DamageEvent = true;
                 break;
         }
