@@ -676,4 +676,21 @@ public class NextMoveModel() // Class to make next move decision
         "Synthesis",
         "Wish"
     ];
+    private Dictionary<string, MonData> _monData = [];
+    private class MonData()
+    {
+        public Dictionary<int, string> abilities = [];
+        public List<string> types = [];
+        public BaseStats bs = new();
+        public class BaseStats()
+        {
+            public int hp;
+            public int at;
+            public int df;
+            public int? sa;
+            public int? sd;
+            public int sp;
+            public int? sl;   
+        }
+    }
 }
