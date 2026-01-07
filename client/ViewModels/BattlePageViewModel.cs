@@ -77,6 +77,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             ActiveMons[i].Attach(ActiveSprites[i]);
             NextMove.Moves[i].TargetMon.Attach(TargetSprites[i]);
         }
+        Task.Run(NextMove.LoadMonData).Wait();
         Task.Run(NextMove.UpdateNextMove);
     }
 
