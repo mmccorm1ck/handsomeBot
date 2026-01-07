@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -541,6 +542,27 @@ public class NextMoveModel() // Class to make next move decision
             priority += 3;
         }
         return priority;
+    }
+
+    public async Task LoadMonData()
+    {
+        HttpClient client = new();
+        List<string> monsForCall = [];
+        foreach (TeamModel mon in theGame.BotTeam)
+        {
+            foreach (string name in allOptions.AllFormes[mon.Name])
+            {
+                if (!monsForCall.Contains(name))
+                {
+                    monsForCall.Add(name);
+                }
+            }
+        }
+        string url = "https://" + theGame.ServerUrl + "/mons?{%22Gen%22:" +
+            theGame.Gen.ToString() + "%2C%22Filter%22:" + JsonSerializer.Serialize(monsForCall) + "}";
+        Dictionary<string, MonData>? response = await client.GetFromJsonAsync<Dictionary<string, MonData>>(url);
+        if (response == null) return;
+        _monData = response;
     }
 
     public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
