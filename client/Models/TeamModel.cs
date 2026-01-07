@@ -49,10 +49,19 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     }
     public string Ability
     {
-        get => _ability;
+        get => _ability == null ? _abilityDefault : _ability;
         set
         {
             _ability = value;
+            OnPropertyChanged();
+        }
+    }
+    public string AbilityDefault
+    {
+        get => _abilityDefault;
+        set
+        {
+            _abilityDefault = value;
             OnPropertyChanged();
         }
     }
@@ -268,7 +277,8 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
     private int _level = 50; // Pokemon's level
-    private string _ability = "None"; // Pokemon's ability
+    private string? _ability; // Pokemon's ability
+    private string _abilityDefault = "None";
     private string _nature = "None"; // Pokemon's nature
     private EVIVModel _ev = new(); // Array of pokemon's EVs
     private EVIVModel _iv = new()
