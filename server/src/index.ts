@@ -1,4 +1,5 @@
 import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES} from "@Smogon/calc";
+import { SpeciesData } from "@Smogon/calc/dist/data/species";
 import 'dotenv/config';
 import { createServer } from "http";
 
@@ -21,7 +22,7 @@ const handleRequest = (url:string) => {
     if (url === '/' || !params[1]) return { valid, result };
     let inputJson: inputObject;
     try {
-        inputJson = JSON.parse(decodeURI(params[1])) as inputObject;
+        inputJson = JSON.parse(decodeURIComponent(params[1])) as inputObject;
     }
     catch
     {
@@ -34,8 +35,18 @@ const handleRequest = (url:string) => {
         else valid = true;
     }
     else if (params[0] === '/mons') {
-        result = SPECIES[genNum];
-        valid = true;
+        if (!inputJson.Filter) {
+            result = SPECIES[genNum];
+            valid = true;
+        } else {
+            inputJson.Filter.forEach(element => {
+                const data: SpeciesData = SPECIES[genNum][element];
+                if (data !== undefined) {
+                    Object.defineProperty(result, element, {value: data, enumerable: true});    
+                }
+            });
+            valid = true;
+        }
     }
     else if (params[0] === '/items') {
         result = ITEMS[genNum];
@@ -117,7 +128,8 @@ type inputObject =
     Gen: number,
     BotMons?: inputPokemon[],
     OppMons?: inputPokemon[],
-    Field?: Partial<State.Field>
+    Field?: Partial<State.Field>,
+    Filter?: string[]
 }
 
 type inputPokemon = 
