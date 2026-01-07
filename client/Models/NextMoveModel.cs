@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace HandsomeBot.Models;
 
@@ -558,8 +559,18 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
         }
-        string url = "https://" + theGame.ServerUrl + "/mons?{%22Gen%22:" +
-            theGame.Gen.ToString() + "%2C%22Filter%22:" + JsonSerializer.Serialize(monsForCall) + "}";
+        foreach (TeamModel mon in theGame.OppTeam)
+        {
+            foreach (string name in allOptions.AllFormes[mon.Name])
+            {
+                if (!monsForCall.Contains(name))
+                {
+                    monsForCall.Add(name);
+                }
+            }
+        }
+        string url = "http://" + theGame.ServerUrl + "/mons?{%22Gen%22:" + theGame.Gen.ToString() +
+            "%2c%22Filter%22:" + HttpUtility.UrlEncode(JsonSerializer.Serialize(monsForCall)) + "}";
         Dictionary<string, MonData>? response = await client.GetFromJsonAsync<Dictionary<string, MonData>>(url);
         if (response == null) return;
         _monData = response;
@@ -699,20 +710,20 @@ public class NextMoveModel() // Class to make next move decision
         "Wish"
     ];
     private Dictionary<string, MonData> _monData = [];
-    private class MonData()
+    public class MonData()
     {
-        public Dictionary<int, string> abilities = [];
-        public List<string> types = [];
-        public BaseStats bs = new();
+        public Dictionary<string, string> abilities { get; set; } = [];
+        public List<string> types { get; set; } = [];
+        public BaseStats bs { get; set; } = new();
         public class BaseStats()
         {
-            public int hp;
-            public int at;
-            public int df;
-            public int? sa;
-            public int? sd;
-            public int sp;
-            public int? sl;   
+            public int hp { get; set; }
+            public int at { get; set; }
+            public int df { get; set; }
+            public int? sa { get; set; }
+            public int? sd { get; set; }
+            public int sp { get; set; }
+            public int? sl { get; set; } 
         }
     }
 }
