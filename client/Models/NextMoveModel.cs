@@ -727,6 +727,34 @@ public class NextMoveModel() // Class to make next move decision
         "Synthesis",
         "Wish"
     ];
+    private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
+    {
+        {"Hardy",   new()},
+        {"Docile",  new()},
+        {"Serious", new()},
+        {"Bashful", new()},
+        {"Quirky",  new()},
+        {"Lonely",  new() {{"Atk", 1.1},{"Def", 0.9}}},
+        {"Brave",   new() {{"Atk", 1.1},{"Spe", 0.9}}},
+        {"Adamant", new() {{"Atk", 1.1},{"SpA", 0.9}}},
+        {"Naughty", new() {{"Atk", 1.1},{"SpD", 0.9}}},
+        {"Bold",    new() {{"Def", 1.1},{"Atk", 0.9}}},
+        {"Relaxed", new() {{"Def", 1.1},{"Spe", 0.9}}},
+        {"Impish",  new() {{"Def", 1.1},{"Spa", 0.9}}},
+        {"Lax",     new() {{"Def", 1.1},{"SpD", 0.9}}},
+        {"Timid",   new() {{"Spe", 1.1},{"Atk", 0.9}}},
+        {"Hasty",   new() {{"Spe", 1.1},{"Def", 0.9}}},
+        {"Jolly",   new() {{"Spe", 1.1},{"SpA", 0.9}}},
+        {"Naive",   new() {{"Spe", 1.1},{"SpD", 0.9}}},
+        {"Modest",  new() {{"SpA", 1.1},{"Atk", 0.9}}},
+        {"Mild",    new() {{"SpA", 1.1},{"Def", 0.9}}},
+        {"Quiet",   new() {{"SpA", 1.1},{"Spe", 0.9}}},
+        {"Rash",    new() {{"SpA", 1.1},{"SpD", 0.9}}},
+        {"Calm",    new() {{"SpD", 1.1},{"Atk", 0.9}}},
+        {"Gentle",  new() {{"SpD", 1.1},{"Def", 0.9}}},
+        {"Sassy",   new() {{"SpD", 1.1},{"Spe", 0.9}}},
+        {"Careful", new() {{"SpD", 1.1},{"SpA", 0.9}}}
+    };
     private Dictionary<string, MonData> _monData = [];
     public class MonData()
     {
