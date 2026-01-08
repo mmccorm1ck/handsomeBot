@@ -167,10 +167,18 @@ public class NextMoveModel() // Class to make next move decision
         if (eventModel.UserMon > 5)
         {
             theGame.OppTeam[eventModel.UserMon - 6].Ability = eventModel.AbilityName;
+            if (eventModel.EventType == "Ability Activation")
+            {
+                theGame.OppTeam[eventModel.UserMon - 6].AbilityActive = true;
+            }
         }
         else if (eventModel.EventType == "Ability Change")
         {
             theGame.BotTeam[eventModel.UserMon].Ability = eventModel.AbilityName;
+        }
+        else if (eventModel.EventType == "Ability Activation")
+        {
+            theGame.BotTeam[eventModel.UserMon].AbilityActive = true;
         }
         if (eventModel.AbilityName == "Imposter")
         {
@@ -380,6 +388,7 @@ public class NextMoveModel() // Class to make next move decision
                 theGame.MonsSeen.Add(eventModel.TargetMons[0].MonNo - 6);
             }
             theGame.OppTeam[eventModel.UserMon - 6].Transform = null;
+            theGame.OppTeam[eventModel.UserMon - 6].AbilityActive = false;
             return;
         }
         if (eventModel.UserMon < 6 && eventModel.TargetMons[0].MonNo < 6)
@@ -387,6 +396,7 @@ public class NextMoveModel() // Class to make next move decision
             theGame.Turns[^2].BotEndMons[theGame.Turns[^2].BotEndMons.IndexOf(eventModel.UserMon)] =
                 eventModel.TargetMons[0].MonNo;
             theGame.BotTeam[eventModel.UserMon].Transform = null;
+            theGame.BotTeam[eventModel.UserMon].AbilityActive = false;
         }
     }
 
