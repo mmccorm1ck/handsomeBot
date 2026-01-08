@@ -521,6 +521,130 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
+    private int DecidePriority(EventModel eventModel)
+    {
+        if (!_priorities.Keys.Contains(eventModel.EventType))
+        {
+            return 1000;
+        }
+        int priority = _priorities[eventModel.EventType];
+        if (eventModel.EventType != "Move")
+        {
+            return priority;
+        }
+        MoveInfoModel moveInfo = allOptions.AllMoves[eventModel.MoveName];
+        TeamModel userMon;
+        if (eventModel.UserMon < 6)
+        {
+            userMon = theGame.BotTeam[eventModel.UserMon];
+        }
+        else
+        {
+            userMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        if (moveInfo.priotity != null)
+        {
+            priority += (int)moveInfo.priotity;
+        }
+        if (moveInfo.category == "Status" && userMon.Ability == "Prankster")
+        {
+            priority++;
+        }
+        if (moveInfo.type == "Flying" && userMon.Ability == "Gale Wings" && userMon.RemainingHP == 100)
+        {
+            priority++;
+        }
+        if (_healingMoves.Contains(eventModel.MoveName) && userMon.Ability == "Triage")
+        {
+            priority += 3;
+        }
+        return priority;
+    }
+
+    public async Task LoadMonData()
+    {
+        HttpClient client = new();
+        List<string> monsForCall = [];
+        foreach (TeamModel mon in theGame.BotTeam)
+        {
+            foreach (string name in allOptions.AllFormes[mon.Name])
+            {
+                if (!monsForCall.Contains(name))
+                {
+                    monsForCall.Add(name);
+                }
+            }
+        }
+        foreach (TeamModel mon in theGame.OppTeam)
+        {
+            foreach (string name in allOptions.AllFormes[mon.Name])
+            {
+                if (!monsForCall.Contains(name))
+                {
+                    monsForCall.Add(name);
+                }
+            }
+        }
+        string url = "http://" + theGame.ServerUrl + "/mons?{%22Gen%22:" + theGame.Gen.ToString() +
+            "%2c%22Filter%22:" + HttpUtility.UrlEncode(JsonSerializer.Serialize(monsForCall)) + "}";
+        Dictionary<string, MonData>? response = await client.GetFromJsonAsync<Dictionary<string, MonData>>(url);
+        if (response == null) return;
+        _monData = response;
+        UpdateDefaultAbilities();
+    }
+
+    public void UpdateDefaultAbilities()
+    {
+        foreach (TeamModel mon in theGame.OppTeam)
+        {
+            if (!_monData.Keys.Contains(mon.Name))
+            {
+                continue;
+            }
+            if (_monData[mon.Name].abilities["0"] == null)
+            {
+                continue;
+            }
+            mon.AbilityDefault = _monData[mon.Name].abilities["0"];
+        }
+    }
+
+    public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
+    {
+        ObservableCollection<PokemonModel> botPokemon = []; // Collection of bot's pokemon in server compatable format
+        ObservableCollection<PokemonModel> oppPokemon = []; // Collection of opponent's pokemon in server compatable format
+        for (int i = 0; i < 2; i++) // Add all mons to collections
+        {
+            botPokemon.Add(new PokemonModel(theGame.Gen, theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]])); // This needs updating to account for switches in future
+            oppPokemon.Add(new PokemonModel(theGame.Gen, theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]]));
+        }
+        CalcCallModel callData = new() // Collect all data together for calc
+        {
+            Gen = theGame.Gen,
+            BotMons = botPokemon,
+            OppMons = oppPokemon,
+            Field = new(
+                theGame.GameType,
+                theGame.CurrentArena
+                )
+        };
+        string callString = JsonSerializer.Serialize(callData); // Serialise call data into string
+        HttpClient client = new();
+        List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{theGame.ServerUrl}/calc?{callString}"); // Send data to server and await response
+        if (response == null) return []; // Return empty results on null response
+        return response;
+    }
+
+    private void ParseCalc(List<CalcRespModel> damages)
+    {
+
+    }
+
+    private void ChooseNextMove(List<CalcRespModel> damages)
+    {
+
+    }
+    
     private int CalcStat(string stat, int monNo)
     {
         TeamModel tempMon;
@@ -651,129 +775,6 @@ public class NextMoveModel() // Class to make next move decision
         return 2.0 / (2 - statChange);
     }
 
-    private int DecidePriority(EventModel eventModel)
-    {
-        if (!_priorities.Keys.Contains(eventModel.EventType))
-        {
-            return 1000;
-        }
-        int priority = _priorities[eventModel.EventType];
-        if (eventModel.EventType != "Move")
-        {
-            return priority;
-        }
-        MoveInfoModel moveInfo = allOptions.AllMoves[eventModel.MoveName];
-        TeamModel userMon;
-        if (eventModel.UserMon < 6)
-        {
-            userMon = theGame.BotTeam[eventModel.UserMon];
-        }
-        else
-        {
-            userMon = theGame.OppTeam[eventModel.UserMon - 6];
-        }
-        if (moveInfo.priotity != null)
-        {
-            priority += (int)moveInfo.priotity;
-        }
-        if (moveInfo.category == "Status" && userMon.Ability == "Prankster")
-        {
-            priority++;
-        }
-        if (moveInfo.type == "Flying" && userMon.Ability == "Gale Wings" && userMon.RemainingHP == 100)
-        {
-            priority++;
-        }
-        if (_healingMoves.Contains(eventModel.MoveName) && userMon.Ability == "Triage")
-        {
-            priority += 3;
-        }
-        return priority;
-    }
-
-    public async Task LoadMonData()
-    {
-        HttpClient client = new();
-        List<string> monsForCall = [];
-        foreach (TeamModel mon in theGame.BotTeam)
-        {
-            foreach (string name in allOptions.AllFormes[mon.Name])
-            {
-                if (!monsForCall.Contains(name))
-                {
-                    monsForCall.Add(name);
-                }
-            }
-        }
-        foreach (TeamModel mon in theGame.OppTeam)
-        {
-            foreach (string name in allOptions.AllFormes[mon.Name])
-            {
-                if (!monsForCall.Contains(name))
-                {
-                    monsForCall.Add(name);
-                }
-            }
-        }
-        string url = "http://" + theGame.ServerUrl + "/mons?{%22Gen%22:" + theGame.Gen.ToString() +
-            "%2c%22Filter%22:" + HttpUtility.UrlEncode(JsonSerializer.Serialize(monsForCall)) + "}";
-        Dictionary<string, MonData>? response = await client.GetFromJsonAsync<Dictionary<string, MonData>>(url);
-        if (response == null) return;
-        _monData = response;
-        UpdateDefaultAbilities();
-    }
-
-    public void UpdateDefaultAbilities()
-    {
-        foreach (TeamModel mon in theGame.OppTeam)
-        {
-            if (!_monData.Keys.Contains(mon.Name))
-            {
-                continue;
-            }
-            if (_monData[mon.Name].abilities["0"] == null)
-            {
-                continue;
-            }
-            mon.AbilityDefault = _monData[mon.Name].abilities["0"];
-        }
-    }
-
-    public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
-    {
-        ObservableCollection<PokemonModel> botPokemon = []; // Collection of bot's pokemon in server compatable format
-        ObservableCollection<PokemonModel> oppPokemon = []; // Collection of opponent's pokemon in server compatable format
-        for (int i = 0; i < 2; i++) // Add all mons to collections
-        {
-            botPokemon.Add(new PokemonModel(theGame.Gen, theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]])); // This needs updating to account for switches in future
-            oppPokemon.Add(new PokemonModel(theGame.Gen, theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]]));
-        }
-        CalcCallModel callData = new() // Collect all data together for calc
-        {
-            Gen = theGame.Gen,
-            BotMons = botPokemon,
-            OppMons = oppPokemon,
-            Field = new(
-                theGame.GameType,
-                theGame.CurrentArena
-                )
-        };
-        string callString = JsonSerializer.Serialize(callData); // Serialise call data into string
-        HttpClient client = new();
-        List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{theGame.ServerUrl}/calc?{callString}"); // Send data to server and await response
-        if (response == null) return []; // Return empty results on null response
-        return response;
-    }
-
-    private void ParseCalc(List<CalcRespModel> damages)
-    {
-
-    }
-
-    private void ChooseNextMove(List<CalcRespModel> damages)
-    {
-
-    }
     private readonly Dictionary<string, int> _statAdjustmentDictionary = new()
     {
         {"Rose", 1},
