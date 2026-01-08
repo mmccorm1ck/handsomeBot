@@ -506,6 +506,71 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
+    private int CalcStat(string stat, TeamModel tempMon)
+    {
+        if (!_monData.ContainsKey(tempMon.Name))
+        {
+            return -1;
+        }
+        int? baseStat = stat switch
+        {
+            "Atk" => _monData[tempMon.Name].bs.at,
+            "Def" => _monData[tempMon.Name].bs.df,
+            "SpA" => _monData[tempMon.Name].bs.sa,
+            "SpD" => _monData[tempMon.Name].bs.sd,
+            "Spe" => _monData[tempMon.Name].bs.sp,
+            _ => -1
+        };
+        int iv = stat switch
+        {
+            "Atk" => tempMon.IV.Atk,
+            "Def" => tempMon.IV.Def,
+            "SpA" => tempMon.IV.SpA,
+            "SpD" => tempMon.IV.SpD,
+            "Spe" => tempMon.IV.Spe,
+            _ => -1
+        };
+        int ev = stat switch
+        {
+            "Atk" => tempMon.EV.Atk,
+            "Def" => tempMon.EV.Def,
+            "SpA" => tempMon.EV.SpA,
+            "SpD" => tempMon.EV.SpD,
+            "Spe" => tempMon.EV.Spe,
+            _ => -1
+        };
+        int statChange = stat switch
+        {
+            "Atk" => tempMon.StatChanges.Atk,
+            "Def" => tempMon.StatChanges.Def,
+            "SpA" => tempMon.StatChanges.SpA,
+            "SpD" => tempMon.StatChanges.SpD,
+            "Spe" => tempMon.StatChanges.Spe,
+            _ => 0
+        };
+        double statChangeMult = CalcStatMult(statChange);
+        double natureMod = 1;
+        if (_natures[tempMon.Nature].ContainsKey(stat))
+        {
+            natureMod = _natures[tempMon.Nature][stat];
+        }
+        if (baseStat == -1 || iv == -1 || ev == -1 || baseStat == null)
+        {
+            return -1;
+        }
+        return (int)Math.Floor(Math.Floor((Math.Floor((double)(
+            (2 * baseStat + iv + Math.Floor(ev / 4.0)) * tempMon.Level / 100.0)) + 5) * natureMod) * statChangeMult);
+    }
+
+    private static double CalcStatMult(int statChange)
+    {
+        if (statChange >= 0)
+        {
+            return 1.0 + 0.5 * statChange;
+        }
+        return 2.0 / (2 - statChange);
+    }
+
     private int DecidePriority(EventModel eventModel)
     {
         if (!_priorities.Keys.Contains(eventModel.EventType))
