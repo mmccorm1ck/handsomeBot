@@ -54,6 +54,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             if (inputModel.Item != "None") item = inputModel.Item;
             if (inputModel.Tera != "None" && inputModel.TeraActive) teraType = inputModel.Tera;
             if (inputModel.Nature != "None") nature = inputModel.Nature;
+            if (inputModel.NonVolStatus != "") status = ParseStatus(inputModel);
             ivs = new EVIV(inputModel.IV);
             evs = new EVIV(inputModel.EV);
             boosts = new EVIV(inputModel.StatChanges);
@@ -115,6 +116,14 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
                 _nature = value;
             }
         }
+        public string? status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+            }
+        }
         public EVIV ivs
         {
             get => _ivs;
@@ -154,6 +163,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         private string? _item;
         private string? _teraType;
         private string? _nature;
+        private string? _status;
         private EVIV _ivs = new();
         private EVIV _evs = new();
         private EVIV? _boosts;
@@ -235,6 +245,20 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         if (inputModel.Move3 != "None") moves.Add(inputModel.Move3);
         if (inputModel.Move4 != "None") moves.Add(inputModel.Move4);
         return moves;
+    }
+
+    static private string ParseStatus(TeamModel inputModel)
+    {
+        return inputModel.NonVolStatus switch
+        {
+            "Burn" => "brn",
+            "Freeze" => "frz",
+            "Paralysis" => "par",
+            "Poison" => "psn",
+            "Badly Poisoned" => "tox",
+            "Sleep" => "slp",
+            _ => ""
+        };
     }
 
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
