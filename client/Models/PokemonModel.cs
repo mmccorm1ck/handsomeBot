@@ -50,7 +50,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             level = inputModel.Level;
             if (inputModel.Gender != 'R') gender = inputModel.Gender;
             if (inputModel.Ability != "None") ability = inputModel.Ability;
-            // Add abilityOn here once implemented
+            if (inputModel.AbilityActive) abilityOn = true;
             if (inputModel.Item != "None") item = inputModel.Item;
             //if (inputModel.Tera != "None") teraType = inputModel.Tera; Commented out until tera on is implemented
             if (inputModel.Nature != "None") nature = inputModel.Nature;
