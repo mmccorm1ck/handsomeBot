@@ -504,10 +504,24 @@ public class NextMoveModel() // Class to make next move decision
                 speedOrders[priority].Add(eventModel.UserMon);
             }
         }
+        Dictionary<int, int> speeds = [];
+        foreach (int monNo in noToName.Keys)
+        {
+            speeds.Add(monNo, CalcStat("Spe", monNo));
+        }
     }
 
-    private int CalcStat(string stat, TeamModel tempMon)
+    private int CalcStat(string stat, int monNo)
     {
+        TeamModel tempMon;
+        if (monNo < 6)
+        {
+            tempMon = theGame.BotTeam[monNo];
+        }
+        else
+        {
+            tempMon = theGame.OppTeam[monNo - 6];
+        }
         if (!_monData.ContainsKey(tempMon.Name))
         {
             return -1;
@@ -558,8 +572,64 @@ public class NextMoveModel() // Class to make next move decision
         {
             return -1;
         }
-        return (int)Math.Floor(Math.Floor((Math.Floor((double)(
+        int calcedStat = (int)Math.Floor(Math.Floor((Math.Floor((double)(
             (2 * baseStat + iv + Math.Floor(ev / 4.0)) * tempMon.Level / 100.0)) + 5) * natureMod) * statChangeMult);
+        if (stat != "Spe") // Damage-based stat modifiers are handled by calc code
+        {
+            return calcedStat;
+        }
+
+        if (tempMon.Item == "Choice Scarf")
+        {
+            calcedStat = (int)Math.Floor(calcedStat * 1.5);
+        }
+        else if (tempMon.Item == "Quick Powder" && tempMon.Name == "Ditto" && tempMon.Transform == null)
+        {
+            calcedStat *= 2;
+        }
+        if ((tempMon.Ability == "Protosynthesis (Speed)" || tempMon.Ability == "Quark Drive (Speed)") && tempMon.AbilityActive)
+        {
+            calcedStat = (int)Math.Floor(calcedStat * 1.5);
+        }
+        else if (tempMon.Ability == "Chlorophyll" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight"))
+        {
+            calcedStat *= 2;
+        }
+        else if (tempMon.Ability == "Swift Swim" && theGame.CurrentArena.Weather.Contains("Rain"))
+        {
+            calcedStat *= 2;
+        }
+        else if (tempMon.Ability == "Sand Rush" && theGame.CurrentArena.Weather == "Sandstorm")
+        {
+            calcedStat *= 2;
+        }
+        else if (tempMon.Ability == "Slush Rush" &&
+            (theGame.CurrentArena.Weather == "Snow" || theGame.CurrentArena.Weather == "Hail"))
+        {
+            calcedStat *= 2;
+        }
+        else if (tempMon.Ability == "Quick Feet" && (tempMon.NonVolStatus != "" || tempMon.VolStatus.Count > 0))
+        {
+            calcedStat = (int)Math.Floor(calcedStat * 1.5);
+        }
+        else if (tempMon.Ability == "Unburden" && tempMon.ItemRemoved)
+        {
+            calcedStat *= 2;
+        }
+        else if (tempMon.Ability == "Surge Surfer" && theGame.CurrentArena.Terrain == "Electric Terrain")
+        {
+            calcedStat *= 2;
+        }
+        if (tempMon.NonVolStatus == "Paralysis" && tempMon.Ability != "Quick Feet")
+        {
+            calcedStat = (int)Math.Floor(calcedStat / 2.0);
+        }
+        if ((monNo < 6 && theGame.CurrentArena.BotSide.Tailwind) ||
+            (monNo > 5 && theGame.CurrentArena.OppSide.Tailwind))
+        {
+            calcedStat *= 2;
+        }
+        return calcedStat;
     }
 
     private static double CalcStatMult(int statChange)
@@ -598,11 +668,11 @@ public class NextMoveModel() // Class to make next move decision
         }
         if (moveInfo.category == "Status" && userMon.Ability == "Prankster")
         {
-            priority ++;
+            priority++;
         }
         if (moveInfo.type == "Flying" && userMon.Ability == "Gale Wings" && userMon.RemainingHP == 100)
         {
-            priority ++;
+            priority++;
         }
         if (_healingMoves.Contains(eventModel.MoveName) && userMon.Ability == "Triage")
         {
@@ -834,7 +904,7 @@ public class NextMoveModel() // Class to make next move decision
             public int? sa { get; set; }
             public int? sd { get; set; }
             public int sp { get; set; }
-            public int? sl { get; set; } 
+            public int? sl { get; set; }
         }
     }
 }
