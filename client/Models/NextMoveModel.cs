@@ -247,6 +247,7 @@ public class NextMoveModel() // Class to make next move decision
         if (eventModel.EventType == "Mega Evolution" && eventModel.UserMon > 5)
         {
             tempMon.Item = "Abomasite"; // Place holder for correct mega stone
+            UpdateDefaultAbilities();
         }
     }
 
@@ -574,6 +575,23 @@ public class NextMoveModel() // Class to make next move decision
         Dictionary<string, MonData>? response = await client.GetFromJsonAsync<Dictionary<string, MonData>>(url);
         if (response == null) return;
         _monData = response;
+        UpdateDefaultAbilities();
+    }
+
+    public void UpdateDefaultAbilities()
+    {
+        foreach (TeamModel mon in theGame.OppTeam)
+        {
+            if (!_monData.Keys.Contains(mon.Name))
+            {
+                continue;
+            }
+            if (_monData[mon.Name].abilities["0"] == null)
+            {
+                continue;
+            }
+            mon.AbilityDefault = _monData[mon.Name].abilities["0"];
+        }
     }
 
     public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
