@@ -20,13 +20,21 @@
             </TextBlock>
         </Border>
         <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="200, 400, 200, 400"
-            RowDefinitions="Auto, Auto, Auto, Auto"
+            ColumnDefinitions="200, 200, 200, 200, 200, 200"
+            RowDefinitions="Auto"
             HorizontalAlignment="Center">
             <TextBox Name="pasteLink" Grid.Row="0" Grid.Column="1" Margin="0 5" Watermark="Pokepaste Link" Text="{Binding TheGame.BotTeamURL}"/>
             <Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10" Command="{Binding LoadPaste}">Load PokePaste</Button>
             <TextBox Name="format" Grid.Row="0" Grid.Column="3" Margin="0 5" Watermark="Format" Text="{Binding TheGame.Format}"/>
             <Button HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Margin="10" Command="{Binding LoadTeam}">Load Previous Team</Button>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="4">Gimmick:</Label>
+            <ComboBox Name="Gimmick" Grid.Row="0" Grid.Column="5" Margin="0.5" HorizontalAlignment="Left" VerticalAlignment="Center"
+                ItemsSource="{Binding AllOptions.Gimmicks}" SelectedItem="{Binding SelectedGimmick}"/>
+        </Grid>
+        <Grid ShowGridLines="False" Margin="5"
+            ColumnDefinitions="200, 400, 200, 400"
+            RowDefinitions="Auto, Auto, Auto, Auto"
+            HorizontalAlignment="Center">
             <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" Source="{Binding Sprites[0].Image}"/>
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 5">
                 <StackPanel Orientation="Horizontal">
