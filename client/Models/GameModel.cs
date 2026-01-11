@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace HandsomeBot.Models;
 public class GameModel() : INotifyPropertyChanged // Class to hold info about a game
@@ -130,6 +131,15 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public GimmickList Gimmicks
+    {
+        get => _gimmicks;
+        set
+        {
+            _gimmicks = value;
+            OnPropertyChanged();
+        }
+    }
     private string _serverUrl = "";
     private string _format = "";
     private string _gameType = "Singles";
@@ -156,6 +166,66 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
     private List<int> _monsSeen = [];
     private ObservableCollection<TurnModel> _turns = [];
     private bool _zoroPresent = false;
+    private GimmickList _gimmicks = new();
+    public class GimmickList
+    {
+        public bool Megas
+        {
+            get => _megas;
+            set
+            {
+                Reset();
+                _megas = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ZMoves
+        {
+            get => _zMoves;
+            set
+            {
+                Reset();
+                _zMoves = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool Dynamax
+        {
+            get => _dynamax;
+            set
+            {
+                Reset();
+                _dynamax = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool Tera
+        {
+            get => _tera;
+            set
+            {
+                Reset();
+                _tera = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _megas = false;
+        private bool _zMoves = false;
+        private bool _dynamax = false;
+        private bool _tera = false;
+        private void Reset()
+        {
+            _megas = false;
+            _zMoves = false;
+            _dynamax = false;
+            _tera = false;
+        }
+        public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
