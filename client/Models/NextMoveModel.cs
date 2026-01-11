@@ -200,7 +200,8 @@ public class NextMoveModel() // Class to make next move decision
             }
         }
         if (eventModel.EventType == "Z-Move" ||
-            (eventModel.EventType == "Item Activation" && allOptions.SingleUseItems.Contains(eventModel.ItemName)))
+            (eventModel.EventType == "Item Activation" && (allOptions.SingleUseItems.Contains(eventModel.ItemName) || 
+            eventModel.ItemName.Contains(" Berry") || eventModel.ItemName.Contains(" Gem"))))
         {
             if (eventModel.UserMon > 5)
             {
