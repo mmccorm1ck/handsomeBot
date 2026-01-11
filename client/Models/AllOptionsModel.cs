@@ -321,6 +321,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
     ];
     public List<string> Gimmicks {get;} =
     [
+        "None",
         "Mega Evolution",
         "Z Crystals",
         "Dynamax",

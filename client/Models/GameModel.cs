@@ -213,7 +213,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
         private bool _zMoves = false;
         private bool _dynamax = false;
         private bool _tera = false;
-        private void Reset()
+        public void Reset()
         {
             _megas = false;
             _zMoves = false;
