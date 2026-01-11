@@ -13,6 +13,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
     public BotTeamPageViewModel(GameModel game, AllOptionsModel options)
     {
         TheGame = game; // Load game info
+        AllOptions = options; 
         for (int i = 0; i < 6; i++)
         {
             if (TheGame.BotTeam[i].BaseForme != "")
@@ -22,6 +23,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             Sprites.Add(new());
             TheGame.BotTeam[i].Attach(Sprites[i]); // Attach image listener for each mon in team
         }
+        LoadGimmick();
     }
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
@@ -42,6 +44,18 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private AllOptionsModel _allOptions = new();
+
+    public AllOptionsModel AllOptions
+    {
+        get => _allOptions;
+        set
+        {
+            _allOptions = value;
+            OnPropertyChanged();
+        }
+    }
+
     private ObservableCollection<ImageListener> _sprites = [];
 
     public ObservableCollection<ImageListener> Sprites // Image listeners for updating sprites
@@ -51,6 +65,61 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             _sprites = value;
             OnPropertyChanged();
+        }
+    }
+
+    private string _selectedGimmick = "None";
+
+    public string SelectedGimmick
+    {
+        get => _selectedGimmick;
+        set
+        {
+            _selectedGimmick = value;
+            UpdateGimmick();
+            OnPropertyChanged();
+        }
+    }
+
+    public void UpdateGimmick()
+    {
+        switch (SelectedGimmick)
+        {
+            case "Mega Evolution":
+                TheGame.Gimmicks.Megas = true;
+                break;
+            case "Z Crystals":
+                TheGame.Gimmicks.ZMoves = true;
+                break;
+            case "Dynamax":
+                TheGame.Gimmicks.Dynamax = true;
+                break;
+            case "Terastallization":
+                TheGame.Gimmicks.Tera = true;
+                break;
+            case "None":
+                TheGame.Gimmicks.Reset();
+                break;
+        }
+    }
+
+    public void LoadGimmick()
+    {
+        if (TheGame.Gimmicks.Megas)
+        {
+            _selectedGimmick = "Mega Evolution";   
+        }
+        else if (TheGame.Gimmicks.ZMoves)
+        {
+            _selectedGimmick = "Z Crystals";   
+        }
+        else if (TheGame.Gimmicks.Dynamax)
+        {
+            _selectedGimmick = "Dynamax";   
+        }
+        else if (TheGame.Gimmicks.Tera)
+        {
+            _selectedGimmick = "Terastallization";   
         }
     }
 
