@@ -319,6 +319,13 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Weakness Policy",
         "White Herb"
     ];
+    public List<string> Gimmicks {get;} =
+    [
+        "Mega Evolution",
+        "Z Crystals",
+        "Dynamax",
+        "Terastallization"
+    ];
     async public Task UpdateInfo(GameModel game)
     {
         HttpClient client = new();
