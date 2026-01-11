@@ -51,7 +51,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             if (inputModel.Gender != 'R') gender = inputModel.Gender;
             if (inputModel.Ability != "None") ability = inputModel.Ability;
             if (inputModel.AbilityActive) abilityOn = true;
-            if (inputModel.Item != "None") item = inputModel.Item;
+            if (inputModel.Item != "None" && !inputModel.ItemRemoved) item = inputModel.Item;
             if (inputModel.Tera != "None" && inputModel.TeraActive) teraType = inputModel.Tera;
             if (inputModel.Nature != "None") nature = inputModel.Nature;
             if (inputModel.NonVolStatus != "") status = ParseStatus(inputModel);
