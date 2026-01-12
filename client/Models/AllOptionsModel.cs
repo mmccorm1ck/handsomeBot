@@ -61,7 +61,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
             OnPropertyChanged();
         }
     }
-    public string[] AvailableEvents { get; set; } = [ // List of possible events
+    private string[] _availableEventsDefault { get; } = [ // List of possible events
         "Move",
         "Switch",
         "KO",
@@ -81,12 +81,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Return to Base Forme",
         "Field Effect Change",
         "Field Effect Ended",
-        "Terastallize",
         "Type Change",
-        "Mega Evolution",
-        "Dynamax",
-        "Gigantamax",
-        "Z-Move",
         "Position Change",
         "Transformation",
         "Illusion Reveal",
@@ -94,6 +89,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Recoil Damage",
         "HP Restored"
     ];
+    public List<string> AvailableEvents { get; set; } = [];
     public string[] AvailableOpeningEvents { get; set; } = [ // List of possible events in turn 0
         "Ability Activation",
         "Ability Change",
@@ -327,6 +323,30 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Dynamax",
         "Terastallization"
     ];
+    public void SetGimmick(GameModel game)
+    {
+        AvailableEvents = [.. _availableEventsDefault];
+        if (game.Gimmicks.Megas)
+        {
+            AvailableEvents.Add("Mega Evolution");
+            return;
+        }
+        if (game.Gimmicks.ZMoves)
+        {
+            AvailableEvents.Add("Z-Move");
+            return;
+        }
+        if (game.Gimmicks.Dynamax)
+        {
+            AvailableEvents.AddRange(["Dynamax", "Gigantamax"]);
+            return;
+        }
+        if (game.Gimmicks.Tera)
+        {
+            AvailableEvents.Add("Terastallize");
+            return;
+        }
+    }
     async public Task UpdateInfo(GameModel game)
     {
         HttpClient client = new();
