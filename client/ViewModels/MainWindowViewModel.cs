@@ -166,6 +166,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
                 DialogButtonVisible = true;
                 return;
             }
+            AllOptions.SetGimmick(TheGame);
         }
         CurrentPage = (ViewModelBase)instance; // Updates page being displayed
         CurrentButtonLabel = targetPage.ButtonLabel;
