@@ -174,7 +174,6 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             get => _megas;
             set
             {
-                Reset();
                 _megas = value;
                 OnPropertyChanged();
             }
@@ -184,7 +183,6 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             get => _zMoves;
             set
             {
-                Reset();
                 _zMoves = value;
                 OnPropertyChanged();
             }
@@ -194,7 +192,6 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             get => _dynamax;
             set
             {
-                Reset();
                 _dynamax = value;
                 OnPropertyChanged();
             }
@@ -204,7 +201,6 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             get => _tera;
             set
             {
-                Reset();
                 _tera = value;
                 OnPropertyChanged();
             }

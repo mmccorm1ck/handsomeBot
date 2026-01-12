@@ -83,6 +83,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
 
     public void UpdateGimmick()
     {
+        TheGame.Gimmicks.Reset();
         switch (SelectedGimmick)
         {
             case "Mega Evolution":
@@ -96,9 +97,6 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 break;
             case "Terastallization":
                 TheGame.Gimmicks.Tera = true;
-                break;
-            case "None":
-                TheGame.Gimmicks.Reset();
                 break;
         }
     }
