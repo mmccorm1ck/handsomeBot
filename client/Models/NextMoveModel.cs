@@ -216,15 +216,8 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseForme(EventModel eventModel)
     {
-        TeamModel tempMon;
-        if (eventModel.UserMon > 5)
-        {
-            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
-        }
-        else
-        {
-            tempMon = theGame.BotTeam[eventModel.UserMon];
-        }
+        TeamModel tempMon = eventModel.UserMon > 5 ?
+            theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
 
         if (!allOptions.AllFormes[tempMon.Name].Contains(eventModel.FormeName))
         {
@@ -301,15 +294,8 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseStat(EventModel eventModel)
     {
-        TeamModel tempMon;
-        if (eventModel.UserMon > 5)
-        {
-            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
-        }
-        else
-        {
-            tempMon = theGame.BotTeam[eventModel.UserMon];
-        }
+        TeamModel tempMon = eventModel.UserMon > 5 ?
+            theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
 
         if (eventModel.EventType == "Stat Levels Reset")
         {
@@ -327,15 +313,8 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseStatus(EventModel eventModel)
     {
-        TeamModel tempMon;
-        if (eventModel.UserMon > 5)
-        {
-            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
-        }
-        else
-        {
-            tempMon = theGame.BotTeam[eventModel.UserMon];
-        }
+        TeamModel tempMon = eventModel.UserMon > 5 ?
+            theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
 
         if (_nonVolStatuses.Contains(eventModel.StatusChange))
         {
@@ -364,15 +343,8 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseType(EventModel eventModel)
     {
-        TeamModel tempMon;
-        if (eventModel.UserMon > 5)
-        {
-            tempMon = theGame.OppTeam[eventModel.UserMon - 6];
-        }
-        else
-        {
-            tempMon = theGame.BotTeam[eventModel.UserMon];
-        }
+        TeamModel tempMon = eventModel.UserMon > 5 ?
+            theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
 
         if (eventModel.EventType == "Terastallize")
         {
