@@ -20,6 +20,8 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             {
                 TheGame.BotTeam[i].Name = TheGame.BotTeam[i].BaseForme;
             }
+            TheGame.BotTeam[i].MegaAbility = null;
+            TheGame.BotTeam[i].Transform = null;
             Sprites.Add(new());
             TheGame.BotTeam[i].Attach(Sprites[i]); // Attach image listener for each mon in team
         }
