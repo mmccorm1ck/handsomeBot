@@ -25,6 +25,10 @@
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
                             MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
                             SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
+                        <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.MoveEvent}">Move:</Label>
+                        <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
+                            MaxDropDownHeight="100" Name="moveCbx" ItemsSource="{Binding AllOptions.AllMoveNames}"
+                            Text="{Binding CurrEvent.MoveName}" IsVisible="{Binding EventType.MoveEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.ItemEvent}">Item:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
                             MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllOptions.AllItems}"
