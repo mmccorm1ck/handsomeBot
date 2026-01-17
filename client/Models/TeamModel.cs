@@ -49,10 +49,19 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     }
     public string Ability
     {
-        get => _ability == null ? _abilityDefault : _ability;
+        get => _megaAbility != null ? _megaAbility : _ability == null ? _abilityDefault : _ability;
         set
         {
             _ability = value;
+            OnPropertyChanged();
+        }
+    }
+    public string? MegaAbility
+    {
+        get => _megaAbility;
+        set
+        {
+            _megaAbility = value;
             OnPropertyChanged();
         }
     }
@@ -287,6 +296,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _item = "None"; // Pokemon's held item
     private int _level = 50; // Pokemon's level
     private string? _ability; // Pokemon's ability
+    private string? _megaAbility;
     private string _abilityDefault = "None";
     private bool _abilityActive = false;
     private string _nature = "None"; // Pokemon's nature

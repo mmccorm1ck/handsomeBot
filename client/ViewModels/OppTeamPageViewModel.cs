@@ -18,6 +18,7 @@ public class OppTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             {
                 TheGame.OppTeam[i].Name = TheGame.OppTeam[i].BaseForme;
             }
+            TheGame.OppTeam[i].MegaAbility = null;
             Sprites.Add(new());
             TheGame.OppTeam[i].Attach(Sprites[i]);
             if (TheGame.OppTeam[i].Name.Contains("Zoroark") || TheGame.OppTeam[i].Name.Contains("Zorua"))

@@ -256,7 +256,15 @@ public class NextMoveModel() // Class to make next move decision
         if (eventModel.EventType == "Mega Evolution" && eventModel.UserMon > 5)
         {
             tempMon.Item = "Abomasite"; // Place holder for correct mega stone
-            UpdateDefaultAbilities();
+            if (!_monData.Keys.Contains(tempMon.Name))
+            {
+                return;
+            }
+            if (_monData[tempMon.Name].abilities["0"] == null)
+            {
+                return;
+            }
+            tempMon.MegaAbility = _monData[tempMon.Name].abilities["0"];
         }
     }
 
