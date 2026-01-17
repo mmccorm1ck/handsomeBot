@@ -369,6 +369,24 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             PokeImage = "Assets/None.png"; // On exception, set path to blank image
         }
     }
+    public TeamModel CloneForTransform()
+    {
+        return new()
+        {
+            Name = Name,
+            Gender = Gender,
+            Ability = Ability,
+            MegaAbility = MegaAbility,
+            Nature = Nature,
+            EV = EV, // Copy EV and IV by reference for updating
+            IV = IV,
+            StatChanges = StatChanges.CloneStats(),
+            Move1 = Move1,
+            Move2 = Move2,
+            Move3 = Move3,
+            Move4 = Move4
+        };
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

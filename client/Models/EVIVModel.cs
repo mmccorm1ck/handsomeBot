@@ -164,6 +164,21 @@ public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a 
         return (value < min) ? min : (value > max) ? max : value;
     }
 
+    public EVIVModel CloneStats()
+    {
+        return new()
+        {
+            Atk = Atk,
+            Def = Def,
+            SpA = SpA,
+            SpD = SpD,
+            Spe = Spe,
+            Acc = Acc,
+            Eva = Eva,
+            Crt = Crt
+        };
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {

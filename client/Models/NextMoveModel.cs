@@ -465,7 +465,15 @@ public class NextMoveModel() // Class to make next move decision
         TeamModel targetMon = eventModel.TargetMons[0].MonNo > 5 ?
             theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6] : theGame.BotTeam[eventModel.TargetMons[0].MonNo];
     
-        tempMon.Transform = targetMon;
+        tempMon.Transform = targetMon.CloneForTransform();
+        tempMon.Transform.Level        = tempMon.Level;
+        tempMon.Transform.Item         = tempMon.Item;
+        tempMon.Transform.ItemRemoved  = tempMon.ItemRemoved;
+        tempMon.Transform.Tera         = tempMon.Tera;
+        tempMon.Transform.TeraActive   = tempMon.TeraActive;
+        tempMon.Transform.RemainingHP  = tempMon.RemainingHP;
+        tempMon.Transform.VolStatus    = tempMon.VolStatus;
+        tempMon.Transform.NonVolStatus = tempMon.NonVolStatus;
     }
 
     private void UpdateSpeeds()
