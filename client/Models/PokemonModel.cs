@@ -46,6 +46,10 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
     {
         public Options(TeamModel inputModel) : this()
         {
+            if (inputModel.Transform != null)
+            {
+                inputModel = inputModel.Transform;
+            }
 
             level = inputModel.Level;
             if (inputModel.Gender != 'R') gender = inputModel.Gender;
