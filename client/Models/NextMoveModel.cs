@@ -504,14 +504,11 @@ public class NextMoveModel() // Class to make next move decision
             return priority;
         }
         MoveInfoModel moveInfo = allOptions.AllMoves[eventModel.MoveName];
-        TeamModel userMon;
-        if (eventModel.UserMon < 6)
+        TeamModel userMon = eventModel.UserMon > 5 ?
+            theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
+        if (userMon.Transform != null)
         {
-            userMon = theGame.BotTeam[eventModel.UserMon];
-        }
-        else
-        {
-            userMon = theGame.OppTeam[eventModel.UserMon - 6];
+            userMon = userMon.Transform;
         }
         if (moveInfo.priotity != null)
         {
@@ -618,14 +615,10 @@ public class NextMoveModel() // Class to make next move decision
     
     private int CalcStat(string stat, int monNo)
     {
-        TeamModel tempMon;
-        if (monNo < 6)
+        TeamModel tempMon = monNo > 5 ? theGame.OppTeam[monNo - 6] : theGame.BotTeam[monNo];
+        if (tempMon.Transform != null)
         {
-            tempMon = theGame.BotTeam[monNo];
-        }
-        else
-        {
-            tempMon = theGame.OppTeam[monNo - 6];
+            tempMon = tempMon.Transform;
         }
         if (!_monData.ContainsKey(tempMon.Name))
         {
