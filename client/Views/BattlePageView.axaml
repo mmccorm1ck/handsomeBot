@@ -88,6 +88,10 @@
                                         <Label HorizontalAlignment="Left">Damage</Label>
                                         <TextBox Watermark="Damage Dealt" Text="{Binding Target.Damage, Mode=TwoWay}"/>
                                     </StackPanel>
+                                    <StackPanel>
+                                        <Label HorizontalAlignment="Left">Crit?</Label>
+                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Target.Crit, Mode=TwoWay}"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                             <Image Margin="10" Source="{Binding Image.Image}"/>

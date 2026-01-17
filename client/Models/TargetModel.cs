@@ -44,6 +44,16 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
             OnPropertyChanged();
         }
     }
+    private bool _crit = false;
+    public bool Crit
+    {
+        get => _crit;
+        set
+        {
+            _crit = value;
+            OnPropertyChanged();
+        }
+    }
     private TeamModel _targetMonModel = new();
     public void Attach(ImageListener listener)
     {
