@@ -200,7 +200,7 @@ public class NextMoveModel() // Class to make next move decision
             }
         }
         if (eventModel.EventType == "Z-Move" ||
-            (eventModel.EventType == "Item Activation" && (allOptions.SingleUseItems.Contains(eventModel.ItemName) || 
+            (eventModel.EventType == "Item Activation" && (allOptions.SingleUseItems.Contains(eventModel.ItemName) ||
             eventModel.ItemName.Contains(" Berry") || eventModel.ItemName.Contains(" Gem"))))
         {
             if (eventModel.UserMon > 5)
@@ -464,22 +464,22 @@ public class NextMoveModel() // Class to make next move decision
             theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
         TeamModel targetMon = eventModel.TargetMons[0].MonNo > 5 ?
             theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6] : theGame.BotTeam[eventModel.TargetMons[0].MonNo];
-    
+
         tempMon.Transform = targetMon.CloneForTransform();
-        tempMon.Transform.Level        = tempMon.Level;
-        tempMon.Transform.Item         = tempMon.Item;
-        tempMon.Transform.ItemRemoved  = tempMon.ItemRemoved;
-        tempMon.Transform.Tera         = tempMon.Tera;
-        tempMon.Transform.TeraActive   = tempMon.TeraActive;
-        tempMon.Transform.RemainingHP  = tempMon.RemainingHP;
-        tempMon.Transform.VolStatus    = tempMon.VolStatus;
+        tempMon.Transform.Level = tempMon.Level;
+        tempMon.Transform.Item = tempMon.Item;
+        tempMon.Transform.ItemRemoved = tempMon.ItemRemoved;
+        tempMon.Transform.Tera = tempMon.Tera;
+        tempMon.Transform.TeraActive = tempMon.TeraActive;
+        tempMon.Transform.RemainingHP = tempMon.RemainingHP;
+        tempMon.Transform.VolStatus = tempMon.VolStatus;
         tempMon.Transform.NonVolStatus = tempMon.NonVolStatus;
     }
 
     private void UpdateSpeeds()
     {
         int turnPos = 100;
-        Dictionary<int, List<int>> speedOrders = [];
+        Dictionary<int, List<int>> eventOrders = [];
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
         {
             int priority = DecidePriority(eventModel);
@@ -488,15 +488,100 @@ public class NextMoveModel() // Class to make next move decision
                 continue;
             }
             turnPos = priority;
-            if (!speedOrders[priority].Contains(eventModel.UserMon))
+            if (!eventOrders[priority].Contains(eventModel.UserMon))
             {
-                speedOrders[priority].Add(eventModel.UserMon);
+                eventOrders[priority].Add(eventModel.UserMon);
             }
         }
         Dictionary<int, int> speeds = [];
         foreach (int monNo in noToName.Keys)
         {
             speeds.Add(monNo, CalcStat("Spe", monNo));
+        }
+        List<int> speedOrder = [];
+        foreach (int monNo in speeds.Keys)
+        {
+            if (speedOrder.Count == 0)
+            {
+                speedOrder.Add(monNo);
+                continue;
+            }
+            for (int i = 0; i < speedOrder.Count; i++)
+            {
+                if (speeds[monNo] <= speeds[speedOrder[i]])
+                {
+                    continue;
+                }
+                speedOrder.Insert(i, monNo);
+            }
+            speedOrder.Add(monNo);
+        }
+        foreach (List<int> order in eventOrders.Values)
+        {
+            if (order.Count == 1)
+            {
+                continue;
+            }
+            for (int i = order.Count - 2; i >= 0; i--)
+            {
+                if (speedOrder.IndexOf(order[i]) > speedOrder.IndexOf(order[i + 1]))
+                {
+                    speedOrder.Remove(order[i]);
+                    speedOrder.Insert(speedOrder.IndexOf(order[i + 1]), order[i]);
+                }
+            }
+        }
+        for (int i = speedOrder.Count - 2; i >= 0; i--)
+        {
+            while (true)
+            {
+                if (speeds[speedOrder[i]] > speeds[speedOrder[i + 1]])
+                {
+                    break;
+                }
+                TeamModel tempMon = speedOrder[i] > 5 ?
+                    theGame.OppTeam[speedOrder[i] - 6] : theGame.BotTeam[speedOrder[i]];
+                TeamModel prevMon = speedOrder[i + 1] > 5 ?
+                    theGame.OppTeam[speedOrder[i + 1] - 6] : theGame.BotTeam[speedOrder[i + 1]];
+                if (tempMon.EV.Spe < 252)
+                {
+                    tempMon.EV.Spe += 4;
+                    speeds[speedOrder[i]] = CalcStat("Spe", speedOrder[i]);
+                    continue;
+                }
+                else if (prevMon.IV.Spe > 0)
+                {
+                    prevMon.IV.Spe--;
+                    speeds[speedOrder[i + 1]] = CalcStat("Spe", speedOrder[i + 1]);
+                }
+                else
+                {
+                    // Parse speed discrepancies here
+                    break;
+                }
+            }
+            for (int j = i + 1; j < speedOrder.Count - 2; j++)
+            {
+                while (true)
+                {
+                    if (speeds[speedOrder[j]] > speeds[speedOrder[j + 1]])
+                    {
+                        break;
+                    }
+                    TeamModel prevMon = speedOrder[j + 1] > 5 ?
+                        theGame.OppTeam[speedOrder[j + 1] - 6] : theGame.BotTeam[speedOrder[j + 1]];
+                    if (prevMon.IV.Spe > 0)
+                    {
+                        prevMon.IV.Spe--;
+                        speeds[speedOrder[j + 1]] = CalcStat("Spe", speedOrder[j + 1]);
+                    }
+                    else
+                    {
+                        // Parse speed discrepancies here
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -620,7 +705,7 @@ public class NextMoveModel() // Class to make next move decision
     {
 
     }
-    
+
     private int CalcStat(string stat, int monNo)
     {
         TeamModel tempMon = monNo > 5 ? theGame.OppTeam[monNo - 6] : theGame.BotTeam[monNo];
