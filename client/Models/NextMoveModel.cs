@@ -26,9 +26,9 @@ public class NextMoveModel() // Class to make next move decision
     public async Task UpdateNextMove()
     {
         ParseTurn();
-        UpdateSpeeds();
         List<CalcRespModel> damages = await CalcDamages();
         ParseCalc(damages);
+        List<int> turnOrder = UpdateSpeeds();
         damages = await CalcDamages();
         ChooseNextMove(damages);
     }
@@ -476,7 +476,43 @@ public class NextMoveModel() // Class to make next move decision
         tempMon.Transform.NonVolStatus = tempMon.NonVolStatus;
     }
 
-    private void UpdateSpeeds()
+    private void ParseNature(TeamModel teamModel)
+    {
+        if (teamModel.NatureBoost == null)
+        {
+            teamModel.Nature = "Hardy";
+            return;
+        }
+        if (teamModel.NatureDrop == null)
+        {
+            if (teamModel.NatureBoost == "Atk")
+            {
+                teamModel.NatureDrop = "SpA";   
+            }
+            else if (teamModel.NatureBoost == "SpA")
+            {
+                teamModel.NatureDrop = "Atk";   
+            }
+            else
+            {
+                return;
+            }
+        }
+        foreach (string nature in _natures.Keys)
+        {
+            if (_natures[nature].ContainsKey(teamModel.NatureBoost) &&
+                _natures[nature].ContainsKey(teamModel.NatureDrop))
+            {
+                if (_natures[nature][teamModel.NatureBoost] == 1.1)
+                {
+                    teamModel.Nature = nature;
+                    return;
+                }
+            }
+        }
+    }
+
+    private List<int> UpdateSpeeds()
     {
         int turnPos = 100;
         Dictionary<int, List<int>> eventOrders = [];
@@ -531,58 +567,92 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
         }
-        for (int i = speedOrder.Count - 2; i >= 0; i--)
+        for (int i = speedOrder.Count - 1; i >= 0; i--)
         {
+            if (speedOrder[i] < 6)
+            {
+                continue;
+            }
+            int monNo = speedOrder[i];
+            TeamModel mon = theGame.OppTeam[monNo - 6];
+            int max = i > 0 ? speeds[speedOrder[i - 1]] : 10000;
+            int min = i < speedOrder.Count - 1 ? speeds[speedOrder[i + 1]] : 0;
+            max = max < min ? min : max;
+            string? prevBoost = null;
+            string? prevDrop = null;
             while (true)
             {
-                if (speeds[speedOrder[i]] > speeds[speedOrder[i + 1]])
+                if (speeds[monNo] < min)
                 {
-                    break;
-                }
-                TeamModel tempMon = speedOrder[i] > 5 ?
-                    theGame.OppTeam[speedOrder[i] - 6] : theGame.BotTeam[speedOrder[i]];
-                TeamModel prevMon = speedOrder[i + 1] > 5 ?
-                    theGame.OppTeam[speedOrder[i + 1] - 6] : theGame.BotTeam[speedOrder[i + 1]];
-                if (tempMon.EV.Spe < 252)
-                {
-                    tempMon.EV.Spe += 4;
-                    speeds[speedOrder[i]] = CalcStat("Spe", speedOrder[i]);
-                    continue;
-                }
-                else if (prevMon.IV.Spe > 0)
-                {
-                    prevMon.IV.Spe--;
-                    speeds[speedOrder[i + 1]] = CalcStat("Spe", speedOrder[i + 1]);
-                }
-                else
-                {
-                    // Parse speed discrepancies here
-                    break;
-                }
-            }
-            for (int j = i + 1; j < speedOrder.Count - 2; j++)
-            {
-                while (true)
-                {
-                    if (speeds[speedOrder[j]] > speeds[speedOrder[j + 1]])
+                    if (mon.EV.Spe <= 248)
                     {
-                        break;
+                        mon.EV.Spe += 4;
                     }
-                    TeamModel prevMon = speedOrder[j + 1] > 5 ?
-                        theGame.OppTeam[speedOrder[j + 1] - 6] : theGame.BotTeam[speedOrder[j + 1]];
-                    if (prevMon.IV.Spe > 0)
+                    else if (mon.IV.Spe < 31)
                     {
-                        prevMon.IV.Spe--;
-                        speeds[speedOrder[j + 1]] = CalcStat("Spe", speedOrder[j + 1]);
+                        mon.IV.Spe++;
+                    }
+                    else if (mon.NatureBoost != "Spe")
+                    {
+                        prevBoost = mon.NatureBoost;
+                        if (mon.NatureDrop == "Spe")
+                        {
+                            mon.NatureDrop = null;
+                        }
+                        else
+                        {
+                            mon.NatureBoost = "Spe";
+                        }
                     }
                     else
                     {
-                        // Parse speed discrepancies here
-                        break;
+                        // Parse items/abilities etc
                     }
+                    speeds[monNo] = CalcStat("Spe", monNo);
+                    continue;
                 }
+                if (speeds[monNo] > max)
+                {
+                    if (mon.EV.Spe >= 4)
+                    {
+                        mon.EV.Spe -= 4;
+                    }
+                    else if (mon.IV.Spe > 0)
+                    {
+                        mon.IV.Spe--;
+                    }
+                    else if (mon.NatureDrop != "Spe")
+                    {
+                        prevDrop = mon.NatureDrop;
+                        if (mon.NatureBoost == "Spe")
+                        {
+                            mon.NatureBoost = null;
+                        }
+                        else
+                        {
+                            mon.NatureDrop = "Spe";
+                        }
+                    }
+                    else
+                    {
+                        // Parse items/abilities etc
+                    }
+                    speeds[monNo] = CalcStat("Spe", monNo);
+                    continue;
+                }
+                break;
             }
+            if (mon.NatureBoost == null && prevBoost != null && prevBoost != mon.NatureDrop)
+            {
+                mon.NatureBoost = prevBoost;
+            }
+            if (mon.NatureDrop == null && prevDrop != null && prevDrop != mon.NatureBoost)
+            {
+                mon.NatureDrop = prevDrop;
+            }
+            ParseNature(mon);
         }
+        return speedOrder;
     }
 
     private int DecidePriority(EventModel eventModel)
@@ -759,6 +829,14 @@ public class NextMoveModel() // Class to make next move decision
         {
             natureMod = _natures[tempMon.Nature][stat];
         }
+        else if (tempMon.NatureBoost == stat) // If exact nature hasn't been determined yet
+        {
+            natureMod = 1.1;
+        }
+        else if (tempMon.NatureDrop == stat)
+        {
+            natureMod = 0.9;
+        }
         if (baseStat == -1 || iv == -1 || ev == -1 || baseStat == null)
         {
             return -1;
@@ -830,6 +908,11 @@ public class NextMoveModel() // Class to make next move decision
             return 1.0 + 0.5 * statChange;
         }
         return 2.0 / (2 - statChange);
+    }
+
+    private void ParseSpeedDiff(TeamModel mon, int min, int max)
+    {
+
     }
 
     private readonly Dictionary<string, int> _statAdjustmentDictionary = new()
