@@ -169,21 +169,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             if (result.BotUser)
             {
-                weights[botMonToNo[result.UserMon]] += ParseDamage(result.Damage); // For damage dealt, add percentage to weighting
+                weights[botMonToNo[result.UserMon]] += result.MinDamage; // For damage dealt, add percentage to weighting
             }
             else
             {
-                weights[botMonToNo[result.TargetMon]] -= ParseDamage(result.Damage) / 2; // For damage recieved, subtract half damage from weighting
+                weights[botMonToNo[result.TargetMon]] -= result.MaxDamage / 2; // For damage recieved, subtract half damage from weighting
             }
         }
         return weights;
-    }
-
-    public static float ParseDamage(string input) // Parses damage string into percentage
-    {
-        string splitInput = input.Split(':')[1].Split('(')[1].Split(" - ")[0];
-        if (Single.TryParse(splitInput, out float damage)) return damage; // If successful return damage value
-        return 0; // Else return 0
     }
 
     public void CalcStrategy() // Looks at each pokemon's ability and moves and adds their strategic value to weightings

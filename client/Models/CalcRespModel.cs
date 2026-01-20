@@ -46,6 +46,25 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
         set
         {
             _damage = value;
+            ParseDamageRange();
+            OnPropertyChanged();
+        }
+    }
+    public float MaxDamage
+    {
+        get => _maxDamage;
+        set
+        {
+            _maxDamage = value;
+            OnPropertyChanged();
+        }
+    }
+    public float MinDamage
+    {
+        get => _minDamage;
+        set
+        {
+            _minDamage = value;
             OnPropertyChanged();
         }
     }
@@ -54,6 +73,28 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
     private string _targetMon = "";
     private int _moveNo = -1;
     private string _damage = "";
+    private float _maxDamage = 0;
+    private float _minDamage = 0;
+    private void ParseDamageRange()
+    {
+        string[] splitInput = _damage.Split(':')[1].Split('(')[1].Split("%)")[0].Split(" - ");
+        if (float.TryParse(splitInput[0], out float damage))
+        {
+            MinDamage = damage;
+        }
+        else
+        {
+            MinDamage = 0;
+        }
+        if (float.TryParse(splitInput[1], out damage))
+        {
+            MaxDamage = damage;
+        }
+        else
+        {
+            MaxDamage = 0;
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
