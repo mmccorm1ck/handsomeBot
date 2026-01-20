@@ -92,6 +92,24 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public string? NatureBoost
+    {
+        get => _natureBoost;
+        set
+        {
+            _natureBoost = value;
+            OnPropertyChanged();
+        }
+    }
+    public string? NatureDrop
+    {
+        get => _natureDrop;
+        set
+        {
+            _natureDrop = value;
+            OnPropertyChanged();
+        }
+    }
     public EVIVModel EV
     {
         get => _ev;
@@ -299,7 +317,9 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string? _megaAbility;
     private string _abilityDefault = "None";
     private bool _abilityActive = false;
-    private string _nature = "None"; // Pokemon's nature
+    private string _nature = "Hardy"; // Pokemon's nature
+    private string? _natureBoost;
+    private string? _natureDrop;
     private EVIVModel _ev = new(); // Array of pokemon's EVs
     private EVIVModel _iv = new()
     {
