@@ -16,11 +16,13 @@ public class NextMoveModel() // Class to make next move decision
     {
         theGame = game;
         allOptions = options;
+        _nameToNo = nameToNo;
         noToName = nameToNo.ToDictionary(x => x.Value, x => x.Key);
         Moves = [new(noToName), new(noToName)];
     }
     private GameModel theGame = new();
     private AllOptionsModel allOptions = new();
+    private Dictionary<string, int> _nameToNo = [];
     private Dictionary<int, string> noToName = [];
     public List<MoveModel> Moves { get; set; } = [];
     public async Task UpdateNextMove()
@@ -487,11 +489,11 @@ public class NextMoveModel() // Class to make next move decision
         {
             if (teamModel.NatureBoost == "Atk")
             {
-                teamModel.NatureDrop = "SpA";   
+                teamModel.NatureDrop = "SpA";
             }
             else if (teamModel.NatureBoost == "SpA")
             {
-                teamModel.NatureDrop = "Atk";   
+                teamModel.NatureDrop = "Atk";
             }
             else
             {
@@ -607,6 +609,7 @@ public class NextMoveModel() // Class to make next move decision
                     else
                     {
                         // Parse items/abilities etc
+                        break; // break to prevent infinite loops
                     }
                     speeds[monNo] = CalcStat("Spe", monNo);
                     continue;
@@ -636,6 +639,7 @@ public class NextMoveModel() // Class to make next move decision
                     else
                     {
                         // Parse items/abilities etc
+                        break;// break to prevent infinite loops
                     }
                     speeds[monNo] = CalcStat("Spe", monNo);
                     continue;
@@ -768,7 +772,62 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseCalc(List<CalcRespModel> damages)
     {
-
+        Dictionary<int, Dictionary<int, List<float>>> expectedDamages = [];
+        foreach (CalcRespModel damage in damages)
+        {
+            int monNo;
+            int targetMon;
+            if (damage.BotUser)
+            {
+                monNo = _nameToNo[damage.UserMon];
+                targetMon = _nameToNo["Opponent's" + damage.TargetMon];
+            }
+            else
+            {
+                monNo = _nameToNo["Opponent's " + damage.UserMon];
+                targetMon = _nameToNo[damage.TargetMon];
+            }
+            if (expectedDamages.TryGetValue(monNo, out Dictionary<int, List<float>>? value))
+            {
+                value.Add(targetMon, [damage.MinDamage, damage.MaxDamage]);
+            }
+            else
+            {
+                expectedDamages.Add(
+                    monNo, new(){{targetMon, [damage.MinDamage, damage.MaxDamage]}}
+                );
+            }
+        }
+        if (theGame.Turns.Count < 2) return;
+        foreach (EventModel eventModel in theGame.Turns[^2].EventList)
+        {
+            if (eventModel.EventType != "Move")
+            {
+                continue;
+            }
+            if (!allOptions.AllMoves.ContainsKey(eventModel.MoveName))
+            {
+                continue;
+            }
+            if (allOptions.AllMoves[eventModel.MoveName].category == "Status")
+            {
+                continue;
+            }
+            foreach (TargetModel target in eventModel.TargetMons)
+            {
+                if (target.MoveResult == "Immune" || target.MoveResult == "Miss" ||
+                    target.MoveResult == "Failed" || target.MoveResult == "")
+                {
+                    continue;
+                }
+                float maxExpected = expectedDamages[eventModel.UserMon][target.MonNo][1];
+                float minExpected = (float)Math.Floor(expectedDamages[eventModel.UserMon][target.MonNo][0]);
+                if (target.Damage >= minExpected && target.Damage <= maxExpected)
+                {
+                    continue;
+                }
+            }
+        }
     }
 
     private void ChooseNextMove(List<CalcRespModel> damages)
@@ -908,11 +967,6 @@ public class NextMoveModel() // Class to make next move decision
             return 1.0 + 0.5 * statChange;
         }
         return 2.0 / (2 - statChange);
-    }
-
-    private void ParseSpeedDiff(TeamModel mon, int min, int max)
-    {
-
     }
 
     private readonly Dictionary<string, int> _statAdjustmentDictionary = new()
