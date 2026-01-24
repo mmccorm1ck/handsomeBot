@@ -342,7 +342,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private EVIVModel _statChanges = new(); // Array of pokemon's stat changes
     private string _tera = "None"; // Pokemon's tera type
     private bool _teraActive = false;
-    private List<string> _moves = [];
+    private List<string> _moves = ["", "", "", ""];
     /*private string _move1 = "None"; // Array of pokemon's moves
     private string _move2 = "None"; // Array of pokemon's moves
     private string _move3 = "None"; // Array of pokemon's moves

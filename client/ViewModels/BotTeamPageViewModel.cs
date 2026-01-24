@@ -235,8 +235,8 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         currMove = -1;
                         break;
                 }*/
-                TheGame.BotTeam[currPokemon].Moves.Add(responses[i][idx..].TrimStart([' ', '-']));
-                if (TheGame.BotTeam[currPokemon].Moves.Count >= 4)
+                TheGame.BotTeam[currPokemon].Moves[currMove - 1] = responses[i][idx..].TrimStart([' ', '-']);
+                if (currMove >= 4)
                 {
                     currMove = -1;
                 }
