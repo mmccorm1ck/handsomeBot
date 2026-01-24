@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace HandsomeBot.Models;
 public class GameModel() : INotifyPropertyChanged // Class to hold info about a game

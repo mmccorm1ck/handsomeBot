@@ -76,10 +76,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[0].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[0].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[0].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[0].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[0].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[0].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[0].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[0].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[0].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[0].Moves[3]}"/>
             </StackPanel>
             <Image HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="10" Source="{Binding Sprites[1].Image}"/>
             <StackPanel Grid.Row="1" Grid.Column="3" Margin="0 5">
@@ -122,10 +122,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[1].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[1].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[1].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[1].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[1].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[1].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[1].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[1].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[1].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[1].Moves[3]}"/>
             </StackPanel>
             <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="10" Source="{Binding Sprites[2].Image}"/>
             <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 5">
@@ -168,10 +168,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[2].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[2].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[2].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[2].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[2].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[2].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[2].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[2].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[2].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[2].Moves[3]}"/>
             </StackPanel>
             <Image HorizontalAlignment="Center" Grid.Row="2" Grid.Column="2" Margin="10" Source="{Binding Sprites[3].Image}"/>
             <StackPanel Grid.Row="2" Grid.Column="3" Margin="0 5">
@@ -214,10 +214,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[3].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[3].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[3].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[3].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[3].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[3].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[3].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[3].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[3].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[3].Moves[3]}"/>
             </StackPanel>
             <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="10" Source="{Binding Sprites[4].Image}"/>
             <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 5">
@@ -260,10 +260,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[4].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[4].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[4].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[4].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[4].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[4].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[4].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[4].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[4].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[4].Moves[3]}"/>
             </StackPanel>
             <Image HorizontalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="10" Source="{Binding Sprites[5].Image}"/>
             <StackPanel Grid.Row="3" Grid.Column="3" Margin="0 5">
@@ -306,10 +306,10 @@
                     <TextBlock Text="{Binding TheGame.BotTeam[5].IV.Spe}"/>
                 </StackPanel>
                 <TextBlock Text="{Binding TheGame.BotTeam[5].Nature}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[5].Move1}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[5].Move2}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[5].Move3}"/>
-                <TextBlock Text="{Binding TheGame.BotTeam[5].Move4}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[5].Moves[0]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[5].Moves[1]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[5].Moves[2]}"/>
+                <TextBlock Text="{Binding TheGame.BotTeam[5].Moves[3]}"/>
             </StackPanel>
         </Grid>
     </StackPanel>

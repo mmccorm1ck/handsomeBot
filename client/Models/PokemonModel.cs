@@ -62,7 +62,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             ivs = new EVIV(inputModel.IV);
             evs = new EVIV(inputModel.EV);
             boosts = new EVIV(inputModel.StatChanges);
-            moves = ParseMoves(inputModel);
+            moves = inputModel.Moves;
         }
         public int level
         {
@@ -241,7 +241,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         private int _spe;
     }
 
-    static private List<string> ParseMoves(TeamModel inputModel) // Convert individual moves into List format
+    /*static private List<string> ParseMoves(TeamModel inputModel) // Convert individual moves into List format
     {
         List<string> moves = [];
         if (inputModel.Move1 != "None") moves.Add(inputModel.Move1);
@@ -249,7 +249,7 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         if (inputModel.Move3 != "None") moves.Add(inputModel.Move3);
         if (inputModel.Move4 != "None") moves.Add(inputModel.Move4);
         return moves;
-    }
+    }*/
 
     static private string ParseStatus(TeamModel inputModel)
     {

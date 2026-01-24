@@ -219,7 +219,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 }
                 idx = responses[i].LastIndexOf('>') + 1;
                 currMove++; // Increments to next move
-                switch (currMove)
+                /*switch (currMove)
                 {
                     case 1:
                         TheGame.BotTeam[currPokemon].Move1 = responses[i][idx..].TrimStart([' ', '-']);
@@ -234,6 +234,11 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                         TheGame.BotTeam[currPokemon].Move4 = responses[i][idx..].TrimStart([' ', '-']);
                         currMove = -1;
                         break;
+                }*/
+                TheGame.BotTeam[currPokemon].Moves.Add(responses[i][idx..].TrimStart([' ', '-']));
+                if (TheGame.BotTeam[currPokemon].Moves.Count >= 4)
+                {
+                    currMove = -1;
                 }
                 continue;
             }

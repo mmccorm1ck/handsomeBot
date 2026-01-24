@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -187,7 +186,14 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
             }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
+            foreach (string move in TheGame.BotTeam[currMon].Moves)
+            {
+                if (StratWeights.TryGetValue(move, out int value))
+                {
+                    Weights[currMon] += value * 10;
+                }
+            }
+            /*if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
             }
@@ -202,7 +208,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4))
             {
                 Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
-            }
+            }*/
         }
     }
 
