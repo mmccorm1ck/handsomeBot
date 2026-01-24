@@ -126,10 +126,11 @@ public class NextMoveModel() // Class to make next move decision
 
     private void SaveMove(EventModel eventModel)
     {
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == "None")
+        if (theGame.OppTeam[eventModel.UserMon - 6].Moves.Count < 4)
         {
-            theGame.OppTeam[eventModel.UserMon - 6].Move1 = eventModel.MoveName;
-            return;
+            theGame.OppTeam[eventModel.UserMon - 6].Moves.Add(eventModel.MoveName);
+        }
+            /*return;
         }
         if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == eventModel.MoveName)
         {
@@ -156,7 +157,7 @@ public class NextMoveModel() // Class to make next move decision
         if (theGame.OppTeam[eventModel.UserMon - 6].Move4 == "None")
         {
             theGame.OppTeam[eventModel.UserMon - 6].Move4 = eventModel.MoveName;
-        }
+        }*/
     }
 
     private void ParseAbility(EventModel eventModel)
