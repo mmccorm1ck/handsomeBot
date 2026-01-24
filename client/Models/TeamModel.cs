@@ -155,7 +155,16 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
-    public string Move1
+    public List<string> Moves
+    {
+        get => _moves;
+        set
+        {
+            _moves = value;
+            OnPropertyChanged();
+        }
+    }
+    /*public string Move1
     {
         get => _move1;
         set
@@ -190,7 +199,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             _move4 = value;
             OnPropertyChanged();
         }
-    }
+    }*/
     public string PokeImage
     {
         get => _image;
@@ -333,10 +342,11 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private EVIVModel _statChanges = new(); // Array of pokemon's stat changes
     private string _tera = "None"; // Pokemon's tera type
     private bool _teraActive = false;
-    private string _move1 = "None"; // Array of pokemon's moves
+    private List<string> _moves = [];
+    /*private string _move1 = "None"; // Array of pokemon's moves
     private string _move2 = "None"; // Array of pokemon's moves
     private string _move3 = "None"; // Array of pokemon's moves
-    private string _move4 = "None"; // Array of pokemon's moves
+    private string _move4 = "None"; // Array of pokemon's moves*/
     private string _image = "Assets/None.png"; // URI of pokemon's image
     private int _remainingHP = 100;
     private List<string> _volStatus = [];
@@ -401,10 +411,11 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
             EV = EV, // Copy EV and IV by reference for updating
             IV = IV,
             StatChanges = StatChanges.CloneStats(),
-            Move1 = Move1,
+            Moves = Moves
+            /*Move1 = Move1,
             Move2 = Move2,
             Move3 = Move3,
-            Move4 = Move4
+            Move4 = Move4*/
         };
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
