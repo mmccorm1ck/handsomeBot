@@ -8,7 +8,9 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
 {
     private Dictionary<int, string> _noToName = noToName;
     private string _moveType = "Calculating";
+    private int _userNo = -1;
     private int _targetNo = -1;
+    private TeamModel _userMon = new();
     private TeamModel _targetMon = new();
     private string _tera = "";
     private bool _mega = false;
@@ -23,6 +25,15 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
             OnPropertyChanged();
         }
     }
+    public int UserNo
+    {
+        get => _userNo;
+        set
+        {
+            _userNo = value;
+            OnPropertyChanged();
+        }
+    }
     public int TargetNo
     {
         get => _targetNo;
@@ -30,6 +41,15 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
         {
             _targetNo = value;
             Update();
+            OnPropertyChanged();
+        }
+    }
+    public TeamModel UserMon
+    {
+        get => _userMon;
+        set
+        {
+            _userMon = value;
             OnPropertyChanged();
         }
     }
@@ -85,6 +105,7 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
             TargetMon.Name = "None";
             return;
         }
+        UserMon.Name = _noToName[UserNo];
         TargetMon.Name = _noToName[TargetNo].Replace("Opponent's ", "");
     }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change

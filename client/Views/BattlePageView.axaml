@@ -267,11 +267,11 @@
                     Value="{Binding TheGame.OppTeam[5].RemainingHP}" ShowProgressText="False"/>
             </Grid>
             <Image Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[0].Image}"/>
-            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding ActiveMons[0].Name}"/>
+            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].UserMon.Name}"/>
             <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[0].Image}"/>
             <Label Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].TargetMon.Name}"/>
             <Image Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[1].Image}"/>
-            <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding ActiveMons[1].Name}"/>
+            <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].UserMon.Name}"/>
             <Image Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[1].Image}"/>
             <Label Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].TargetMon.Name}"/>
             <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>

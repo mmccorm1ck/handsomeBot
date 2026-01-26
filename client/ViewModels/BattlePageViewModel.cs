@@ -73,8 +73,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         NextMove = new(TheGame, AllOptions, NameToNo); // Initialise next move model
         for (int i = 0; i < 2; i++)
         {
-            ActiveMons[i].Name = TheGame.BotTeam[TheGame.Turns[1].BotStartMons[i]].Name;
-            ActiveMons[i].Attach(ActiveSprites[i]);
+            NextMove.Moves[i].UserMon.Attach(ActiveSprites[i]);
             NextMove.Moves[i].TargetMon.Attach(TargetSprites[i]);
         }
         Task.Run(NextMove.LoadMonData).Wait();
@@ -142,7 +141,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<TeamModel> _activeMons = [new(), new()];
+    /*private ObservableCollection<TeamModel> _activeMons = [new(), new()];
 
     public ObservableCollection<TeamModel> ActiveMons
     {
@@ -152,7 +151,7 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             _activeMons = value;
             OnPropertyChanged();
         }
-    }
+    }*/
 
     private ObservableCollection<ImageListener> _targetSprites = [new(), new()];
 
