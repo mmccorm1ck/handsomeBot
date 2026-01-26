@@ -126,9 +126,13 @@ public class NextMoveModel() // Class to make next move decision
 
     private void SaveMove(EventModel eventModel)
     {
-        if (theGame.OppTeam[eventModel.UserMon - 6].Moves.Count < 4)
+        for (int i = 0; i < 4; i++)
         {
-            theGame.OppTeam[eventModel.UserMon - 6].Moves.Add(eventModel.MoveName);
+            if (theGame.OppTeam[eventModel.UserMon - 6].Moves[i] == "")
+            {
+                theGame.OppTeam[eventModel.UserMon - 6].Moves[i] = eventModel.MoveName;
+                return;
+            }
         }
         /*return;
     }
