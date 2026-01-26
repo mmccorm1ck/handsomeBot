@@ -311,7 +311,7 @@ public class NextMoveModel() // Class to make next move decision
             return;
         }
         tempMon.StatChanges.IncrementStat(eventModel.StatChange,
-            _statAdjustmentDictionary[eventModel.StatAdjustment]);
+            _statAdjustmentDictionary[eventModel.StatAdjustment], "Stage");
     }
 
     private void ParseStatus(EventModel eventModel)

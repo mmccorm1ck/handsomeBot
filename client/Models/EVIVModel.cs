@@ -95,37 +95,54 @@ public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _eva; // Pokemon's evastion stat
     private int _crt; // Pokemon's crit chance stat
 
-    public void IncrementStat(string statName, int statChange)
+    public void IncrementStat(string statName, int statChange, string statType)
     {
+        int max;
+        int min;
+        switch (statType)
+        {
+            case "EV":
+                max = 252;
+                min = 0;
+                break;
+            case "IV":
+                max = 31;
+                min = 0;
+                break;
+            default:
+                max = 6;
+                min = -6;
+                break;
+        }
         switch (statName)
         {
             case "Atk":
-                Atk = ClampStat(Atk + statChange, -6, 6);
+                Atk = ClampStat(Atk + statChange, min, max);
                 break;
             case "Def":
-                Def = ClampStat(Def + statChange, -6, 6);
+                Def = ClampStat(Def + statChange, min, max);
                 break;
             case "SpA":
-                SpA = ClampStat(SpA + statChange, -6, 6);
+                SpA = ClampStat(SpA + statChange, min, max);
                 break;
             case "SpD":
-                SpD = ClampStat(SpD + statChange, -6, 6);
+                SpD = ClampStat(SpD + statChange, min, max);
                 break;
             case "Spe":
-                Spe = ClampStat(Spe + statChange, -6, 6);
+                Spe = ClampStat(Spe + statChange, min, max);
                 break;
             case "Acc":
-                Acc = ClampStat(Acc + statChange, -6, 6);
+                Acc = ClampStat(Acc + statChange, min, max);
                 break;
             case "Eva":
-                Eva = ClampStat(Eva + statChange, -6, 6);
+                Eva = ClampStat(Eva + statChange, min, max);
                 break;
             case "Crt":
-                Crt = ClampStat(Crt + statChange, 0, 6);
+                Crt = ClampStat(Crt + statChange, 0, max);
                 break;
         }
     }
-
+    
     public void SetStat(string statName, int statValue)
     {
         statValue = ClampStat(statValue, -6, 6);
@@ -157,6 +174,23 @@ public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a 
                 Crt = statValue;
                 break;
         }
+    }
+
+    public int GetStatFromName(string statName)
+    {
+        return statName switch
+        {
+            "HP" => HP,
+            "Atk" => Atk,
+            "Def" => Def,
+            "SpA" => SpA,
+            "SpD" => SpD,
+            "Spe" => Spe,
+            "Acc" => Acc,
+            "Eva" => Eva,
+            "Crt" => Crt,
+            _ => 0,
+        };
     }
 
     private static int ClampStat(int value, int min, int max)
