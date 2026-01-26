@@ -749,33 +749,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseCalc(List<CalcRespModel> damages)
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = [];
-        foreach (CalcRespModel damage in damages)
-        {
-            int monNo;
-            int targetMon;
-            if (damage.BotUser)
-            {
-                monNo = _nameToNo[damage.UserMon];
-                targetMon = _nameToNo["Opponent's" + damage.TargetMon];
-            }
-            else
-            {
-                monNo = _nameToNo["Opponent's " + damage.UserMon];
-                targetMon = _nameToNo[damage.TargetMon];
-            }
-
-            if (expectedDamages.TryAdd(
-                monNo, new() { { targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } } } }))
-            {
-                continue;
-            }
-            if (expectedDamages[monNo].TryAdd(targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
-            {
-                continue;
-            }
-            expectedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
-        }
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
         if (theGame.Turns.Count < 2) return;
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
         {
@@ -956,6 +930,37 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
+    private Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> FormatCalcs(List<CalcRespModel> damages)
+    {
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = [];
+        foreach (CalcRespModel damage in damages)
+        {
+            int monNo;
+            int targetMon;
+            if (damage.BotUser)
+            {
+                monNo = _nameToNo[damage.UserMon];
+                targetMon = _nameToNo["Opponent's" + damage.TargetMon];
+            }
+            else
+            {
+                monNo = _nameToNo["Opponent's " + damage.UserMon];
+                targetMon = _nameToNo[damage.TargetMon];
+            }
+
+            if (expectedDamages.TryAdd(
+                monNo, new() { { targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } } } }))
+            {
+                continue;
+            }
+            if (expectedDamages[monNo].TryAdd(targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
+            {
+                continue;
+            }
+            expectedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
+        }
+        return expectedDamages;
+    }
     private void ChooseNextMove(List<CalcRespModel> damages)
     {
 
