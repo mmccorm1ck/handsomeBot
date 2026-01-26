@@ -242,16 +242,6 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         private int _spe;
     }
 
-    /*static private List<string> ParseMoves(TeamModel inputModel) // Convert individual moves into List format
-    {
-        List<string> moves = [];
-        if (inputModel.Move1 != "None") moves.Add(inputModel.Move1);
-        if (inputModel.Move2 != "None") moves.Add(inputModel.Move2);
-        if (inputModel.Move3 != "None") moves.Add(inputModel.Move3);
-        if (inputModel.Move4 != "None") moves.Add(inputModel.Move4);
-        return moves;
-    }*/
-
     static private string ParseStatus(TeamModel inputModel)
     {
         return inputModel.NonVolStatus switch

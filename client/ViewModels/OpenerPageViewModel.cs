@@ -193,22 +193,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
                     Weights[currMon] += value * 10;
                 }
             }
-            /*if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move1))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move1] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move2))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move2] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move3))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move3] * 10;
-            }
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Move4))
-            {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Move4] * 10;
-            }*/
         }
     }
 

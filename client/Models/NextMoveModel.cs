@@ -134,34 +134,6 @@ public class NextMoveModel() // Class to make next move decision
                 return;
             }
         }
-        /*return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == eventModel.MoveName)
-    {
-        return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == "None")
-    {
-        theGame.OppTeam[eventModel.UserMon - 6].Move2 = eventModel.MoveName;
-        return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == eventModel.MoveName)
-    {
-        return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == "None")
-    {
-        theGame.OppTeam[eventModel.UserMon - 6].Move3 = eventModel.MoveName;
-        return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == eventModel.MoveName)
-    {
-        return;
-    }
-    if (theGame.OppTeam[eventModel.UserMon - 6].Move4 == "None")
-    {
-        theGame.OppTeam[eventModel.UserMon - 6].Move4 = eventModel.MoveName;
-    }*/
     }
 
     private void ParseAbility(EventModel eventModel)
