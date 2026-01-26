@@ -130,34 +130,34 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.OppTeam[eventModel.UserMon - 6].Moves.Add(eventModel.MoveName);
         }
-            /*return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == eventModel.MoveName)
-        {
-            return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == "None")
-        {
-            theGame.OppTeam[eventModel.UserMon - 6].Move2 = eventModel.MoveName;
-            return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == eventModel.MoveName)
-        {
-            return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == "None")
-        {
-            theGame.OppTeam[eventModel.UserMon - 6].Move3 = eventModel.MoveName;
-            return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == eventModel.MoveName)
-        {
-            return;
-        }
-        if (theGame.OppTeam[eventModel.UserMon - 6].Move4 == "None")
-        {
-            theGame.OppTeam[eventModel.UserMon - 6].Move4 = eventModel.MoveName;
-        }*/
+        /*return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move1 == eventModel.MoveName)
+    {
+        return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == "None")
+    {
+        theGame.OppTeam[eventModel.UserMon - 6].Move2 = eventModel.MoveName;
+        return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move2 == eventModel.MoveName)
+    {
+        return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == "None")
+    {
+        theGame.OppTeam[eventModel.UserMon - 6].Move3 = eventModel.MoveName;
+        return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move3 == eventModel.MoveName)
+    {
+        return;
+    }
+    if (theGame.OppTeam[eventModel.UserMon - 6].Move4 == "None")
+    {
+        theGame.OppTeam[eventModel.UserMon - 6].Move4 = eventModel.MoveName;
+    }*/
     }
 
     private void ParseAbility(EventModel eventModel)
@@ -773,7 +773,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseCalc(List<CalcRespModel> damages)
     {
-        Dictionary<int, Dictionary<int, List<float>>> expectedDamages = [];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = [];
         foreach (CalcRespModel damage in damages)
         {
             int monNo;
@@ -788,16 +788,17 @@ public class NextMoveModel() // Class to make next move decision
                 monNo = _nameToNo["Opponent's " + damage.UserMon];
                 targetMon = _nameToNo[damage.TargetMon];
             }
-            if (expectedDamages.TryGetValue(monNo, out Dictionary<int, List<float>>? value))
+
+            if (expectedDamages.TryAdd(
+                monNo, new() { { targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } } } }))
             {
-                value.Add(targetMon, [damage.MinDamage, damage.MaxDamage]);
+                continue;
             }
-            else
+            if (expectedDamages[monNo].TryAdd(targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
             {
-                expectedDamages.Add(
-                    monNo, new(){{targetMon, [damage.MinDamage, damage.MaxDamage]}}
-                );
+                continue;
             }
+            expectedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
         }
         if (theGame.Turns.Count < 2) return;
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
@@ -814,19 +815,167 @@ public class NextMoveModel() // Class to make next move decision
             {
                 continue;
             }
+            string atkCategory = allOptions.AllMoves[eventModel.MoveName].category == "Physical" ? "Atk" : "SpA";
+            string defCategory = atkCategory == "Atk" ? "Def" :
+                _SpaDefMoves.Contains(eventModel.MoveName) ? "Def" : "SpD";
+            TeamModel userMon = eventModel.UserMon > 5 ?
+                theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
             foreach (TargetModel target in eventModel.TargetMons)
             {
+                if ((eventModel.UserMon < 6 && target.MonNo < 6) || (eventModel.UserMon > 5 && target.MonNo > 5))
+                {
+                    continue;
+                }
                 if (target.MoveResult == "Immune" || target.MoveResult == "Miss" ||
                     target.MoveResult == "Failed" || target.MoveResult == "")
                 {
                     continue;
                 }
-                float maxExpected = expectedDamages[eventModel.UserMon][target.MonNo][1];
-                float minExpected = (float)Math.Floor(expectedDamages[eventModel.UserMon][target.MonNo][0]);
+                if (target.Damage == null)
+                {
+                    continue;
+                }
+                if (_categoryChangingMoves.Contains(eventModel.MoveName))
+                {
+                    continue; // will implement this properly down the line
+                }
+                float maxExpected =
+                    expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)][1];
+                float minExpected = (float)Math.Floor(
+                    expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)][0]);
                 if (target.Damage >= minExpected && target.Damage <= maxExpected)
                 {
                     continue;
                 }
+                TeamModel targetMon = target.MonNo > 5 ?
+                    theGame.OppTeam[target.MonNo - 6] : userMon;
+                float mult = (float)(target.Damage < minExpected ?
+                    minExpected / target.Damage : maxExpected / target.Damage);
+                string statName;
+                int monNoToChange;
+                if (eventModel.UserMon < 6)
+                {
+                    statName = defCategory;
+                    mult = 1 / mult;
+                    monNoToChange = target.MonNo;
+                }
+                else
+                {
+                    statName = atkCategory;
+                    monNoToChange = eventModel.UserMon;
+                }
+                int targetStat = (int)Math.Floor(CalcStat(statName, monNoToChange) * mult);
+                if (mult > 1)
+                {
+                    targetStat++;
+                }
+                string? prevBoost = null;
+                string? prevDrop = null;
+
+                while (true)
+                {
+                    int calcedStat = CalcStat(statName, monNoToChange);
+                    if (calcedStat > targetStat)
+                    {
+                        if (mult > 1)
+                        {
+                            break;
+                        }
+                        if (targetMon.EV.GetStatFromName(statName) <= 248)
+                        {
+                            targetMon.EV.IncrementStat(statName, 4, "EV");
+                            continue;
+                        }
+                        if (targetMon.IV.GetStatFromName(statName) <= 30)
+                        {
+                            targetMon.IV.IncrementStat(statName, 1, "IV");
+                            continue;
+                        }
+                        if (!statName.Contains('A')) // If not an attacking stat
+                        {
+                            if (targetMon.EV.HP <= 248)
+                            {
+                                targetMon.EV.HP += 4;
+                                continue;
+                            }
+                            if (targetMon.IV.HP < 31)
+                            {
+                                targetMon.IV.HP ++;
+                                continue;
+                            }
+                        }
+                        if (targetMon.NatureBoost != statName)
+                        {
+                            prevBoost = targetMon.NatureBoost;
+                            if (targetMon.NatureDrop == statName)
+                            {
+                                targetMon.NatureDrop = null;
+                            }
+                            else
+                            {
+                                targetMon.NatureBoost = statName;
+                            }
+                            continue;
+                        }
+                        // Account for abilities/items here
+                        break;
+                    }
+                    if (calcedStat < targetStat)
+                    {
+                        if (mult < 1)
+                        {
+                            break;
+                        }
+                        if (targetMon.EV.GetStatFromName(statName) >= 4)
+                        {
+                            targetMon.EV.IncrementStat(statName, -4, "EV");
+                            continue;
+                        }
+                        if (targetMon.IV.GetStatFromName(statName) > 0)
+                        {
+                            targetMon.IV.IncrementStat(statName, -1, "IV");
+                            continue;
+                        }
+                        if (!statName.Contains('A')) // If not an attacking stat
+                        {
+                            if (targetMon.EV.HP >= 4)
+                            {
+                                targetMon.EV.HP -= 4;
+                                continue;
+                            }
+                            if (targetMon.IV.HP > 0)
+                            {
+                                targetMon.IV.HP --;
+                                continue;
+                            }
+                        }
+                        if (targetMon.NatureDrop != statName)
+                        {
+                            prevDrop = targetMon.NatureDrop;
+                            if (targetMon.NatureBoost == statName)
+                            {
+                                targetMon.NatureBoost = null;
+                            }
+                            else
+                            {
+                                targetMon.NatureDrop = statName;
+                            }
+                            continue;
+                        }
+                        // Account for abilities/items here
+                        break;
+                    }
+                    break;
+                }
+                if (targetMon.NatureBoost == null && prevBoost != null && prevBoost != targetMon.NatureDrop)
+                {
+                    targetMon.NatureBoost = prevBoost;
+                }
+                if (targetMon.NatureDrop == null && prevDrop != null && prevDrop != targetMon.NatureBoost)
+                {
+                    targetMon.NatureDrop = prevDrop;
+                }
+                ParseNature(targetMon);
             }
         }
     }
@@ -1067,6 +1216,17 @@ public class NextMoveModel() // Class to make next move decision
         "Swallow",
         "Synthesis",
         "Wish"
+    ];
+    private readonly List<string> _categoryChangingMoves = [
+        "Photon Geyser",
+        "Shell Side Arm",
+        "Tera Blast",
+        "Tera Starstorm"
+    ];
+    private readonly List<string> _SpaDefMoves = [
+        "Psyshock",
+        "Psystrike",
+        "Secret Sword"
     ];
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {

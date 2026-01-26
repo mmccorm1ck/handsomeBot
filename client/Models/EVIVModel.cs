@@ -116,6 +116,9 @@ public class EVIVModel() : INotifyPropertyChanged // Class to hold info about a 
         }
         switch (statName)
         {
+            case "HP":
+                Atk = ClampStat(HP + statChange, min, max);
+                break;
             case "Atk":
                 Atk = ClampStat(Atk + statChange, min, max);
                 break;
