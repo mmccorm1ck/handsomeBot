@@ -136,8 +136,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public Dictionary<string, int> StratWeights = new(); // Contains strategic value of moves & abilities for deciding on an opener
-
     public async Task<float[]> CalcDamages() // Calculates damage portion of weightings
     {
         float[] weights = new float[6]; // Empty weights array
@@ -182,15 +180,15 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         for (int currMon = 0; currMon < 6; currMon++)
         {
-            if (StratWeights.ContainsKey(TheGame.BotTeam[currMon].Ability))
+            if (AllOptions.StratWeights.TryGetValue(TheGame.BotTeam[currMon].Ability, out int abltyValue))
             {
-                Weights[currMon] += StratWeights[TheGame.BotTeam[currMon].Ability] * 10;
+                Weights[currMon] += abltyValue * 10;
             }
             foreach (string move in TheGame.BotTeam[currMon].Moves)
             {
-                if (StratWeights.TryGetValue(move, out int value))
+                if (AllOptions.StratWeights.TryGetValue(move, out int mvValue))
                 {
-                    Weights[currMon] += value * 10;
+                    Weights[currMon] += mvValue * 10;
                 }
             }
         }
