@@ -172,6 +172,7 @@ public class NextMoveModel() // Class to make next move decision
             if (eventModel.EventType == "Z-Move")
             {
                 theGame.OppTeam[eventModel.UserMon = 6].Item = "Normalium Z"; // Placeholder before determining correct crystal
+                theGame.GimmickUsed[1] = true;
             }
             else
             {
@@ -189,6 +190,10 @@ public class NextMoveModel() // Class to make next move decision
             else
             {
                 theGame.BotTeam[eventModel.UserMon].ItemRemoved = true;
+                if (eventModel.EventType == "Z-Move")
+                {
+                    theGame.GimmickUsed[0] = true;
+                }
             }
         }
     }
@@ -216,18 +221,31 @@ public class NextMoveModel() // Class to make next move decision
         tempMon.BaseForme = tempMon.Name;
         tempMon.Name = eventModel.FormeName;
 
-        if (eventModel.EventType == "Dynamax")
+        if (eventModel.EventType.Contains("amax"))
         {
             tempMon.TurnDynamaxed = theGame.Turns[^2].TurnNo;
+            if (eventModel.UserMon < 6)
+            {
+                theGame.GimmickUsed[0] = true;
+            }
+            else
+            {
+                theGame.GimmickUsed[1] = true;
+                if (eventModel.EventType == "Gigantamax")
+                {
+                    tempMon.GMax = true;
+                }
+            }
         }
-        if (eventModel.EventType == "Gigantamax")
+        if (eventModel.EventType == "Mega Evolution")
         {
-            tempMon.TurnDynamaxed = theGame.Turns[^2].TurnNo;
-            tempMon.GMax = true;
-        }
-        if (eventModel.EventType == "Mega Evolution" && eventModel.UserMon > 5)
-        {
+            if (eventModel.UserMon < 6)
+            {
+                theGame.GimmickUsed[0] = true;
+                return;
+            }
             tempMon.Item = "Abomasite"; // Place holder for correct mega stone
+            theGame.GimmickUsed[1] = true;
             if (!_monData.Keys.Contains(tempMon.Name))
             {
                 return;
@@ -328,7 +346,13 @@ public class NextMoveModel() // Class to make next move decision
         if (eventModel.EventType == "Terastallize")
         {
             tempMon.TeraActive = true;
-            if (eventModel.UserMon > 5 && tempMon.Tera == "None")
+            if (eventModel.UserMon < 6)
+            {
+                theGame.GimmickUsed[0] = true;
+                return;
+            }
+            theGame.GimmickUsed[1] = true;
+            if (tempMon.Tera == "None")
             {
                 tempMon.Tera = eventModel.TypeChange;
             }

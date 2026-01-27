@@ -24,6 +24,7 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
             TheGame.BotTeam[i].Position = "Reserve";
             TheGame.OppTeam[i].Position = "Reserve";
         }
+        TheGame.GimmickUsed = [false, false];
         TheGame.Turns = [ // Create empty entry for opening turn
             new()
             {

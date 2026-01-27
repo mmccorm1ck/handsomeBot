@@ -139,6 +139,15 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             OnPropertyChanged();
         }
     }
+    public List<bool> GimmickUsed
+    {
+        get => _gimmickUsed;
+        set
+        {
+            _gimmickUsed = value;
+            OnPropertyChanged();
+        }
+    }
     private string _serverUrl = "";
     private string _format = "";
     private string _gameType = "Singles";
@@ -166,6 +175,7 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
     private ObservableCollection<TurnModel> _turns = [];
     private bool _zoroPresent = false;
     private GimmickList _gimmicks = new();
+    private List<bool> _gimmickUsed = [false, false];
     public class GimmickList
     {
         public bool Megas
