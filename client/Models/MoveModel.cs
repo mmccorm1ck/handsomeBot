@@ -12,7 +12,7 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
     private int _targetNo = -1;
     private TeamModel _userMon = new();
     private TeamModel _targetMon = new();
-    private string _tera = "";
+    private bool _tera = false;
     private bool _mega = false;
     private bool _dynamax = false;
     private bool _zMove = false;
@@ -62,7 +62,7 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
             OnPropertyChanged();
         }
     }
-    public string Tera
+    public bool Tera
     {
         get => _tera;
         set
