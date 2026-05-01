@@ -1307,6 +1307,24 @@ public class NextMoveModel() // Class to make next move decision
         "Psystrike",
         "Secret Sword"
     ];
+    private readonly List<string> _protectionMoves = [
+        "Baneful Bunker",
+        "Burning Bulwark",
+        "Detect",
+        "King's Shield",
+        "Max Guard",
+        "Obstruct",
+        "Protect",
+        "Silk Trap",
+        "Spiky Shield"
+    ];
+    private readonly List<string> _protectionBreakingMoves = [
+        "Feint",
+        "Hyperspace Fury",
+        "Hyperspace Hole",
+        "Phantom Force",
+        "Shadow Force"
+    ];
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
         {"Hardy",   new()},
