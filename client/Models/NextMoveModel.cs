@@ -28,10 +28,11 @@ public class NextMoveModel() // Class to make next move decision
     public List<MoveModel> Moves { get; set; } = [];
     public async Task UpdateNextMove()
     {
+        bool trickRoomActive = theGame.CurrentArena.TrickRoom;
         ParseTurn();
         List<CalcRespModel> damages = await CalcDamages();
         ParseCalc(damages);
-        List<int> turnOrder = UpdateSpeeds();
+        List<int> turnOrder = UpdateSpeeds(trickRoomActive);
         damages = await CalcDamages();
         ChooseNextMove(damages, turnOrder);
     }
@@ -517,7 +518,7 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
-    private List<int> UpdateSpeeds()
+    private List<int> UpdateSpeeds(bool trickRoomActive)
     {
         int turnPos = 100;
         Dictionary<int, List<int>> eventOrders = [];
@@ -532,6 +533,13 @@ public class NextMoveModel() // Class to make next move decision
             if (!eventOrders[priority].Contains(eventModel.UserMon))
             {
                 eventOrders[priority].Add(eventModel.UserMon);
+            }
+        }
+        if (trickRoomActive)
+        {
+            foreach (int priority in eventOrders.Keys)
+            {
+                eventOrders[priority].Reverse();
             }
         }
         Dictionary<int, int> speeds = [];
@@ -1050,6 +1058,10 @@ public class NextMoveModel() // Class to make next move decision
         }
         Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
         ChooseSwitch(expectedDamages);
+        if (theGame.CurrentArena.TrickRoom)
+        {
+            speedOrder.Reverse();
+        }
     }
 
     private int CalcStat(string stat, int monNo)
