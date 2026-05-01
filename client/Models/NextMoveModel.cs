@@ -884,7 +884,7 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             if (targetMon.IV.HP < 31)
                             {
-                                targetMon.IV.HP ++;
+                                targetMon.IV.HP++;
                                 continue;
                             }
                         }
@@ -929,7 +929,7 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             if (targetMon.IV.HP > 0)
                             {
-                                targetMon.IV.HP --;
+                                targetMon.IV.HP--;
                                 continue;
                             }
                         }
@@ -1061,6 +1061,47 @@ public class NextMoveModel() // Class to make next move decision
         if (theGame.CurrentArena.TrickRoom)
         {
             speedOrder.Reverse();
+        }
+
+        List<BestDamages> bestDamages = [];
+        for (int i = 0; i < 2; i++)
+        {
+            int mon = theGame.Turns[^1].BotStartMons[i];
+            for (int j = 0; j < 2; j++)
+            {
+                int opp = theGame.Turns[^1].OppStartMons[j];
+                bestDamages.Add(new(mon, opp));
+            }
+        }
+        foreach (BestDamages matchup in bestDamages)
+        {
+            if (matchup.MonNo == -1 || matchup.Target == -1)
+            {
+                continue;
+            }
+            foreach (int move in expectedDamages[matchup.MonNo][matchup.Target].Keys)
+            {
+                if (theGame.BotTeam[matchup.MonNo].Moves[move] == "Fake Out")
+                {
+                    continue;
+                }
+                if (matchup.OKOChance && matchup.OutspeedTarget)
+                {
+                    continue;
+                }
+                if (expectedDamages[matchup.MonNo][matchup.Target][move][0] > matchup.MinDamage)
+                {
+                    matchup.MinDamage = expectedDamages[matchup.MonNo][matchup.Target][move][0];
+                    matchup.OKOChance = expectedDamages[matchup.MonNo][matchup.Target][move][1] >= theGame.OppTeam[matchup.Target].RemainingHP;
+                    matchup.TKOGuaranteed = matchup.MinDamage >= 50;
+                    matchup.MoveName = theGame.BotTeam[matchup.MonNo].Moves[move];
+                    matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
+                }
+            }
+            if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
+            {
+                matchup.OutspeedTarget = true;
+            }
         }
     }
 
@@ -1369,5 +1410,15 @@ public class NextMoveModel() // Class to make next move decision
             public int sp { get; set; }
             public int? sl { get; set; }
         }
+    }
+    public class BestDamages(int user, int target)
+    {
+        public int MonNo { get; set; } = user;
+        public int Target { get; set; } = target;
+        public string MoveName { get; set; } = "";
+        public float MinDamage { get; set; } = 0;
+        public bool OKOChance { get; set; } = false;
+        public bool TKOGuaranteed { get; set; } = false;
+        public bool OutspeedTarget { get; set; } = false;
     }
 }
