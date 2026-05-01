@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using DynamicData;
 
 namespace HandsomeBot.Models;
 
@@ -32,7 +33,7 @@ public class NextMoveModel() // Class to make next move decision
         ParseCalc(damages);
         List<int> turnOrder = UpdateSpeeds();
         damages = await CalcDamages();
-        ChooseNextMove(damages);
+        ChooseNextMove(damages, turnOrder);
     }
     private void ParseTurn()
     {
@@ -402,6 +403,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.BotTeam[eventModel.UserMon].RemainingHP = 0;
             theGame.BotTeam[eventModel.UserMon].Position = "KO";
+            theGame.Turns[^1].BotStartMons.Replace(eventModel.UserMon, -1);
         }
         else
         {
@@ -985,9 +987,69 @@ public class NextMoveModel() // Class to make next move decision
         }
         return expectedDamages;
     }
-    private void ChooseNextMove(List<CalcRespModel> damages)
-    {
 
+    private void ChooseSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
+    {
+        if (!theGame.BotTeam.Any(x => x.Position == "Reserve"))
+        {
+            return;
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            if (theGame.Turns[^1].BotStartMons[i] != -1)
+            {
+                continue;
+            }
+            int switchMon = -1;
+            float minDamage = 10000;
+            foreach (TeamModel tempMon in theGame.BotTeam)
+            {
+                if (tempMon.Position != "Reserve")
+                {
+                    continue;
+                }
+                int monNo = _nameToNo[tempMon.Name];
+                float maxDamage = 0;
+                foreach (int targetmon in theGame.Turns[^1].OppStartMons)
+                {
+                    if (targetmon == -1)
+                    {
+                        continue;
+                    }
+                    float maxMonDamage = 0;
+                    foreach (List<float> move in expectedDamages[targetmon][monNo].Values)
+                    {
+                        maxMonDamage = maxMonDamage < move[0] ? move[0] : maxMonDamage;
+                    }
+                    maxDamage += maxMonDamage;
+                }
+                if (maxDamage < minDamage)
+                {
+                    minDamage = maxDamage;
+                    switchMon = monNo;
+                }
+            }
+            if (switchMon == -1)
+            {
+                continue;
+            }
+            theGame.Turns[^1].BotStartMons[i] = switchMon;
+        }
+    }
+
+    private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
+    {
+        foreach (MoveModel move in Moves)
+        {
+            move.MoveType = "Calculating...";
+            move.TargetNo = -1;
+            move.Mega = false;
+            move.Dynamax = false;
+            move.ZMove = false;
+            move.Tera = false;
+        }
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
+        ChooseSwitch(expectedDamages);
     }
 
     private int CalcStat(string stat, int monNo)
