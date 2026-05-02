@@ -1149,7 +1149,7 @@ public class NextMoveModel() // Class to make next move decision
             }
         }
 
-        if (BotCanFakeOut.Contains(true) && theGame.CurrentArena.Terrain != "Psychic Terrain")
+        if (BotCanFakeOut.Contains(true))
         {
             if (!BotCanFakeOut.Contains(false))
             {
@@ -1164,24 +1164,18 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 TeamModel targetMon = theGame.OppTeam[target - 6];
-                if (expectedDamages[fakeOutUser][target - 6][theGame.BotTeam[BotCanFakeOut.IndexOf(true)].Moves.IndexOf("Fake Out")][1] == 0)
-                {
-                    continue;   
-                }
-                if (targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
-                    (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute"))
-                {
-                    continue;
-                }
-                if (targetMon.Tera == "Ghost" && !theGame.GimmickUsed[1])
-                {
-                    continue;
-                }
-                if (theGame.OppTeam[theGame.Turns[^1].OppStartMons.Find(x => x != target)].Ability == "Queenly Magesty")
+                if (_monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
+                    (targetMon.Tera == "Ghost" && ( targetMon.TeraActive || !theGame.GimmickUsed[1])) ||
+                    targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
+                    (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
+                    theGame.OppTeam[theGame.Turns[^1].OppStartMons.Find(x => x != target)].Ability == "Queenly Magesty" ||
+                    (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
+                    (theGame.CurrentArena.Terrain == "Psychic Terrain" && !((_monData[targetMon.Name].types.Contains("Flying") && !(targetMon.NonVolStatus.Contains("Grounded") ||
+                    (targetMon.Item == "Iron Ball") && !targetMon.ItemRemoved)) || (targetMon.Item == "Air Balloon" && !targetMon.ItemRemoved) || targetMon.Ability == "Levitate")))
+                    // Probably more things to consider in here
                 {
                     continue;
                 }
-                // Probably more things to consider in here
                 fakeOutMove.MoveType = "Fake Out";
                 fakeOutMove.UserNo = fakeOutUser;
                 fakeOutMove.TargetNo = target;
