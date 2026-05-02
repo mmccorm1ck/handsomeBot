@@ -1103,6 +1103,131 @@ public class NextMoveModel() // Class to make next move decision
                 matchup.OutspeedTarget = true;
             }
         }
+        bestDamages.Sort(delegate(BestDamages a, BestDamages b)
+        {
+            return (int)(b.MinDamage - a.MinDamage - (a.OutspeedTarget ? 100 : 0) + (b.OutspeedTarget ? 100 : 0));
+        });
+
+        List<bool> BotCanFakeOut = [false, false];
+        List<bool> OppCanFakeOut = [false, false];
+        for (int i = 0; i < 2; i++)
+        {
+            if (theGame.Turns[^1].BotStartMons[i] == -1)
+            {
+                continue;
+            }
+            if (theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]].Moves.Contains("Fake Out"))
+            {
+                if (theGame.Turns.Count <= 2)
+                {
+                    BotCanFakeOut[i] = true;
+                    continue;
+                }
+                if (!theGame.Turns[^2].BotStartMons.Contains(theGame.Turns[^1].BotStartMons[i]))
+                {
+                    BotCanFakeOut[i] = true;
+                }
+            }
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            if (theGame.Turns[^1].OppStartMons[i] == -1)
+            {
+                continue;
+            }
+            if (theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].Moves.Contains("Fake Out"))
+            {
+                if (theGame.Turns.Count <= 2)
+                {
+                    OppCanFakeOut[i] = true;
+                    continue;
+                }
+                if (!theGame.Turns[^2].OppStartMons.Contains(theGame.Turns[^1].OppStartMons[i]))
+                {
+                    OppCanFakeOut[i] = true;
+                }
+            }
+        }
+
+        if (BotCanFakeOut.Contains(true) && theGame.CurrentArena.Terrain != "Psychic Terrain")
+        {
+            if (!BotCanFakeOut.Contains(false))
+            {
+                BotCanFakeOut[theGame.Turns[^1].BotStartMons.IndexOf(bestDamages[0].MonNo)] = false;
+            }
+            int fakeOutUser = theGame.Turns[^1].BotStartMons[BotCanFakeOut.IndexOf(true)];
+            MoveModel fakeOutMove = Moves[BotCanFakeOut.IndexOf(true)];
+            foreach (int target in speedOrder)
+            {
+                if (target < 6)
+                {
+                    continue;
+                }
+                TeamModel targetMon = theGame.OppTeam[target - 6];
+                if (expectedDamages[fakeOutUser][target - 6][theGame.BotTeam[BotCanFakeOut.IndexOf(true)].Moves.IndexOf("Fake Out")][1] == 0)
+                {
+                    continue;   
+                }
+                if (targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
+                    (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute"))
+                {
+                    continue;
+                }
+                if (targetMon.Tera == "Ghost" && !theGame.GimmickUsed[1])
+                {
+                    continue;
+                }
+                if (theGame.OppTeam[theGame.Turns[^1].OppStartMons.Find(x => x != target)].Ability == "Queenly Magesty")
+                {
+                    continue;
+                }
+                // Probably more things to consider in here
+                fakeOutMove.MoveType = "Fake Out";
+                fakeOutMove.UserNo = fakeOutUser;
+                fakeOutMove.TargetNo = target;
+            }
+        }
+
+        List<BestDamages> bestDamagesOpp = [];
+        for (int i = 0; i < 2; i++)
+        {
+            int mon = theGame.Turns[^1].OppStartMons[i];
+            for (int j = 0; j < 2; j++)
+            {
+                int opp = theGame.Turns[^1].BotStartMons[j];
+                bestDamagesOpp.Add(new(mon, opp));
+            }
+        }
+        foreach (BestDamages matchup in bestDamagesOpp)
+        {
+            if (matchup.MonNo == -1 || matchup.Target == -1)
+            {
+                continue;
+            }
+            foreach (int move in expectedDamages[matchup.MonNo][matchup.Target].Keys)
+            {
+                if (theGame.OppTeam[matchup.MonNo].Moves[move] == "Fake Out" || theGame.OppTeam[matchup.MonNo].Moves[move] == "")
+                {
+                    continue;
+                }
+                if (matchup.OKOChance && matchup.OutspeedTarget)
+                {
+                    continue;
+                }
+                if (expectedDamages[matchup.MonNo][matchup.Target][move][0] > matchup.MinDamage)
+                {
+                    matchup.MinDamage = expectedDamages[matchup.MonNo][matchup.Target][move][0];
+                    matchup.OKOChance = expectedDamages[matchup.MonNo][matchup.Target][move][1] >= theGame.BotTeam[matchup.Target].RemainingHP;
+                    matchup.TKOGuaranteed = matchup.MinDamage >= 50;
+                    matchup.MoveName = theGame.OppTeam[matchup.MonNo].Moves[move];
+                    matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
+                }
+            }
+            if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
+            {
+                matchup.OutspeedTarget = true;
+            }
+        }
     }
 
     private int CalcStat(string stat, int monNo)
