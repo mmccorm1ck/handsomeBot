@@ -1045,6 +1045,34 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
+    private bool ImmuneToFakeOut(int target, TeamModel targetMon) // Probably more things to consider in here
+    {
+        bool queenlyMajesty = false;
+        if (target < 6)
+        {
+            int partnerMon = theGame.Turns[^1].BotStartMons.Find(x => x != target);
+            if (partnerMon != -1)
+            {    
+                queenlyMajesty = theGame.BotTeam[partnerMon].Ability == "Queenly Magesty";
+            }
+        }
+        else
+        {
+            int partnerMon = theGame.Turns[^1].OppStartMons.Find(x => x != target - 6);
+            if (partnerMon != -1)
+            {    
+                queenlyMajesty = theGame.OppTeam[partnerMon].Ability == "Queenly Magesty";
+            }
+        }
+        return queenlyMajesty || _monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
+            (targetMon.Tera == "Ghost" && ( targetMon.TeraActive || !theGame.GimmickUsed[target/6])) ||
+            targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
+            (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
+            (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
+            (theGame.CurrentArena.Terrain == "Psychic Terrain" && !((_monData[targetMon.Name].types.Contains("Flying") && !(targetMon.NonVolStatus.Contains("Grounded") ||
+            (targetMon.Item == "Iron Ball") && !targetMon.ItemRemoved)) || (targetMon.Item == "Air Balloon" && !targetMon.ItemRemoved) || targetMon.Ability == "Levitate"));
+    }
+
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
     {
         foreach (MoveModel move in Moves)
@@ -1164,15 +1192,7 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 TeamModel targetMon = theGame.OppTeam[target - 6];
-                if (_monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
-                    (targetMon.Tera == "Ghost" && ( targetMon.TeraActive || !theGame.GimmickUsed[1])) ||
-                    targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
-                    (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
-                    theGame.OppTeam[theGame.Turns[^1].OppStartMons.Find(x => x != target)].Ability == "Queenly Magesty" ||
-                    (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
-                    (theGame.CurrentArena.Terrain == "Psychic Terrain" && !((_monData[targetMon.Name].types.Contains("Flying") && !(targetMon.NonVolStatus.Contains("Grounded") ||
-                    (targetMon.Item == "Iron Ball") && !targetMon.ItemRemoved)) || (targetMon.Item == "Air Balloon" && !targetMon.ItemRemoved) || targetMon.Ability == "Levitate")))
-                    // Probably more things to consider in here
+                if (ImmuneToFakeOut(target, targetMon))
                 {
                     continue;
                 }
