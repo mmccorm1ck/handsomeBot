@@ -1327,6 +1327,7 @@ public class NextMoveModel() // Class to make next move decision
                     move.UserNo = monNo;
                     move.TargetNo = switchMon;
                     move.MoveType = "Switch";
+                    theGame.BotTeam[switchMon].Position = "Switching";
                     continue;
                 }
             }
