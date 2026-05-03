@@ -372,6 +372,8 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.Turns[^2].OppEndMons[theGame.Turns[^2].OppEndMons.IndexOf(eventModel.UserMon - 6)] =
                 eventModel.TargetMons[0].MonNo - 6;
+            theGame.OppTeam[eventModel.UserMon - 6].Position = "Reserve";
+            theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6].Position = "Active";
             if (!theGame.MonsSeen.Contains(eventModel.TargetMons[0].MonNo - 6))
             {
                 theGame.MonsSeen.Add(eventModel.TargetMons[0].MonNo - 6);
@@ -384,6 +386,8 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.Turns[^2].BotEndMons[theGame.Turns[^2].BotEndMons.IndexOf(eventModel.UserMon)] =
                 eventModel.TargetMons[0].MonNo;
+            theGame.BotTeam[eventModel.UserMon].Position = "Reserve";
+            theGame.BotTeam[eventModel.TargetMons[0].MonNo].Position = "Active";
             theGame.BotTeam[eventModel.UserMon].Transform = null;
             theGame.BotTeam[eventModel.UserMon].AbilityActive = false;
         }
@@ -999,7 +1003,7 @@ public class NextMoveModel() // Class to make next move decision
         return expectedDamages;
     }
 
-    private void ChooseSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
+    private void ChooseKOSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
     {
         if (!theGame.BotTeam.Any(x => x.Position == "Reserve"))
         {
@@ -1011,41 +1015,47 @@ public class NextMoveModel() // Class to make next move decision
             {
                 continue;
             }
-            int switchMon = -1;
-            float minDamage = 10000;
-            foreach (TeamModel tempMon in theGame.BotTeam)
-            {
-                if (tempMon.Position != "Reserve")
-                {
-                    continue;
-                }
-                int monNo = _nameToNo[tempMon.Name];
-                float maxDamage = 0;
-                foreach (int targetmon in theGame.Turns[^1].OppStartMons)
-                {
-                    if (targetmon == -1)
-                    {
-                        continue;
-                    }
-                    float maxMonDamage = 0;
-                    foreach (List<float> move in expectedDamages[targetmon][monNo].Values)
-                    {
-                        maxMonDamage = maxMonDamage < move[0] ? move[0] : maxMonDamage;
-                    }
-                    maxDamage += maxMonDamage;
-                }
-                if (maxDamage < minDamage)
-                {
-                    minDamage = maxDamage;
-                    switchMon = monNo;
-                }
-            }
+            int switchMon = ChooseSwitch(expectedDamages, 10000);
             if (switchMon == -1)
             {
                 continue;
             }
             theGame.Turns[^1].BotStartMons[i] = switchMon;
+            theGame.BotTeam[switchMon].Position = "Switching";
         }
+    }
+
+    private int ChooseSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages, float damageToBeat)
+    {
+        int switchMon = -1;
+        foreach (TeamModel tempMon in theGame.BotTeam)
+        {
+            if (tempMon.Position != "Reserve")
+            {
+                continue;
+            }
+            int monNo = _nameToNo[tempMon.Name];
+            float maxDamage = 0;
+            foreach (int targetmon in theGame.Turns[^1].OppStartMons)
+            {
+                if (targetmon == -1)
+                {
+                    continue;
+                }
+                float maxMonDamage = 0;
+                foreach (List<float> move in expectedDamages[targetmon][monNo].Values)
+                {
+                    maxMonDamage = maxMonDamage < move[0] ? move[0] : maxMonDamage;
+                }
+                maxDamage += maxMonDamage;
+            }
+            if (maxDamage < damageToBeat)
+            {
+                damageToBeat = maxDamage;
+                switchMon = monNo;
+            }
+        }
+        return switchMon;
     }
 
     private bool ImmuneToFakeOut(int target, TeamModel targetMon) // Probably more things to consider in here
@@ -1093,7 +1103,7 @@ public class NextMoveModel() // Class to make next move decision
             move.Tera = false;
         }
         Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
-        ChooseSwitch(expectedDamages);
+        ChooseKOSwitch(expectedDamages);
         if (theGame.CurrentArena.TrickRoom)
         {
             speedOrder.Reverse();
