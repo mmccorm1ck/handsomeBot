@@ -1331,7 +1331,91 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
             }
+
+            if (providingOffensvePressure[monNo])
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    MoveInfoModel moveInfo = allOptions.AllMoves[theGame.BotTeam[monNo].Moves[i]];
+                    if (moveInfo.target == "AllAdjacentFoes" || moveInfo.target == "AllAdjacent" || moveInfo.priotity > 0)
+                    {
+                        int target = -1;
+                        foreach (int key in expectedDamages[monNo].Keys)
+                        {
+                            if (!theGame.Turns[^1].OppStartMons.Contains(key))
+                            {
+                                continue;
+                            }
+                            if (expectedDamages[monNo][key][i][0] >= theGame.OppTeam[key - 6].RemainingHP)
+                            {
+                                target = key;
+                            }
+                        }
+                        if (target != -1)
+                        {
+                            move.UserNo = monNo;
+                            move.TargetNo = target;
+                            move.MoveType = theGame.BotTeam[monNo].Moves[i];
+                            break;
+                        }
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                foreach (BestDamages matchup in bestDamagesOpp)
+                {
+                    if (speedOrder.IndexOf(monNo) > speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
+                        theGame.BotTeam[monNo].Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
+                    {
+                        int moveNo = -1;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            string moveName = theGame.BotTeam[monNo].Moves[i];
+                            if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && expectedDamages[monNo][matchup.MonNo][i][0] > 0)
+                            {
+                                moveNo = i;
+                                break;
+                            }
+                        }
+                        if (moveNo != -1)
+                        {
+                            move.UserNo = monNo;
+                            move.TargetNo = matchup.MonNo;
+                            move.MoveType = theGame.BotTeam[monNo].Moves[moveNo];
+                            break;
+                        }
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                
+                BestDamages? currBest = null;
+                foreach (BestDamages matchup in bestDamages)
+                {
+                    if (currBest == null)
+                    {
+                        currBest = matchup;
+                        continue;
+                    }
+                    if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage))
+                    {
+                        currBest = matchup;
+                    }
+                }
+                if (currBest != null)
+                {
+                    move.UserNo = monNo;
+                    move.TargetNo = currBest.Target;
+                    move.MoveType = currBest.MoveName;
+                    continue;
+                }
+            }
         }
+
         foreach (TeamModel mon in theGame.BotTeam)
         {
             if (mon.Position == "Switching")
