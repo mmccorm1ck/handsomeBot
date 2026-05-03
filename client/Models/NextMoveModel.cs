@@ -1355,7 +1355,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             move.UserNo = monNo;
                             move.TargetNo = target;
-                            move.MoveType = theGame.BotTeam[monNo].Moves[i];
+                            move.MoveType = user.Moves[i];
                             break;
                         }
                     }
@@ -1367,12 +1367,12 @@ public class NextMoveModel() // Class to make next move decision
                 foreach (BestDamages matchup in bestDamagesOpp)
                 {
                     if (speedOrder.IndexOf(monNo) > speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
-                        theGame.BotTeam[monNo].Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
+                        user.Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
                     {
                         int moveNo = -1;
                         for (int i = 0; i < 4; i++)
                         {
-                            string moveName = theGame.BotTeam[monNo].Moves[i];
+                            string moveName = user.Moves[i];
                             if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && expectedDamages[monNo][matchup.MonNo][i][0] > 0)
                             {
                                 moveNo = i;
@@ -1383,7 +1383,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             move.UserNo = monNo;
                             move.TargetNo = matchup.MonNo;
-                            move.MoveType = theGame.BotTeam[monNo].Moves[moveNo];
+                            move.MoveType = user.Moves[moveNo];
                             break;
                         }
                     }
@@ -1413,6 +1413,33 @@ public class NextMoveModel() // Class to make next move decision
                     move.MoveType = currBest.MoveName;
                     continue;
                 }
+            }
+
+            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
+            {
+                move.UserNo = monNo;
+                move.TargetNo = monNo;
+                move.MoveType = "Tailwind";        
+                continue;
+            }
+            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
+            {
+                move.UserNo = monNo;
+                move.TargetNo = monNo;
+                move.MoveType = "Trick Room";        
+                continue;
+            }
+
+
+
+
+
+            BestDamages? bestOption = bestDamages.Find(x => x.MonNo == monNo);
+            if (bestOption != null)
+            {
+                move.UserNo = monNo;
+                move.TargetNo = bestOption.Target;
+                move.MoveType = bestOption.MoveName;        
             }
         }
 
