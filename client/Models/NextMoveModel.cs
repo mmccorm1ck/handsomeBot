@@ -1307,7 +1307,35 @@ public class NextMoveModel() // Class to make next move decision
                     string? moveName = user.Moves.Find(_protectionMoves.Contains);
                     moveName ??= "Protect";
                     move.MoveType = moveName;
+                    continue;
                 }
+            }
+
+            if (underOffensvePressure[monNo])
+            {
+                float damageToBeat = 0;
+                foreach (BestDamages matchup in bestDamagesOpp)
+                {
+                    if (matchup.Target == monNo && matchup.OutspeedTarget)
+                    {
+                        damageToBeat += matchup.MinDamage;
+                    }
+                }
+                int switchMon = ChooseSwitch(expectedDamages, damageToBeat);
+                if (switchMon != -1)
+                {
+                    move.UserNo = monNo;
+                    move.TargetNo = switchMon;
+                    move.MoveType = "Switch";
+                    continue;
+                }
+            }
+        }
+        foreach (TeamModel mon in theGame.BotTeam)
+        {
+            if (mon.Position == "Switching")
+            {
+                mon.Position = "Reserve";
             }
         }
     }
