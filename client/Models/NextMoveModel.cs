@@ -1286,9 +1286,11 @@ public class NextMoveModel() // Class to make next move decision
             }
             TeamModel user = theGame.BotTeam[monNo];
             int allyMon = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
-            if (OppCanFakeOut.Contains(true) && user.Moves.Any(_protectionMoves.Contains))
+            if (user.Moves.Any(_protectionMoves.Contains))
             {
-                if (!ImmuneToFakeOut(monNo, user) && !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] && Moves.Find(x => x.MoveType != "Calculating...") == null && underOffensvePressure[monNo] && !protectionBreakingMove)
+                if (((OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user)) || underOffensvePressure[monNo]) &&
+                    !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] &&
+                    Moves.Find(x => x.MoveType != "Calculating...") == null && !protectionBreakingMove)
                 {
                     move.UserNo = monNo;
                     move.TargetNo = monNo;
