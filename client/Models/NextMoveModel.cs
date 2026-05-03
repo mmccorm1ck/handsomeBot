@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Security;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using DynamicData;
@@ -1073,6 +1076,11 @@ public class NextMoveModel() // Class to make next move decision
             (targetMon.Item == "Iron Ball") && !targetMon.ItemRemoved)) || (targetMon.Item == "Air Balloon" && !targetMon.ItemRemoved) || targetMon.Ability == "Levitate"));
     }
 
+    private bool ProtectedLastTurn(int user)
+    {
+        return theGame.Turns[^2].EventList.Find(x => x.UserMon == user && _protectionMoves.Contains(x.MoveName)) != null;
+    }
+
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
     {
         foreach (MoveModel move in Moves)
@@ -1240,6 +1248,54 @@ public class NextMoveModel() // Class to make next move decision
             if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
             {
                 matchup.OutspeedTarget = true;
+            }
+        }
+        
+        Dictionary<int, bool> providingOffensvePressure = [];
+        foreach (BestDamages matchup in bestDamages)
+        {
+            if (!providingOffensvePressure.TryAdd(matchup.MonNo, matchup.TKOGuaranteed))
+            {
+                providingOffensvePressure[matchup.MonNo] = providingOffensvePressure[matchup.MonNo] || matchup.TKOGuaranteed;
+            }
+        }
+
+        Dictionary<int, bool> underOffensvePressure = [];
+        foreach (BestDamages matchup in bestDamagesOpp)
+        {
+            if (!underOffensvePressure.TryAdd(matchup.Target, matchup.TKOGuaranteed))
+            {
+                underOffensvePressure[matchup.Target] = underOffensvePressure[matchup.Target] || matchup.TKOGuaranteed;
+            }
+        }
+
+        bool protectionBreakingMove = theGame.Turns[^1].OppStartMons.Any(x => theGame.OppTeam[x].Moves.Any(_protectionBreakingMoves.Contains));
+
+        // Also need to calculate support pressures
+        
+        foreach (int monNo in speedOrder)
+        {
+            if (!theGame.Turns[^1].BotStartMons.Contains(monNo))
+            {
+                continue;
+            }
+            MoveModel move = Moves[theGame.Turns[^1].BotStartMons.IndexOf(monNo)];
+            if (move.MoveType != "Calculating...")
+            {
+                continue;
+            }
+            TeamModel user = theGame.BotTeam[monNo];
+            int allyMon = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
+            if (OppCanFakeOut.Contains(true) && user.Moves.Any(_protectionMoves.Contains))
+            {
+                if (!ImmuneToFakeOut(monNo, user) && !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] && Moves.Find(x => x.MoveType != "Calculating...") == null && underOffensvePressure[monNo] && !protectionBreakingMove)
+                {
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    string? moveName = user.Moves.Find(_protectionMoves.Contains);
+                    moveName ??= "Protect";
+                    move.MoveType = moveName;
+                }
             }
         }
     }

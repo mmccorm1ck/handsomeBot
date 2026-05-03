@@ -7,7 +7,7 @@ namespace HandsomeBot.Models;
 public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChanged // Class to hold info about next recommended move
 {
     private Dictionary<int, string> _noToName = noToName;
-    private string _moveType = "Calculating";
+    private string _moveType = "Calculating...";
     private int _userNo = -1;
     private int _targetNo = -1;
     private TeamModel _userMon = new();
