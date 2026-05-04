@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Avalonia;
 using DynamicData;
 
 namespace HandsomeBot.Models;
@@ -1466,7 +1467,147 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-
+            if (user.Moves.Any(_statusCausingMoves.ContainsKey))
+            {
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statusCausingMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (_statusCausingMoves[moveName] != "Sleep")
+                    {
+                        continue;   
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (Moves.Any(x => x.TargetNo == targetNo && _statusCausingMoves.ContainsKey(x.MoveType)))
+                        {
+                            continue;
+                        }
+                        if (target.NonVolStatus != "")
+                        {
+                            continue;
+                        }
+                        if (((theGame.CurrentArena.Terrain == "Electric Terrain" || theGame.CurrentArena.Terrain == "Misty Terrain") && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard ||
+                            target.Ability == "Insomnia" || target.Ability == "Vital Spirit" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
+                            target.Ability == "Early Bird" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
+                            theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" || (theGame.OppTeam[x - 6].VolStatus.Contains("Making an Uproar") && (target.Ability != "Soundproof" || theGame.Gen > 4)) : false) ||
+                            ((moveName == "Grass Whistle" || moveName == "Sing") && target.Ability == "Soundproof") || target.VolStatus.Contains("Substitute") ||
+                            ((moveName == "Sleep Powder" || moveName == "Spore") && ((_monData[target.Name].types.Contains("Grass") && target.TypeChange == "" && !target.TeraActive) ||
+                            target.TypeChange == "Grass" || (target.Tera == "Grass" && target.TeraActive) || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" !&& target.ItemRemoved))))
+                        {
+                            continue;
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statusCausingMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (_statusCausingMoves[moveName] != "Burn")
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (Moves.Any(x => x.TargetNo == targetNo && _statusCausingMoves.ContainsKey(x.MoveType)))
+                        {
+                            continue;
+                        }
+                        if (target.NonVolStatus != "" || (_monData[target.Name].types.Contains("Fire") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Fire" || (target.Tera == "Fire" && target.TeraActive))
+                        {
+                            continue;
+                        }
+                        if (CalcStat("Atk", targetNo) < CalcStat("SpA", targetNo))
+                        {
+                            continue;
+                        }
+                        if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
+                            target.Ability == "Flash Fire" || target.Ability == "Water Veil" || target.Ability == "Water Bubble" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
+                            target.Ability == "Thermal Exchange" || target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")))
+                        {
+                            continue;
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statusCausingMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (_statusCausingMoves[moveName] != "Para")
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (Moves.Any(x => x.TargetNo == targetNo && _statusCausingMoves.ContainsKey(x.MoveType)))
+                        {
+                            continue;
+                        }
+                        if (target.NonVolStatus != "" || (_monData[target.Name].types.Contains("Electric") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Electric" || (target.Tera == "Electric" && target.TeraActive) ||
+                            (allOptions.AllMoves[moveName].type == "Electric" && ((_monData[target.Name].types.Contains("Ground") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Ground" || (target.Tera == "Ground" && target.TeraActive))))
+                        {
+                            continue;
+                        }
+                        int targetSpe = CalcStat("Spe", targetNo);
+                        if (targetSpe < CalcStat("Spe", monNo))
+                        {
+                            continue;
+                        }
+                        int ally = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
+                        if (ally != -1)
+                        {
+                            if (targetSpe < CalcStat("Spe", ally))
+                            {
+                                continue;
+                            }   
+                        }
+                        if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
+                            target.Ability == "Limber" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
+                            target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
+                            (moveName == "Stun Spore" && ((_monData[target.Name].types.Contains("Grass") && target.TypeChange == "" && !target.TeraActive) ||
+                            target.TypeChange == "Grass" || (target.Tera == "Grass" && target.TeraActive) || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" !&& target.ItemRemoved))))
+                        {
+                            continue;
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+            }
 
             BestDamages? bestOption = bestDamages.Find(x => x.MonNo == monNo);
             if (bestOption != null)
