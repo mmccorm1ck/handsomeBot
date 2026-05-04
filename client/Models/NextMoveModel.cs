@@ -1671,7 +1671,8 @@ public class NextMoveModel() // Class to make next move decision
         "Rainbow",
         "Reflect",
         "Light Screen",
-        "Aurora Veil"
+        "Aurora Veil",
+        "Safeguard"
     ];
     private readonly Dictionary<string, int> _priorities = new()
     {

@@ -360,6 +360,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Reflect",
         "Light Screen",
         "Aurora Veil",
+        "Safeguard",
         "Stealth Rock",
         "Spikes (1)",
         "Spikes (2)",

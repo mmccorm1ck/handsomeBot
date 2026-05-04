@@ -122,6 +122,15 @@ public class ArenaSideModel() : INotifyPropertyChanged // Class to store arena s
             OnPropertyChanged();
         }
     }
+    public bool Safeguard
+    {
+        get => _safeguard;
+        set
+        {
+            _safeguard = value;
+            OnPropertyChanged();
+        }
+    }
     public bool Protected
     {
         get => _protected;
@@ -225,6 +234,7 @@ public class ArenaSideModel() : INotifyPropertyChanged // Class to store arena s
     private bool _sr = false;
     private bool _reflect = false;
     private bool _lightScreen = false;
+    private bool _safeguard = false;
     private bool _protected = false;
     private bool _seeded = false;
     private bool _foresight = false;
