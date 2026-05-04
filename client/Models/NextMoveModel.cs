@@ -1433,7 +1433,33 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-
+            if (user.Moves.Any(_screenMoves.Contains))
+            {
+                List<string> screenMoves = user.Moves.FindAll(_screenMoves.Contains);
+                foreach (string moveName in screenMoves)
+                {
+                    if (moveName == "Aurora Veil" && !(theGame.CurrentArena.Weather == "Snow" || theGame.CurrentArena.Weather == "Hail"))
+                    {
+                        continue;
+                    }
+                    if (_physicalScreenMoves.Contains(moveName) && (theGame.CurrentArena.BotSide.Reflect || theGame.CurrentArena.BotSide.AuroraVeil || Moves.Any(x => _physicalScreenMoves.Contains(x.MoveType))))
+                    {
+                        continue;
+                    }
+                    if (_specialScreenMoves.Contains(moveName) && (theGame.CurrentArena.BotSide.LightScreen || theGame.CurrentArena.BotSide.AuroraVeil || Moves.Any(x => _specialScreenMoves.Contains(x.MoveType))))
+                    {
+                        continue;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+            }
 
 
 
@@ -1722,6 +1748,16 @@ public class NextMoveModel() // Class to make next move decision
         "Glitzy Glow",
         "Light Screen",
         "Reflect"
+    ];
+    private readonly List<string> _physicalScreenMoves = [
+        "Aurora Veil",
+        "Baddy Bad",
+        "Reflect"
+    ];
+    private readonly List<string> _specialScreenMoves = [
+        "Aurora Veil",
+        "Glitzy Glow",
+        "Light Screen"  
     ];
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
