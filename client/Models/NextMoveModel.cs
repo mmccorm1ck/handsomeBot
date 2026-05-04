@@ -1716,6 +1716,13 @@ public class NextMoveModel() // Class to make next move decision
         "Phantom Force",
         "Shadow Force"
     ];
+    private readonly List<string> _screenMoves = [
+        "Aurora Veil",
+        "Baddy Bad",
+        "Glitzy Glow",
+        "Light Screen",
+        "Reflect"
+    ];
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
         {"Hardy",   new()},
