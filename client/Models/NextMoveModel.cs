@@ -1415,19 +1415,22 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
+            if (!Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
             {
-                move.UserNo = monNo;
-                move.TargetNo = monNo;
-                move.MoveType = "Tailwind";        
-                continue;
-            }
-            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
-            {
-                move.UserNo = monNo;
-                move.TargetNo = monNo;
-                move.MoveType = "Trick Room";        
-                continue;
+                if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
+                {
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = "Tailwind";
+                    continue;
+                }
+                if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
+                {
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = "Trick Room";
+                    continue;
+                }
             }
 
 
