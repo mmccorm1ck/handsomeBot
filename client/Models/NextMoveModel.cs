@@ -1765,6 +1765,23 @@ public class NextMoveModel() // Class to make next move decision
         "Glitzy Glow",
         "Light Screen"  
     ];
+    private readonly Dictionary<string, string> _statusCausingMoves = new()
+    {
+        {"Buzzy Buzz", "Para"},
+        {"Dark Void", "Sleep"},
+        {"Glare", "Para"},
+        {"Grass Whistle", "Sleep"},
+        {"Hypnosis", "Sleep"},
+        {"Lovely Kiss", "Sleep"},
+        {"Nuzzle", "Para"},
+        {"Sing", "Sleep"},
+        {"Sleep Powder", "Sleep"},
+        {"Spore", "Sleep"},
+        {"Stun Spore", "Para"},
+        {"Thunder Wave", "Para"},
+        {"Will-O-Wisp", "Burn"},
+        {"Yawn", "Sleep"}
+    };
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
         {"Hardy",   new()},
