@@ -1082,13 +1082,18 @@ public class NextMoveModel() // Class to make next move decision
             targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
             (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
             (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
-            (theGame.CurrentArena.Terrain == "Psychic Terrain" && !((_monData[targetMon.Name].types.Contains("Flying") && !(targetMon.NonVolStatus.Contains("Grounded") ||
-            (targetMon.Item == "Iron Ball") && !targetMon.ItemRemoved)) || (targetMon.Item == "Air Balloon" && !targetMon.ItemRemoved) || targetMon.Ability == "Levitate"));
+            (theGame.CurrentArena.Terrain == "Psychic Terrain" && Grounded(targetMon));
     }
 
     private bool ProtectedLastTurn(int user)
     {
         return theGame.Turns[^2].EventList.Find(x => x.UserMon == user && _protectionMoves.Contains(x.MoveName)) != null;
+    }
+
+    private bool Grounded(TeamModel mon)
+    {
+        return !(_monData[mon.Name].types.Contains("Flying") || mon.Ability == "Levitate" || (mon.Item == "Air Balloon" && !mon.ItemRemoved)) ||
+            (mon.Item == "Iron Ball" && !mon.ItemRemoved) || mon.VolStatus.Contains("Grounded") || theGame.CurrentArena.Gravity;
     }
 
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
