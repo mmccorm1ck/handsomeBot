@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Avalonia;
 using DynamicData;
+using Microsoft.VisualBasic.FileIO;
 
 namespace HandsomeBot.Models;
 
@@ -1975,7 +1976,81 @@ public class NextMoveModel() // Class to make next move decision
         {"Toxic Thread", ["Spe"]},
         {"Triple Arrows", ["Def", "SpD"]},
         {"Trop Kick", ["Atk"]},
-        {"Venom Drench", ["Atk", "SpA", "Spe"]},
+        {"Venom Drench", ["Atk", "SpA", "Spe"]}
+    };
+    private readonly Dictionary<string, List<string>> _statRaisingMovesSelf = new()
+    {
+        {"Acid Armor", ["Def"]},
+        {"Agility", ["Spe"]},
+        {"Amnesia", ["SpD"]},
+        {"Aqua Step", ["Spe"]},
+        {"Aura Wheel", ["Spe"]},
+        {"Autotomize", ["Spe"]},
+        {"Barrier", ["Def"]},
+        {"Belly Drum", ["Atk"]},
+        {"Bulk Up", ["Atk", "Def"]},
+        {"Calm Mind", ["SpA"]},
+        {"Charge", ["SpD"]},
+        {"Clangorous Soul", ["Atk", "Def", "SpA", "SpD", "Spe"]},
+        {"Coil", ["Atk", "Def"]},
+        {"Cosmic Power", ["Def", "SpD"]},
+        {"Cotton Guard", ["Def"]},
+        {"Curse", ["Atk", "Def"]},
+        {"Defend Order", ["Def", "SpD"]},
+        {"Defence Curl", ["Def"]},
+        {"Dragon Dance", ["Atk", "Spe"]},
+        {"Esper Wing", ["Spe"]},
+        {"Fillet Away", ["Atk", "SpA", "Spe"]},
+        {"Flame Charge", ["Spe"]},
+        {"Flower Shield", ["Def", "SpD"]},
+        {"Gear Up", ["Atk", "SpA"]},
+        {"Geomancy", ["SpA", "SpD", "Spe"]},
+        {"Growth", ["Atk", "SpA"]},
+        {"Harden", ["Def"]},
+        {"Hone Claws", ["Atk"]},
+        {"Howl", ["Atk"]},
+        {"Iron Defence", ["Def"]},
+        {"Magnetic Flux", ["Def", "SpD"]},
+        {"Meditate", ["Atk"]},
+        {"Meteor Beam", ["SpA"]},
+        {"Nasty Plot", ["SpA"]},
+        {"No Retreat", ["Atk", "Def", "SpA", "SpD", "Spe"]},
+        {"Order Up", ["Atk", "Def", "Spe"]},
+        {"Power-Up Punch", ["Atk"]},
+        {"Psyshield Bash", ["Def"]},
+        {"Rapid Spin", ["Spe"]},
+        {"Rock Polish", ["Spe"]},
+        {"Rototiller", ["Atk", "SpA"]},
+        {"Scale Shot", ["Spe"]},
+        {"Sharpen", ["Atk"]},
+        {"Shell Smash", ["Atk", "SpA", "Spe"]},
+        {"Shelter", ["Def"]},
+        {"Shift Gear", ["Atk", "Spe"]},
+        {"Skull Bash", ["Def"]},
+        {"Stockpile", ["Def", "SpD"]},
+        {"Stuff Cheeks", ["Def"]},
+        {"Swords Dance", ["Atk"]},
+        {"Tail Glow", ["SpA"]},
+        {"Tidy Up", ["Atk", "Spe"]},
+        {"Torch Song", ["SpA"]},
+        {"Trailblaze", ["Spe"]},
+        {"Quiver Dance", ["SpA", "SpD", "Spe"]},
+        {"Victory Dance", ["Atk", "Def", "Spe"]},
+        {"Withdraw", ["Def"]},
+        {"Work Up", ["Atk", "SpA"]}
+    };
+    private readonly Dictionary<string, List<string>> _statRaisingMovesAlly = new()
+    {
+        {"Aromatic Mist", ["SpD"]},
+        {"Coaching", ["Atk", "Def"]},
+        {"Decorate", ["Atk", "SpA"]},
+        {"Flatter", ["SpA"]},
+        {"Flower Shield", ["Def", "SpD"]},
+        {"Gear Up", ["Atk", "SpA"]},
+        {"Magnetic Flux", ["Def", "SpD"]},
+        {"Rototiller", ["Atk", "SpA"]},
+        {"Spicy Extract", ["Atk"]},
+        {"Swagger", ["Atk"]}
     };
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
