@@ -286,6 +286,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Bide",
         "Recharging",
         "Charging Turn",
+        "Electrify",
         "Semi-invulnerable Turn",
         "Flinch",
         "Bracing",

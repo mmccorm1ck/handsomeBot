@@ -1062,13 +1062,15 @@ public class NextMoveModel() // Class to make next move decision
 
     private bool ImmuneToFakeOut(int target, TeamModel targetMon) // Probably more things to consider in here
     {
-        bool queenlyMajesty = false;
         if (target < 6)
         {
             int partnerMon = theGame.Turns[^1].BotStartMons.Find(x => x != target);
             if (partnerMon != -1)
             {    
-                queenlyMajesty = theGame.BotTeam[partnerMon].Ability == "Queenly Magesty";
+                if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty")
+                {
+                    return true;
+                }
             }
         }
         else
@@ -1076,15 +1078,155 @@ public class NextMoveModel() // Class to make next move decision
             int partnerMon = theGame.Turns[^1].OppStartMons.Find(x => x != target - 6);
             if (partnerMon != -1)
             {    
-                queenlyMajesty = theGame.OppTeam[partnerMon].Ability == "Queenly Magesty";
+                if (theGame.OppTeam[partnerMon].Ability == "Queenly Magesty")
+                {
+                    return true;
+                }
             }
         }
-        return queenlyMajesty || _monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
+        return _monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
             (targetMon.Tera == "Ghost" && ( targetMon.TeraActive || !theGame.GimmickUsed[target/6])) ||
             targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
             (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
             (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
             (theGame.CurrentArena.Terrain == "Psychic Terrain" && Grounded(targetMon));
+    }
+
+    private bool HasType(TeamModel mon, string type)
+    {
+        if (!mon.TeraActive && _monData[mon.Name].types.Contains(type) && mon.TypeChange == "")
+        {
+            return true;
+        }
+        if (!mon.TeraActive && mon.TypeChange == type)
+        {
+            return true;
+        }
+        if (mon.Tera == type && mon.TeraActive)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool ImmuneToMove(string moveName, TeamModel target, TeamModel user)
+    {
+        MoveInfoModel move = allOptions.AllMoves[moveName];
+        string? moveType = move.type;
+        if (user.VolStatus.Contains("Electrify"))
+        {
+            moveType = "Electric";
+        }
+        if (move.isSound != null && (user.VolStatus.Contains("Throat Chop") || target.Ability == "Soundproof"))
+        {
+            return true;
+        }
+        if (move.isBullet != null && target.Ability == "Bulletproof")
+        {
+            return true;
+        }
+        if (move.isWind != null && target.Ability == "Wind Rider")
+        {
+            return true;
+        }
+        switch (user.Ability)
+        {
+            case "Normalize":
+                moveType = "Normal";
+                break;
+            case "Aerilate":
+                moveType = moveType == "Normal" ? "Flying" : moveType;
+                break;
+            case "Dragonize":
+                moveType = moveType == "Normal" ? "Dragon" : moveType;
+                break;
+            case "Galvanize":
+                moveType = moveType == "Normal" ? "Electric" : moveType;
+                break;
+            case "Pixilate":
+                moveType = moveType == "Normal" ? "Fairy" : moveType;
+                break;
+            case "Refrigerate":
+                moveType = moveType == "Normal" ? "Ice" : moveType;
+                break;
+            case "Liquid Voice":
+                moveType = move.isSound != null ? "Water" : moveType;
+                break;
+        }
+        switch (moveType)
+        {
+            case "Dragon":
+                if (move.category != null && HasType(target, "Fairy"))
+                {
+                    return true;
+                }
+                break;
+            case "Electric":
+                if (((move.category != null || moveName == "Thunder Wave") && HasType(target, "Ground")) || target.Ability == "Volt Absorb" || (target.Ability == "Lightning Rod" && theGame.Gen > 4) || target.Ability == "Motor Drive")
+                {
+                    return true;
+                }
+                break;
+            case "Fighting":
+                if (move.category != null && HasType(target, "Ghost") && !(user.Ability == "Scrappy" || user.Ability == "Mind's Eye") && !target.VolStatus.Contains("Identified"))
+                {
+                    return true;
+                }
+                break;
+            case "Fire":
+                if (target.Ability == "Flash Fire" || (theGame.CurrentArena.Weather == "Heavy Rain" && move.category != null))
+                {
+                    return true;
+                }
+                break;
+            case "Ghost":
+                if (move.category != null && HasType(target, "Normal"))
+                {
+                    return true;
+                }
+                break;
+            case "Grass":
+                if (target.Ability == "Sap Sipper")
+                {
+                    return true;
+                }
+                break;
+            case "Ground":
+                if (move.category != null && !Grounded(target))
+                {
+                    return true;
+                }
+                break;
+            case "Normal": // Need to acount for ion deluge and plasma fists
+                if (HasType(target, "Ghost"))
+                {
+                    return true;
+                }
+                break;
+            case "Poison":
+                if (HasType(target, "Steel"))
+                {
+                    return true;
+                }
+                break;
+            case "Psychic":
+                if (HasType(target, "Dark") && !target.VolStatus.Contains("Identified"))
+                {
+                    return true;
+                }
+                break;
+            case "Water":
+                if (target.Ability == "Dry Skin" || target.Ability == "Storm Drain" || (move.category != null && theGame.CurrentArena.Weather == "Extremely Harsh Sunlight"))
+                {
+                    return true;
+                }
+                break;
+        }
+        if (_powderMoves.Contains(moveName) && (HasType(target, "Grass") || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" && !target.ItemRemoved)))
+        {
+            return true;
+        }
+        return false;
     }
 
     private bool ProtectedLastTurn(int user)
@@ -1094,7 +1236,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private bool Grounded(TeamModel mon)
     {
-        return !(_monData[mon.Name].types.Contains("Flying") || mon.Ability == "Levitate" || (mon.Item == "Air Balloon" && !mon.ItemRemoved)) ||
+        return !(_monData[mon.Name].types.Contains("Flying") || mon.Ability == "Levitate" || mon.VolStatus.Contains("Magnetic Levitation") || mon.VolStatus.Contains("Telekinesis") || (mon.Item == "Air Balloon" && !mon.ItemRemoved)) ||
             (mon.Item == "Iron Ball" && !mon.ItemRemoved) || mon.VolStatus.Contains("Grounded") || theGame.CurrentArena.Gravity;
     }
 
@@ -1422,22 +1564,19 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-            if (!Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
+            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
             {
-                if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
-                {
-                    move.UserNo = monNo;
-                    move.TargetNo = monNo;
-                    move.MoveType = "Tailwind";
-                    continue;
-                }
-                if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
-                {
-                    move.UserNo = monNo;
-                    move.TargetNo = monNo;
-                    move.MoveType = "Trick Room";
-                    continue;
-                }
+                move.UserNo = monNo;
+                move.TargetNo = monNo;
+                move.MoveType = "Tailwind";
+                continue;
+            }
+            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
+            {
+                move.UserNo = monNo;
+                move.TargetNo = monNo;
+                move.MoveType = "Trick Room";
+                continue;
             }
 
             if (user.Moves.Any(_screenMoves.Contains))
@@ -1496,9 +1635,7 @@ public class NextMoveModel() // Class to make next move decision
                             target.Ability == "Insomnia" || target.Ability == "Vital Spirit" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
                             target.Ability == "Early Bird" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
                             theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" || (theGame.OppTeam[x - 6].VolStatus.Contains("Making an Uproar") && (target.Ability != "Soundproof" || theGame.Gen > 4)) : false) ||
-                            ((moveName == "Grass Whistle" || moveName == "Sing") && target.Ability == "Soundproof") || target.VolStatus.Contains("Substitute") ||
-                            ((moveName == "Sleep Powder" || moveName == "Spore") && ((_monData[target.Name].types.Contains("Grass") && target.TypeChange == "" && !target.TeraActive) ||
-                            target.TypeChange == "Grass" || (target.Tera == "Grass" && target.TeraActive) || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" !&& target.ItemRemoved))))
+                            target.VolStatus.Contains("Substitute") || ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
@@ -1539,8 +1676,9 @@ public class NextMoveModel() // Class to make next move decision
                             continue;
                         }
                         if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
-                            target.Ability == "Flash Fire" || target.Ability == "Water Veil" || target.Ability == "Water Bubble" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
-                            target.Ability == "Thermal Exchange" || target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")))
+                            target.Ability == "Water Veil" || target.Ability == "Water Bubble" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
+                            target.Ability == "Thermal Exchange" || target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
+                            ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
@@ -1572,8 +1710,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if (target.NonVolStatus != "" || (_monData[target.Name].types.Contains("Electric") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Electric" || (target.Tera == "Electric" && target.TeraActive) ||
-                            (allOptions.AllMoves[moveName].type == "Electric" && ((_monData[target.Name].types.Contains("Ground") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Ground" || (target.Tera == "Ground" && target.TeraActive))))
+                        if (target.NonVolStatus != "")
                         {
                             continue;
                         }
@@ -1592,9 +1729,7 @@ public class NextMoveModel() // Class to make next move decision
                         }
                         if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
                             target.Ability == "Limber" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
-                            target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
-                            (moveName == "Stun Spore" && ((_monData[target.Name].types.Contains("Grass") && target.TypeChange == "" && !target.TeraActive) ||
-                            target.TypeChange == "Grass" || (target.Tera == "Grass" && target.TeraActive) || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" !&& target.ItemRemoved))))
+                            target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) || ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
@@ -1860,6 +1995,16 @@ public class NextMoveModel() // Class to make next move decision
         "Swallow",
         "Synthesis",
         "Wish"
+    ];
+    private readonly List<string> _powderMoves = [
+        "Cotton Spore",
+        "Magic Powder",
+        "Poison Powder",
+        "Powder",
+        "Rage Powder",
+        "Sleep Powder",
+        "Spore",
+        "Stun Spore"
     ];
     private readonly List<string> _categoryChangingMoves = [
         "Photon Geyser",
