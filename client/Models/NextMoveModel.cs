@@ -1267,7 +1267,7 @@ public class NextMoveModel() // Class to make next move decision
     {
         if (target.Ability == "Clear Body" || target.Ability == "Full Metal Body" || target.Ability == "White Smoke" ||
             target.Ability == "Mirror Armor" || target.Ability == "Contrary" || target.Ability == "Defiant" || target.Ability == "Competitive" ||
-            (theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" : false) && HasType(target, "Grass")))
+            (theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Flower Veil" : false) && HasType(target, "Grass")))
         {
             return true;
         }
