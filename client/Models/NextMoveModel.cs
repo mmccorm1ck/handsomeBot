@@ -1254,7 +1254,33 @@ public class NextMoveModel() // Class to make next move decision
                 }
                 break;
             case "Para":
-                if (target.Ability == "Limber" || target.Ability == "Quick Feet" || target.Ability == "Guts"|| HasType(target, "Electric"))
+                if (target.Ability == "Limber" || target.Ability == "Quick Feet" || target.Ability == "Guts" || HasType(target, "Electric"))
+                {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    private bool ImmuneToLowerStat(TeamModel target, string stat)
+    {
+        if (target.Ability == "Clear Body" || target.Ability == "Full Metal Body" || target.Ability == "White Smoke" ||
+            target.Ability == "Mirror Armor" || target.Ability == "Contrary" || target.Ability == "Defiant" || target.Ability == "Competitive" ||
+            (theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" : false) && HasType(target, "Grass")))
+        {
+            return true;
+        }
+        switch (stat)
+        {
+            case "Atk":
+                if (target.Ability == "Hyper Cutter")
+                {
+                    return true;
+                }
+                break;
+            case "Def":
+                if (target.Ability == "Big Pecks")
                 {
                     return true;
                 }
@@ -1674,6 +1700,10 @@ public class NextMoveModel() // Class to make next move decision
                         move.MoveType = moveName;
                         break;
                     }
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
                 }
                 if (move.TargetNo != -1)
                 {
@@ -1714,6 +1744,10 @@ public class NextMoveModel() // Class to make next move decision
                         move.MoveType = moveName;
                         break;
                     }
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
                 }
                 if (move.TargetNo != -1)
                 {
@@ -1746,10 +1780,9 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        int ally = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
-                        if (ally != -1)
+                        if (allyMon != -1)
                         {
-                            if (targetSpe < CalcStat("Spe", ally))
+                            if (targetSpe < CalcStat("Spe", allyMon))
                             {
                                 continue;
                             }   
@@ -1761,6 +1794,162 @@ public class NextMoveModel() // Class to make next move decision
                         move.UserNo = monNo;
                         move.TargetNo = targetNo;
                         move.MoveType = moveName;
+                        break;
+                    }
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+            }
+
+            if (user.Moves.Any(_statLoweringMoves.ContainsKey))
+            {
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statLoweringMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statLoweringMoves[moveName].Contains("Spe"))
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (ImmuneToLowerStat(target, "Spe") || ImmuneToMove(moveName, target, user))
+                        {
+                            continue;
+                        }
+                        int targetSpe = CalcStat("Spe", targetNo);
+                        if (targetSpe < CalcStat("Spe", monNo))
+                        {
+                            continue;
+                        }
+                        if (allyMon != -1)
+                        {
+                            if (targetSpe < CalcStat("Spe", allyMon))
+                            {
+                                continue;
+                            }   
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statLoweringMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statLoweringMoves[moveName].Contains("Atk") && !_statLoweringMoves[moveName].Contains("SpA"))
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (CalcStat("Atk", targetNo) >= CalcStat("SpA", targetNo))
+                        {
+                            if (ImmuneToLowerStat(target, "Atk") || ImmuneToMove(moveName, target, user))
+                            {
+                                continue;
+                            }
+                            if (!_statLoweringMoves[moveName].Contains("Atk"))
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (ImmuneToLowerStat(target, "SpA") || ImmuneToMove(moveName, target, user))
+                            {
+                                continue;
+                            }
+                            if (!_statLoweringMoves[moveName].Contains("SpA"))
+                            {
+                                continue;
+                            }
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statLoweringMoves.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statLoweringMoves[moveName].Contains("Def") && !_statLoweringMoves[moveName].Contains("SpD"))
+                    {
+                        continue;
+                    }
+                    if (allyMon == -1)
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int targetNo = theGame.Turns[^1].OppStartMons[i];
+                        TeamModel target = theGame.OppTeam[targetNo - 6];
+                        if (CalcStat("Atk", allyMon) >= CalcStat("SpA", allyMon))
+                        {
+                            if (ImmuneToLowerStat(target, "Def") || ImmuneToMove(moveName, target, user))
+                            {
+                                continue;
+                            }
+                            if (!_statLoweringMoves[moveName].Contains("Def"))
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (ImmuneToLowerStat(target, "SpD") || ImmuneToMove(moveName, target, user))
+                            {
+                                continue;
+                            }
+                            if (!_statLoweringMoves[moveName].Contains("SpD"))
+                            {
+                                continue;
+                            }
+                        }
+                        move.UserNo = monNo;
+                        move.TargetNo = targetNo;
+                        move.MoveType = moveName;
+                        break;
+                    }
+                    if (move.TargetNo != -1)
+                    {
                         break;
                     }
                 }
