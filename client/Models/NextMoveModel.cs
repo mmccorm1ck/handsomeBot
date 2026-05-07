@@ -1,18 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Net.Security;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Avalonia;
 using DynamicData;
-using Microsoft.VisualBasic.FileIO;
 
 namespace HandsomeBot.Models;
 
@@ -1226,6 +1221,45 @@ public class NextMoveModel() // Class to make next move decision
         {
             return true;
         }
+        if (move.category == null && (target.Ability == "Good as Gold" || target.Ability == "Magic Bounce"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool ImmuneToStatus(TeamModel target, string status, MoveInfoModel move)
+    {
+            if (target.Ability == "Purifying Salt" || target.Ability == "Comatose" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) || target.Ability == "Synchronize" ||
+                target.VolStatus.Contains("Substitute") || (theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || (move.category != null && target.Ability == "Shield Dust"))
+        {
+            return true;
+        }
+        switch (status)
+        {
+            case "Sleep":
+                if ((theGame.CurrentArena.Terrain == "Electric Terrain" && Grounded(target)) ||
+                    target.Ability == "Insomnia" || target.Ability == "Vital Spirit" || target.Ability == "Early Bird" ||
+                    theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" ||
+                    (theGame.OppTeam[x - 6].VolStatus.Contains("Making an Uproar") && (target.Ability != "Soundproof" || theGame.Gen > 4)) : false))
+                {
+                    return true;
+                }
+                break;
+            case "Burn":
+                if (target.Ability == "Water Veil" || target.Ability == "Water Bubble" || target.Ability == "Flare Boost" ||
+                    target.Ability == "Thermal Exchange" || target.Ability == "Guts" || HasType(target, "Fire"))
+                {
+                    return true;
+                }
+                break;
+            case "Para":
+                if (target.Ability == "Limber" || target.Ability == "Quick Feet" || target.Ability == "Guts"|| HasType(target, "Electric"))
+                {
+                    return true;
+                }
+                break;
+        }
         return false;
     }
 
@@ -1631,11 +1665,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if (((theGame.CurrentArena.Terrain == "Electric Terrain" || theGame.CurrentArena.Terrain == "Misty Terrain") && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard ||
-                            target.Ability == "Insomnia" || target.Ability == "Vital Spirit" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
-                            target.Ability == "Early Bird" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
-                            theGame.Turns[^1].OppStartMons.Any(x => x > 5 ? theGame.OppTeam[x - 6].Ability == "Sweet Veil" || (theGame.OppTeam[x - 6].VolStatus.Contains("Making an Uproar") && (target.Ability != "Soundproof" || theGame.Gen > 4)) : false) ||
-                            target.VolStatus.Contains("Substitute") || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Sleep", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
@@ -1667,7 +1697,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if (target.NonVolStatus != "" || (_monData[target.Name].types.Contains("Fire") && target.TypeChange == "" && !target.TeraActive) || target.TypeChange == "Fire" || (target.Tera == "Fire" && target.TeraActive))
+                        if (target.NonVolStatus != "")
                         {
                             continue;
                         }
@@ -1675,10 +1705,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
-                            target.Ability == "Water Veil" || target.Ability == "Water Bubble" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
-                            target.Ability == "Thermal Exchange" || target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) ||
-                            ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Burn", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
@@ -1727,9 +1754,7 @@ public class NextMoveModel() // Class to make next move decision
                                 continue;
                             }   
                         }
-                        if ((theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || target.VolStatus.Contains("Substitute") ||
-                            target.Ability == "Limber" || target.Ability == "Purifying Salt" || target.Ability == "Comatose" ||
-                            target.Ability == "Guts" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Para", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
                         {
                             continue;
                         }
