@@ -1543,7 +1543,8 @@ public class NextMoveModel() // Class to make next move decision
             {
                 if (((OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user, theGame.OppTeam[theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)]])) ||
                     underOffensvePressure[monNo]) && !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] &&
-                    Moves.Find(x => x.MoveType != "Calculating...") == null && !protectionBreakingMove)
+                    Moves.Find(x => x.MoveType != "Calculating...") == null && !protectionBreakingMove &&
+                    !theGame.Turns[^1].OppStartMons.Any(x => x > 5 && theGame.OppTeam[x - 6].Ability == "Unseen Fist" && theGame.OppTeam[x - 6].Item != "Punching Glove"))
                 {
                     move.UserNo = monNo;
                     move.TargetNo = monNo;
