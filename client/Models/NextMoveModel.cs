@@ -1300,6 +1300,20 @@ public class NextMoveModel() // Class to make next move decision
             (mon.Item == "Iron Ball" && !mon.ItemRemoved) || mon.VolStatus.Contains("Grounded") || theGame.CurrentArena.Gravity;
     }
 
+    private bool CanSwitch(TeamModel mon)
+    {
+        if (theGame.Turns[^1].OppStartMons.Any(x => x > 5 &&
+            ((theGame.OppTeam[x - 6].Ability == "Shadow Tag" && !HasType(mon, "Ghost")) || (theGame.OppTeam[x - 6].Ability == "Arena Trap" && Grounded(mon)) || (theGame.OppTeam[x - 6].Ability == "Magnet Pull" && HasType(mon, "Steel")))))
+        {
+            return false;
+        }
+        if (mon.VolStatus.Contains("Can't Escape"))
+        {
+            return false;
+        }
+        return true;
+    }
+
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
     {
         foreach (MoveModel move in Moves)
@@ -1531,7 +1545,7 @@ public class NextMoveModel() // Class to make next move decision
                     }
                 }
                 int switchMon = ChooseSwitch(expectedDamages, damageToBeat);
-                if (switchMon != -1)
+                if (switchMon != -1 && CanSwitch(user))
                 {
                     move.UserNo = monNo;
                     move.TargetNo = switchMon;
