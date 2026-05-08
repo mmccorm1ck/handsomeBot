@@ -128,6 +128,10 @@ public class NextMoveModel() // Class to make next move decision
 
     private void SaveMove(EventModel eventModel)
     {
+        if (eventModel.MoveName == "Struggle")
+        {
+            return;
+        }
         for (int i = 0; i < 4; i++)
         {
             if (theGame.OppTeam[eventModel.UserMon - 6].Moves[i] == "")
