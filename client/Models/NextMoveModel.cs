@@ -2063,6 +2063,113 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
             }
+            
+            
+            if (user.Moves.Any(_statRaisingMovesAlly.ContainsKey) && allyMon != -1)
+            {
+                TeamModel ally = theGame.BotTeam[allyMon];
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesAlly.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesAlly[moveName].Contains("Spe"))
+                    {
+                        continue;
+                    }
+                    if (ally.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    int monSpeed =  CalcStat("Spe", allyMon);
+                    bool outsped = false;
+                    foreach (int target in theGame.Turns[^1].OppStartMons)
+                    {
+                        if (target == -1)
+                        {
+                            continue;
+                        }
+                        if (CalcStat("Spe", target) > monSpeed)
+                        {
+                            outsped = true;
+                        }
+                    }
+                    if (!outsped)
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = allyMon;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                string statToBoost = "Atk";
+                if (CalcStat("Atk", allyMon) < CalcStat("SpA", allyMon))
+                {
+                    statToBoost = "SpA";
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesAlly.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesAlly[moveName].Contains(statToBoost))
+                    {
+                        continue;
+                    }
+                    if (ally.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = allyMon;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                bestDamagesOpp.Sort(delegate(BestDamages a, BestDamages b)
+                    {
+                        return (int)(b.MinDamage - a.MinDamage);
+                    });
+                BestDamages? biggestThreat = bestDamages.Find(x => x.Target == allyMon);
+                statToBoost = "Def";
+                if (biggestThreat != null && allOptions.AllMoves[biggestThreat.MoveName].category == "Special")
+                {
+                    statToBoost = "SpD";
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesAlly.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesAlly[moveName].Contains(statToBoost))
+                    {
+                        continue;
+                    }
+                    if (ally.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+            }
 
             BestDamages? bestOption = bestDamages.Find(x => x.MonNo == monNo);
             if (bestOption != null)
