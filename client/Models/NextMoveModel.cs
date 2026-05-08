@@ -1915,7 +1915,7 @@ public class NextMoveModel() // Class to make next move decision
                     }
                     if (allyMon == -1)
                     {
-                        continue;
+                        break;
                     }
                     for (int i = 0; i < 2; i++)
                     {
@@ -1952,6 +1952,111 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+            }
+
+            if (user.Moves.Any(_statRaisingMovesSelf.ContainsKey))
+            {
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesSelf.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesSelf[moveName].Contains("Spe"))
+                    {
+                        continue;
+                    }
+                    if (user.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    int monSpeed =  CalcStat("Spe", monNo);
+                    bool outsped = false;
+                    foreach (int target in theGame.Turns[^1].OppStartMons)
+                    {
+                        if (target == -1)
+                        {
+                            continue;
+                        }
+                        if (CalcStat("Spe", target) > monSpeed)
+                        {
+                            outsped = true;
+                        }
+                    }
+                    if (!outsped)
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                string statToBoost = "Atk";
+                if (CalcStat("Atk", monNo) < CalcStat("SpA", monNo))
+                {
+                    statToBoost = "SpA";
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesSelf.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesSelf[moveName].Contains(statToBoost))
+                    {
+                        continue;
+                    }
+                    if (user.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = moveName;
+                    break;
+                }
+                if (move.TargetNo != -1)
+                {
+                    continue;
+                }
+                bestDamagesOpp.Sort(delegate(BestDamages a, BestDamages b)
+                    {
+                        return (int)(b.MinDamage - a.MinDamage);
+                    });
+                BestDamages? biggestThreat = bestDamages.Find(x => x.Target == monNo);
+                statToBoost = "Def";
+                if (biggestThreat != null && allOptions.AllMoves[biggestThreat.MoveName].category == "Special")
+                {
+                    statToBoost = "SpD";
+                }
+                foreach (string moveName in user.Moves)
+                {
+                    if (!_statRaisingMovesSelf.ContainsKey(moveName))
+                    {
+                        continue;
+                    }
+                    if (!_statRaisingMovesSelf[moveName].Contains(statToBoost))
+                    {
+                        continue;
+                    }
+                    if (user.Ability == "Contrary")
+                    {
+                        break;
+                    }
+                    move.UserNo = monNo;
+                    move.TargetNo = monNo;
+                    move.MoveType = moveName;
+                    break;
                 }
                 if (move.TargetNo != -1)
                 {
