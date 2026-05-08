@@ -1055,14 +1055,21 @@ public class NextMoveModel() // Class to make next move decision
         return switchMon;
     }
 
-    private bool ImmuneToFakeOut(int target, TeamModel targetMon) // Probably more things to consider in here
+    private bool ImmuneToFakeOut(int target, TeamModel targetMon, TeamModel user) // Probably more things to consider in here
+    {
+        return ImmuneToMove("Fake Out", targetMon, user, target) || (targetMon.Tera == "Ghost" && !theGame.GimmickUsed[target/6]) ||
+            (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
+            (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1);
+    }
+
+    private bool ImmuneToPriority(int target, TeamModel targetMon)
     {
         if (target < 6)
         {
             int partnerMon = theGame.Turns[^1].BotStartMons.Find(x => x != target);
             if (partnerMon != -1)
             {    
-                if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty")
+                if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty" || theGame.BotTeam[partnerMon].Ability == "Dazzling" || theGame.BotTeam[partnerMon].Ability == "Armor Tail")
                 {
                     return true;
                 }
@@ -1073,17 +1080,13 @@ public class NextMoveModel() // Class to make next move decision
             int partnerMon = theGame.Turns[^1].OppStartMons.Find(x => x != target - 6);
             if (partnerMon != -1)
             {    
-                if (theGame.OppTeam[partnerMon].Ability == "Queenly Magesty")
+                if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty" || theGame.BotTeam[partnerMon].Ability == "Dazzling" || theGame.BotTeam[partnerMon].Ability == "Armor Tail")
                 {
                     return true;
                 }
             }
         }
-        return _monData[targetMon.Name].types.Contains("Ghost") || targetMon.TypeChange == "Ghost" ||
-            (targetMon.Tera == "Ghost" && ( targetMon.TeraActive || !theGame.GimmickUsed[target/6])) ||
-            targetMon.Ability == "Inner Focus" || targetMon.Ability == "Shield Dust" || targetMon.Ability == "Queenly Majesty" ||
-            (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
-            (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1) ||
+        return targetMon.Ability == "Queenly Majesty" || targetMon.Ability == "Dazzling" || targetMon.Ability == "Armor Tail" ||
             (theGame.CurrentArena.Terrain == "Psychic Terrain" && Grounded(targetMon));
     }
 
@@ -1104,7 +1107,7 @@ public class NextMoveModel() // Class to make next move decision
         return false;
     }
 
-    private bool ImmuneToMove(string moveName, TeamModel target, TeamModel user)
+    private bool ImmuneToMove(string moveName, TeamModel target, TeamModel user, int targetNo)
     {
         MoveInfoModel move = allOptions.AllMoves[moveName];
         string? moveType = move.type;
@@ -1222,6 +1225,15 @@ public class NextMoveModel() // Class to make next move decision
             return true;
         }
         if (move.category == null && (target.Ability == "Good as Gold" || target.Ability == "Magic Bounce"))
+        {
+            return true;
+        }
+        if (ImmuneToPriority(targetNo, target) && (move.priotity > 0 || (user.Ability == "Prankster" && move.category == null) ||
+            (user.Ability == "Gale Wings" && move.type == "Flying" && user.RemainingHP == 100) || (user.Ability == "Triage" && _healingMoves.Contains(moveName))))
+        {
+            return true;
+        }
+        if (HasType(target, "Dark") && user.Ability == "Prankster" && move.category == null)
         {
             return true;
         }
@@ -1358,6 +1370,10 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
+                if (ImmuneToMove(matchup.MoveName, theGame.OppTeam[matchup.Target], theGame.BotTeam[matchup.MonNo], matchup.Target))
+                {
+                    continue;
+                }
                 if (expectedDamages[matchup.MonNo][matchup.Target][move][0] > matchup.MinDamage)
                 {
                     matchup.MinDamage = expectedDamages[matchup.MonNo][matchup.Target][move][0];
@@ -1433,7 +1449,7 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 TeamModel targetMon = theGame.OppTeam[target - 6];
-                if (ImmuneToFakeOut(target, targetMon))
+                if (ImmuneToFakeOut(target, targetMon,theGame.BotTeam[fakeOutUser]))
                 {
                     continue;
                 }
@@ -1466,6 +1482,10 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 if (matchup.OKOChance && matchup.OutspeedTarget)
+                {
+                    continue;
+                }
+                if (ImmuneToMove(matchup.MoveName, theGame.BotTeam[matchup.Target], theGame.OppTeam[matchup.MonNo], matchup.Target))
                 {
                     continue;
                 }
@@ -1521,8 +1541,8 @@ public class NextMoveModel() // Class to make next move decision
             int allyMon = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
             if (user.Moves.Any(_protectionMoves.Contains))
             {
-                if (((OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user)) || underOffensvePressure[monNo]) &&
-                    !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] &&
+                if (((OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user, theGame.OppTeam[theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)]])) ||
+                    underOffensvePressure[monNo]) && !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] &&
                     Moves.Find(x => x.MoveType != "Calculating...") == null && !protectionBreakingMove)
                 {
                     move.UserNo = monNo;
@@ -1705,7 +1725,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if (ImmuneToStatus(target, "Sleep", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Sleep", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user, targetNo))
                         {
                             continue;
                         }
@@ -1749,7 +1769,7 @@ public class NextMoveModel() // Class to make next move decision
                         {
                             continue;
                         }
-                        if (ImmuneToStatus(target, "Burn", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Burn", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user, targetNo))
                         {
                             continue;
                         }
@@ -1801,7 +1821,7 @@ public class NextMoveModel() // Class to make next move decision
                                 continue;
                             }   
                         }
-                        if (ImmuneToStatus(target, "Para", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToStatus(target, "Para", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user, targetNo))
                         {
                             continue;
                         }
@@ -1837,7 +1857,7 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         int targetNo = theGame.Turns[^1].OppStartMons[i];
                         TeamModel target = theGame.OppTeam[targetNo - 6];
-                        if (ImmuneToLowerStat(target, "Spe") || ImmuneToMove(moveName, target, user))
+                        if (ImmuneToLowerStat(target, "Spe") || ImmuneToMove(moveName, target, user, targetNo))
                         {
                             continue;
                         }
@@ -1883,7 +1903,7 @@ public class NextMoveModel() // Class to make next move decision
                         TeamModel target = theGame.OppTeam[targetNo - 6];
                         if (CalcStat("Atk", targetNo) >= CalcStat("SpA", targetNo))
                         {
-                            if (ImmuneToLowerStat(target, "Atk") || ImmuneToMove(moveName, target, user))
+                            if (ImmuneToLowerStat(target, "Atk") || ImmuneToMove(moveName, target, user, targetNo))
                             {
                                 continue;
                             }
@@ -1894,7 +1914,7 @@ public class NextMoveModel() // Class to make next move decision
                         }
                         else
                         {
-                            if (ImmuneToLowerStat(target, "SpA") || ImmuneToMove(moveName, target, user))
+                            if (ImmuneToLowerStat(target, "SpA") || ImmuneToMove(moveName, target, user, targetNo))
                             {
                                 continue;
                             }
@@ -1937,7 +1957,7 @@ public class NextMoveModel() // Class to make next move decision
                         TeamModel target = theGame.OppTeam[targetNo - 6];
                         if (CalcStat("Atk", allyMon) >= CalcStat("SpA", allyMon))
                         {
-                            if (ImmuneToLowerStat(target, "Def") || ImmuneToMove(moveName, target, user))
+                            if (ImmuneToLowerStat(target, "Def") || ImmuneToMove(moveName, target, user, targetNo))
                             {
                                 continue;
                             }
@@ -1948,7 +1968,7 @@ public class NextMoveModel() // Class to make next move decision
                         }
                         else
                         {
-                            if (ImmuneToLowerStat(target, "SpD") || ImmuneToMove(moveName, target, user))
+                            if (ImmuneToLowerStat(target, "SpD") || ImmuneToMove(moveName, target, user, targetNo))
                             {
                                 continue;
                             }
