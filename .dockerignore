@@ -1,0 +1,10 @@
+server/.env
+server/node_modules
+.git
+.gitignore
+Dockerfile*
+.dockerignore
+README.md
+LICENSE*
+client
+.vscode
