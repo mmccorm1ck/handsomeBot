@@ -991,7 +991,7 @@ public class NextMoveModel() // Class to make next move decision
             if (damage.BotUser)
             {
                 monNo = _nameToNo[damage.UserMon];
-                targetMon = _nameToNo["Opponent's" + damage.TargetMon];
+                targetMon = _nameToNo["Opponent's " + damage.TargetMon];
             }
             else
             {
@@ -1004,7 +1004,8 @@ public class NextMoveModel() // Class to make next move decision
             {
                 continue;
             }
-            if (expectedDamages[monNo].TryAdd(targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
+            if (expectedDamages[monNo].TryAdd(
+                targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
             {
                 continue;
             }
