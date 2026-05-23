@@ -579,8 +579,12 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 speedOrder.Insert(i, monNo);
+                break;
             }
-            speedOrder.Add(monNo);
+            if (!speedOrder.Contains(monNo))
+            {
+                speedOrder.Add(monNo);
+            }
         }
         foreach (List<int> order in eventOrders.Values)
         {
