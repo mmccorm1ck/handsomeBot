@@ -1359,7 +1359,7 @@ public class NextMoveModel() // Class to make next move decision
             int mon = theGame.Turns[^1].BotStartMons[i];
             for (int j = 0; j < 2; j++)
             {
-                int opp = theGame.Turns[^1].OppStartMons[j];
+                int opp = theGame.Turns[^1].OppStartMons[j] + 6;
                 bestDamages.Add(new(mon, opp));
             }
         }
@@ -1379,14 +1379,14 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
-                if (ImmuneToMove(matchup.MoveName, theGame.OppTeam[matchup.Target], theGame.BotTeam[matchup.MonNo], matchup.Target))
+                if (ImmuneToMove(theGame.BotTeam[matchup.MonNo].Moves[move], theGame.OppTeam[matchup.Target - 6], theGame.BotTeam[matchup.MonNo], matchup.Target))
                 {
                     continue;
                 }
                 if (expectedDamages[matchup.MonNo][matchup.Target][move][0] > matchup.MinDamage)
                 {
                     matchup.MinDamage = expectedDamages[matchup.MonNo][matchup.Target][move][0];
-                    matchup.OKOChance = expectedDamages[matchup.MonNo][matchup.Target][move][1] >= theGame.OppTeam[matchup.Target].RemainingHP;
+                    matchup.OKOChance = expectedDamages[matchup.MonNo][matchup.Target][move][1] >= theGame.OppTeam[matchup.Target - 6].RemainingHP;
                     matchup.TKOGuaranteed = matchup.MinDamage >= 50;
                     matchup.MoveName = theGame.BotTeam[matchup.MonNo].Moves[move];
                     matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
