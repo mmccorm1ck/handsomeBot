@@ -28,6 +28,15 @@ public class NextMoveModel() // Class to make next move decision
     public List<MoveModel> Moves { get; set; } = [];
     public async Task UpdateNextMove()
     {
+        foreach (MoveModel move in Moves)
+        {
+            move.MoveType = "Calculating...";
+            move.TargetNo = -1;
+            move.Mega = false;
+            move.Dynamax = false;
+            move.ZMove = false;
+            move.Tera = false;
+        }
         bool trickRoomActive = theGame.CurrentArena.TrickRoom;
         ParseTurn();
         List<CalcRespModel> damages = await CalcDamages();
@@ -1332,15 +1341,6 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
     {
-        foreach (MoveModel move in Moves)
-        {
-            move.MoveType = "Calculating...";
-            move.TargetNo = -1;
-            move.Mega = false;
-            move.Dynamax = false;
-            move.ZMove = false;
-            move.Tera = false;
-        }
         Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
         ChooseKOSwitch(expectedDamages);
         if (theGame.CurrentArena.TrickRoom)
