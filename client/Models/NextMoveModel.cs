@@ -1360,6 +1360,10 @@ public class NextMoveModel() // Class to make next move decision
             for (int j = 0; j < 2; j++)
             {
                 int opp = theGame.Turns[^1].OppStartMons[j] + 6;
+                if (opp == 5)
+                {
+                    opp = -1;
+                }
                 bestDamages.Add(new(mon, opp));
             }
         }
@@ -1471,7 +1475,11 @@ public class NextMoveModel() // Class to make next move decision
         List<BestDamages> bestDamagesOpp = [];
         for (int i = 0; i < 2; i++)
         {
-            int mon = theGame.Turns[^1].OppStartMons[i];
+            int mon = theGame.Turns[^1].OppStartMons[i] + 6;
+            if (mon == 5)
+            {
+                mon = -1;
+            }
             for (int j = 0; j < 2; j++)
             {
                 int opp = theGame.Turns[^1].BotStartMons[j];
@@ -1480,13 +1488,13 @@ public class NextMoveModel() // Class to make next move decision
         }
         foreach (BestDamages matchup in bestDamagesOpp)
         {
-            if (matchup.MonNo == -1 || matchup.Target == -1)
+            if (matchup.MonNo == -1 || matchup.Target == -1 || !expectedDamages.ContainsKey(matchup.MonNo))
             {
                 continue;
             }
             foreach (int move in expectedDamages[matchup.MonNo][matchup.Target].Keys)
             {
-                if (theGame.OppTeam[matchup.MonNo].Moves[move] == "Fake Out" || theGame.OppTeam[matchup.MonNo].Moves[move] == "")
+                if (theGame.OppTeam[matchup.MonNo - 6].Moves[move] == "Fake Out" || theGame.OppTeam[matchup.MonNo - 6].Moves[move] == "")
                 {
                     continue;
                 }
@@ -1494,7 +1502,7 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
-                if (ImmuneToMove(matchup.MoveName, theGame.BotTeam[matchup.Target], theGame.OppTeam[matchup.MonNo], matchup.Target))
+                if (ImmuneToMove(theGame.OppTeam[matchup.MonNo - 6].Moves[move], theGame.BotTeam[matchup.Target], theGame.OppTeam[matchup.MonNo], matchup.Target))
                 {
                     continue;
                 }
