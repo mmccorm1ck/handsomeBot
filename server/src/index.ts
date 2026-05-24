@@ -1,5 +1,5 @@
-import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES} from "@Smogon/calc";
-import { SpeciesData } from "@Smogon/calc/dist/data/species";
+import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES} from "@smogon/calc";
+import { SpeciesData } from "@smogon/calc/dist/data/species";
 import 'dotenv/config';
 import { createServer } from "http";
 
