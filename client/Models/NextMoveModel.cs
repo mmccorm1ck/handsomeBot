@@ -1627,6 +1627,10 @@ public class NextMoveModel() // Class to make next move decision
                 }
                 foreach (BestDamages matchup in bestDamagesOpp)
                 {
+                    if (matchup.Target != monNo)
+                    {
+                        continue;
+                    }
                     if (speedOrder.IndexOf(monNo) > speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
                         user.Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
                     {
@@ -1657,6 +1661,10 @@ public class NextMoveModel() // Class to make next move decision
                 BestDamages? currBest = null;
                 foreach (BestDamages matchup in bestDamages)
                 {
+                    if (matchup.MonNo != monNo)
+                    {
+                        continue;
+                    }
                     if (currBest == null)
                     {
                         currBest = matchup;
