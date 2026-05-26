@@ -1597,13 +1597,18 @@ public class NextMoveModel() // Class to make next move decision
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    MoveInfoModel moveInfo = allOptions.AllMoves[theGame.BotTeam[monNo].Moves[i]];
+                    string moveName = user.Moves[i];
+                    MoveInfoModel moveInfo = allOptions.AllMoves[moveName];
                     if (moveInfo.target == "AllAdjacentFoes" || moveInfo.target == "AllAdjacent" || moveInfo.priotity > 0)
                     {
                         int target = -1;
                         foreach (int key in expectedDamages[monNo].Keys)
                         {
                             if (!theGame.Turns[^1].OppStartMons.Contains(key))
+                            {
+                                continue;
+                            }
+                            if (ImmuneToMove(moveName, theGame.OppTeam[key], user, key))
                             {
                                 continue;
                             }
@@ -1631,17 +1636,21 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    if (speedOrder.IndexOf(monNo) > speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
+                    if (speedOrder.IndexOf(monNo) < speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
                         user.Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
                     {
                         int moveNo = -1;
+                        float highestDamage = 0;
                         for (int i = 0; i < 4; i++)
                         {
                             string moveName = user.Moves[i];
-                            if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && expectedDamages[monNo][matchup.MonNo][i][0] > 0)
+                            if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && !ImmuneToMove(moveName, theGame.OppTeam[matchup.MonNo], user, matchup.MonNo))
                             {
-                                moveNo = i;
-                                break;
+                                if (expectedDamages[monNo][matchup.MonNo][i][0] > highestDamage)
+                                {
+                                    highestDamage = expectedDamages[monNo][matchup.MonNo][i][0];
+                                    moveNo = i;
+                                }
                             }
                         }
                         if (moveNo != -1)
@@ -1658,16 +1667,11 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 
-                BestDamages? currBest = null;
+                BestDamages? currBest = new(monNo, -1);
                 foreach (BestDamages matchup in bestDamages)
                 {
                     if (matchup.MonNo != monNo)
                     {
-                        continue;
-                    }
-                    if (currBest == null)
-                    {
-                        currBest = matchup;
                         continue;
                     }
                     if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage))
@@ -1675,7 +1679,7 @@ public class NextMoveModel() // Class to make next move decision
                         currBest = matchup;
                     }
                 }
-                if (currBest != null)
+                if (currBest.Target != -1)
                 {
                     move.UserNo = monNo;
                     move.TargetNo = currBest.Target;
@@ -1684,14 +1688,14 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind)
+            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
             {
                 move.UserNo = monNo;
                 move.TargetNo = monNo;
                 move.MoveType = "Tailwind";
                 continue;
             }
-            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget))
+            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget) && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
             {
                 move.UserNo = monNo;
                 move.TargetNo = monNo;
