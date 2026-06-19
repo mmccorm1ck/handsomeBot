@@ -225,6 +225,14 @@ public class GameModel() : INotifyPropertyChanged // Class to hold info about a 
             _dynamax = false;
             _tera = false;
         }
+        public string? GetGimmick()
+        {
+            if (_tera) return "Tera";
+            if (_megas) return "Mega";
+            if (_dynamax) return "Dynamax";
+            if (_zMoves) return "Z Moves";
+            return null;
+        }
         public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
         {

@@ -39,10 +39,10 @@ public class NextMoveModel() // Class to make next move decision
         }
         bool trickRoomActive = theGame.CurrentArena.TrickRoom;
         ParseTurn();
-        List<CalcRespModel> damages = await CalcDamages();
+        List<CalcRespModel> damages = await CalcDamages(false);
         ParseCalc(damages);
         List<int> turnOrder = UpdateSpeeds(trickRoomActive);
-        damages = await CalcDamages();
+        damages = await CalcDamages(true);
         ChooseNextMove(damages, turnOrder);
     }
     private void ParseTurn()
@@ -776,7 +776,7 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
-    public async Task<List<CalcRespModel>> CalcDamages() // Calculates damage portion of weightings
+    public async Task<List<CalcRespModel>> CalcDamages(bool includeGimmick) // Calculates damage portion of weightings
     {
         ObservableCollection<PokemonModel> botPokemon = []; // Collection of bot's pokemon in server compatable format
         ObservableCollection<PokemonModel> oppPokemon = []; // Collection of opponent's pokemon in server compatable format
@@ -795,6 +795,10 @@ public class NextMoveModel() // Class to make next move decision
                 theGame.CurrentArena
                 )
         };
+        if (includeGimmick && !theGame.GimmickUsed[0])
+        {
+            callData.IncludeGimmick = theGame.Gimmicks.GetGimmick();
+        }
         string callString = JsonSerializer.Serialize(callData); // Serialise call data into string
         HttpClient client = new();
         List<CalcRespModel>? response = await client.GetFromJsonAsync<List<CalcRespModel>>($"http://{theGame.ServerUrl}/calc?{callString}"); // Send data to server and await response
