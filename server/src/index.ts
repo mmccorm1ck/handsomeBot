@@ -129,6 +129,7 @@ type inputObject =
     BotMons?: inputPokemon[],
     OppMons?: inputPokemon[],
     Field?: Partial<State.Field>,
+    IncludeGimmick?: string,
     Filter?: string[]
 }
 
@@ -136,7 +137,8 @@ type inputPokemon =
 {
     gen: number,
     name: string,
-    options: object
+    options: object,
+    teraType?: string
 }
 
 server.listen(port, () => {
