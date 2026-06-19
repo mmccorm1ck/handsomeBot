@@ -64,6 +64,10 @@ const handleRequest = (url:string) => {
 }
 
 function calcDamages(input: inputObject): object[] {
+    if (!input.BotMons || !input.OppMons)
+    {
+        return [];
+    }
     const gen = Generations.get(input.Gen as GenerationNum);
     const field: Field = new Field(input.Field);
     let switchedField = Object.assign({}, field);
