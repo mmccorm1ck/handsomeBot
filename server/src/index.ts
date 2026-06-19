@@ -141,6 +141,44 @@ type inputPokemon =
     teraType?: string
 }
 
+const zCrystals = new Map([
+    ["Buginium Z", "Savage Spin-Out"],
+    ["Darkinium Z", "Black Hole Eclipse"],
+    ["Dragonium Z", "Devastating Drake"],
+    ["Electrium Z", "Gigavolt Havoc"],
+    ["Fairium Z", "Twinkle Tackle"],
+    ["Fightinium Z", "All-Out Pummeling"],
+    ["Firium Z", "Inferno Overdrive"],
+    ["Flyinium Z", "Supersonic Skystrike"],
+    ["Ghostium Z", "Never-Ending Nightmare"],
+    ["Grassium Z", "Bloom Doom"],
+    ["Groundium Z", "Tectonic Rage"],
+    ["Icium Z", "Subzero Slammer"],
+    ["Normalium Z", "Breakneck Blitz"],
+    ["Poisonium Z", "Acid Downpour"],
+    ["Psychium Z", "Shattered Psyche"],
+    ["Rockium Z", "Continental Crash"],
+    ["Steelium Z", "Corkscrew Chash"],
+    ["Waterium Z", "Hydro Vortex"],
+    ["Aloraichium Z", "Stoked Sparksurfer"],
+    ["Decidium Z",   "Sinister Arrow Raid"],
+    ["Eevium Z",  "Extreme Evoboost"],
+    ["Incinium Z",   "Malicious Moonsault"],
+    ["Kommonium Z",   "Clangorous Soulblaze"],
+    ["Lunalium Z", "Menacing Moonraze Maelstrom"],
+    ["Lycanium Z",   "Splintered Stormshards"],
+    ["Marshadium Z", "Soul-Stealing 7-Star Strike"],
+    ["Mewnium Z",  "Genesis Supernova"],
+    ["Mimikium Z", "Let\'s Snuggle Forever"],
+    ["Pikanium Z", "Catastropika"],
+    ["Pikashunium Z", "10,000,000 Volt Thunderbolt"],
+    ["Primarium Z", "Oceanic Operetta"],
+    ["Snorlium Z",   "Pulverizing Pancake"],
+    ["Solganium Z", "Searing Sunraze Smash"],
+    ["Tapnium Z", "Guardian of Alola"],
+    ["Ultranecrozium Z", "Light That Burns the Sky"]
+]);
+
 server.listen(port, () => {
     console.log("Server running on port " + port);
 });
