@@ -68,6 +68,15 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
             OnPropertyChanged();
         }
     }
+    public bool GimmickUsed
+    {
+        get => _gimmickUsed;
+        set
+        {
+            _gimmickUsed = value;
+            OnPropertyChanged();
+        }
+    }
     private bool _botUser = true;
     private string _userMon = "";
     private string _targetMon = "";
@@ -75,6 +84,7 @@ public class CalcRespModel() : INotifyPropertyChanged // Class to hold info abou
     private string _damage = "";
     private float _maxDamage = 0;
     private float _minDamage = 0;
+    private bool _gimmickUsed = false;
     private void ParseDamageRange()
     {
         string[] splitInput = _damage.Split(':')[1].Split('(')[1].Split("%)")[0].Split(" - ");
