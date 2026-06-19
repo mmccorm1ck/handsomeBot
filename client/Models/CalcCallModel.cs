@@ -41,10 +41,20 @@ public class CalcCallModel() : INotifyPropertyChanged // Class to hold info to s
             OnPropertyChanged();
         }
     }
+    public string? IncludeGimmick
+    {
+        get => _includeGimmick;
+        set
+        {
+            _includeGimmick = value;
+            OnPropertyChanged();
+        }
+    }
     private int _gen = -1;
     private ObservableCollection<PokemonModel> _botMons = [];
     private ObservableCollection<PokemonModel> _oppMons = [];
     private FieldModel _field = new();
+    private string? _includeGimmick = null;
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
     {
