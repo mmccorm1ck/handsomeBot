@@ -11,6 +11,10 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
         gen = inputGen;
         name = inputModel.Name;
         options = new Options(inputModel);
+        if (inputModel.Tera != "None")
+        {
+            teraType = inputModel.Tera;
+        }
     }
     public int gen // Lower case variable names for server compatability
     {
@@ -39,9 +43,19 @@ public class PokemonModel() : INotifyPropertyChanged // Class to convert pokemon
             OnPropertyChanged();
         } 
     }
+    public string? teraType
+    {
+        get => _teraType;
+        set
+        {
+            _teraType = value;
+            OnPropertyChanged();
+        }
+    }
     private int _gen = -1;
     private string _name = "None";
     private Options _options = new() {};
+    private string? _teraType = null;
     public class Options() // Class to hold battle modifiers
     {
         public Options(TeamModel inputModel) : this()
