@@ -155,6 +155,20 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
             if (responses[i].Contains("<article>"))
             { // Detects splits between each pokemon
                 currPokemon++;
+                if (currPokemon > 5)
+                {
+                    continue;
+                }
+                TheGame.BotTeam[currPokemon].EV = new();
+                TheGame.BotTeam[currPokemon].IV = new()
+                {
+                    HP = 31,
+                    Atk = 31,
+                    Def = 31,
+                    SpA = 31,
+                    SpD = 31,
+                    Spe = 31
+                };
                 continue;
             }
             if (currPokemon < 0)
