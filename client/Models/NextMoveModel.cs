@@ -808,7 +808,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ParseCalc(List<CalcRespModel> damages)
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages)[0];
         if (theGame.Turns.Count < 2) return;
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
         {
@@ -989,9 +989,9 @@ public class NextMoveModel() // Class to make next move decision
         }
     }
 
-    private Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> FormatCalcs(List<CalcRespModel> damages)
+    private Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] FormatCalcs(List<CalcRespModel> damages)
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = [];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] expectedDamages = [[],[]];
         foreach (CalcRespModel damage in damages)
         {
             int monNo;
@@ -1007,17 +1007,30 @@ public class NextMoveModel() // Class to make next move decision
                 targetMon = _nameToNo[damage.TargetMon];
             }
 
-            if (expectedDamages.TryAdd(
+            Console.WriteLine(damage.UserMon+" "+damage.TargetMon+" "+damage.Damage+" "+damage.GimmickUsed);
+
+            Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> parsedDamages;
+
+            if (damage.GimmickUsed)
+            {
+                parsedDamages = expectedDamages[1];
+            }
+            else
+            {
+                parsedDamages = expectedDamages[0];
+            }
+
+            if (parsedDamages.TryAdd(
                 monNo, new() { { targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } } } }))
             {
                 continue;
             }
-            if (expectedDamages[monNo].TryAdd(
+            if (parsedDamages[monNo].TryAdd(
                 targetMon, new() { { damage.MoveNo, [damage.MinDamage, damage.MaxDamage] } }))
             {
                 continue;
             }
-            expectedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
+            parsedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
         }
         return expectedDamages;
     }
@@ -1350,7 +1363,9 @@ public class NextMoveModel() // Class to make next move decision
 
     private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = FormatCalcs(damages);
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] calcedDamages = FormatCalcs(damages);
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = calcedDamages[0];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages  = calcedDamages[1];
         ChooseKOSwitch(expectedDamages);
         if (theGame.CurrentArena.TrickRoom)
         {
