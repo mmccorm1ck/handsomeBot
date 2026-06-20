@@ -239,7 +239,7 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                     if (item.Contains("<span"))
                     {
                         item = item[0..^7];
-                        int idxtemp = item.LastIndexOf('>');
+                        int idxtemp = item.LastIndexOf('>') + 1;
                         item = item[idxtemp..].Replace("'", "");
                     }
                     TheGame.BotTeam[currPokemon].Item = item;
