@@ -266,6 +266,10 @@ public class BotTeamPageViewModel : ViewModelBase, INotifyPropertyChanged
                 responses[i] = responses[i].Split("</span>")[0];
                 idx = responses[i].LastIndexOf(">") + 1;
                 TheGame.BotTeam[currPokemon].Name = responses[i][idx..].Replace("'", "");
+                if (TheGame.BotTeam[currPokemon].Name.Contains("-Mega"))
+                {
+                    TheGame.BotTeam[currPokemon].Name = TheGame.BotTeam[currPokemon].Name.Split("-Mega")[0];
+                }
             }
             if (responses[i].Contains("Ability"))
             { // Saves pokemon's ability
