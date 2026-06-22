@@ -157,7 +157,6 @@ function calcDamages(input: inputObject): object[] {
                             gimmickMove.useMax = true;
                         }
                         move = gimmickMove.clone();
-                        console.log(move)
                         if (input.IncludeGimmick === "Z Move")
                         {
                             if (!gimmickMon.item)

@@ -1007,8 +1007,6 @@ public class NextMoveModel() // Class to make next move decision
                 targetMon = _nameToNo[damage.TargetMon];
             }
 
-            Console.WriteLine(damage.UserMon+" "+damage.TargetMon+" "+damage.Damage+" "+damage.GimmickUsed);
-
             Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> parsedDamages;
 
             if (damage.GimmickUsed)
