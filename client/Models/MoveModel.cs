@@ -108,6 +108,32 @@ public class MoveModel(Dictionary<int, string> noToName) : INotifyPropertyChange
         UserMon.Name = _noToName[UserNo];
         TargetMon.Name = _noToName[TargetNo].Replace("Opponent's ", "");
     }
+    public void UseGimmick(string? gimmick)
+    {
+        Tera = false;
+        Mega = false;
+        Dynamax = false;
+        ZMove = false;
+        switch (gimmick)
+        {
+            case "Tera":
+                Tera = true;
+                break;
+            case "Mega":
+                Mega = true;
+                break;
+            case "Dyna":
+                Dynamax = true;
+                break;
+            case "Z Move":
+                ZMove = true;
+                break;
+        }
+    }
+    public bool UsingGimmick()
+    {
+        return Tera || Mega || Dynamax || ZMove;
+    }
     public event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) // Function to trigger above event handler
