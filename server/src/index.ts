@@ -1,4 +1,5 @@
-import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES} from "@smogon/calc";
+import {calculate, Generations, GenerationNum, Pokemon, Move, Field, State, SPECIES, ITEMS, ABILITIES, MOVES, MEGA_STONES} from "@smogon/calc";
+import { ItemName, SpeciesName, TypeName } from "@smogon/calc/dist/data/interface";
 import { SpeciesData } from "@smogon/calc/dist/data/species";
 import 'dotenv/config';
 import { createServer } from "http";
@@ -76,13 +77,59 @@ function calcDamages(input: inputObject): object[] {
     let results: object[] = [];
     for (const rawUserMon of input.BotMons) {
         const userMon: Pokemon = new Pokemon(rawUserMon.gen as GenerationNum, rawUserMon.name, rawUserMon.options);
+        let options = { ability: userMon.ability, item: userMon.item, species: userMon.species.name };
+        let gimmickMon: Pokemon = userMon.clone();
+        let includeGimmick = false;
+        switch (input.IncludeGimmick)
+        {
+            case "Tera":
+                if (rawUserMon.teraType)
+                {
+                    gimmickMon.teraType = rawUserMon.teraType as TypeName;
+                    includeGimmick = true;
+                }
+                break;
+            case "Mega":
+                if (!gimmickMon.item)
+                {
+                    break;
+                }
+                if (MEGA_STONES[gimmickMon.item as ItemName] as SpeciesName === gimmickMon.name)
+                {
+                    let megaName: string = gimmickMon.name + "-Mega";
+                    if (gimmickMon.item?.slice(-2, -1) === " ")
+                    {
+                        megaName += "-" + gimmickMon.item.slice(-1);
+                    }
+                    if (SPECIES[input.Gen][megaName])
+                    {
+                        gimmickMon = new Pokemon(rawUserMon.gen as GenerationNum, megaName, rawUserMon.options);
+                        includeGimmick = true;
+                    }
+                }
+                break;
+            case "Z Move":
+                if (!gimmickMon.item)
+                {
+                    break;
+                }
+                if (zCrystals.has(gimmickMon.item))
+                {
+                    includeGimmick = true;
+                }
+                break;
+            case "Dynamax":
+                gimmickMon.isDynamaxed = true;
+                includeGimmick = true;
+                break;
+        }
+        let gimmickOptions = { ability: gimmickMon.ability, item: userMon.item, species: gimmickMon.species.name };
         for (const rawOppMon of input.OppMons) {
             const oppMon: Pokemon = new Pokemon(rawOppMon.gen as GenerationNum, rawOppMon.name, rawOppMon.options);
-            let options = { ability: userMon.ability, item: userMon.item, species: userMon.species.name };
             for (let i = 0; i < userMon.moves.length; i++) {
                 const moveName = userMon.moves[i];
                 if (moveName === "None") continue;
-                const move: Move = new Move(gen, moveName, options);
+                let move: Move = new Move(gen, moveName, options);
                 try {
                     results.push({
                         BotUser: true,
@@ -95,10 +142,50 @@ function calcDamages(input: inputObject): object[] {
                             oppMon,
                             move,
                             field
-                        ).desc()
+                        ).desc(),
+                        GimmickUsed: false
                     });
-            }
-            catch {continue;}
+                    if (includeGimmick)
+                    {
+                        let gimmickMove: Move = new Move(gen, moveName, gimmickOptions);
+                        if (input.IncludeGimmick === "Z Move")
+                        {
+                            gimmickMove.useZ = true;
+                        }
+                        else if (input.IncludeGimmick === "Dynamax")
+                        {
+                            gimmickMove.useMax = true;
+                        }
+                        move = gimmickMove.clone();
+                        console.log(move)
+                        if (input.IncludeGimmick === "Z Move")
+                        {
+                            if (!gimmickMon.item)
+                            {
+                                continue;
+                            }
+                            if (zCrystals.get(gimmickMon.item) !== move.name)
+                            {
+                                continue;
+                            }
+                        }
+                        results.push({
+                            BotUser: true,
+                            UserMon: userMon.name,
+                            TargetMon: oppMon.name,
+                            MoveNo: i,
+                            Damage: calculate(
+                                gen,
+                                gimmickMon,
+                                oppMon,
+                                move,
+                                field,
+                            ).desc(),
+                            GimmickUsed: true
+                        });
+                    }
+                }
+                catch {continue;}
             }
             options = { ability: oppMon.ability, item: oppMon.item, species: oppMon.species.name };
             for (let i = 0; i < oppMon.moves.length; i++) {
@@ -117,8 +204,26 @@ function calcDamages(input: inputObject): object[] {
                             userMon,
                             move,
                             switchedField
-                        ).desc()
+                        ).desc(),
+                        GimmickUsed: false
                     });
+                    if (includeGimmick)
+                    {
+                        results.push({
+                            BotUser: false,
+                            UserMon: oppMon.name,
+                            TargetMon: userMon.name,
+                            MoveNo: i,
+                            Damage: calculate(
+                                gen,
+                                oppMon,
+                                gimmickMon,
+                                move,
+                                field,
+                            ).desc(),
+                            GimmickUsed: true
+                        });
+                    }
                 }
                 catch {continue;}
             }
