@@ -274,8 +274,20 @@
             <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].UserMon.Name}"/>
             <Image Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[1].Image}"/>
             <Label Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].TargetMon.Name}"/>
-            <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
-            <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
+            <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Tera}">TERA</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Mega}">MEGA EVO</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Dynamax}">DYNAMAX</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].ZMove}">Z MOVE</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Tera}">TERA</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Mega}">MEGA EVO</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Dynamax}">DYNAMAX</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].ZMove}">Z MOVE</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
+            </StackPanel>
             <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].MoveType}"/>
             <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].MoveType}"/>
         </Grid>
