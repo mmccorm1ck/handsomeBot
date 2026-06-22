@@ -1411,6 +1411,21 @@ public class NextMoveModel() // Class to make next move decision
                     matchup.TKOGuaranteed = matchup.MinDamage >= 50;
                     matchup.MoveName = theGame.BotTeam[matchup.MonNo].Moves[move];
                     matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
+                    if (gimmickDamages.ContainsKey(matchup.MonNo) && gimmickDamages[matchup.MonNo].ContainsKey(matchup.Target) && gimmickDamages[matchup.MonNo][matchup.Target].ContainsKey(move))
+                    {
+                        if (!matchup.OKOChance && gimmickDamages[matchup.MonNo][matchup.Target][move][1] >= theGame.OppTeam[matchup.Target - 6].RemainingHP)
+                        {
+                            matchup.GimmickSignificant = true;
+                        }
+                        else
+                        {
+                            matchup.GimmickSignificant = false;
+                        }
+                    }
+                    else
+                    {
+                        matchup.GimmickSignificant = false;
+                    }
                 }
             }
             if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
@@ -1530,6 +1545,21 @@ public class NextMoveModel() // Class to make next move decision
                     matchup.TKOGuaranteed = matchup.MinDamage >= 50;
                     matchup.MoveName = theGame.OppTeam[matchup.MonNo].Moves[move];
                     matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
+                    if (gimmickDamages.ContainsKey(matchup.MonNo) && gimmickDamages[matchup.MonNo].ContainsKey(matchup.Target) && gimmickDamages[matchup.MonNo][matchup.Target].ContainsKey(move))
+                    {
+                        if (matchup.OKOChance && gimmickDamages[matchup.MonNo][matchup.Target][move][1] < theGame.BotTeam[matchup.Target].RemainingHP)
+                        {
+                            matchup.GimmickSignificant = true;
+                        }
+                        else
+                        {
+                            matchup.GimmickSignificant = false;
+                        }
+                    }
+                    else
+                    {
+                        matchup.GimmickSignificant = false;
+                    }
                 }
             }
             if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
@@ -2758,5 +2788,6 @@ public class NextMoveModel() // Class to make next move decision
         public bool OKOChance { get; set; } = false;
         public bool TKOGuaranteed { get; set; } = false;
         public bool OutspeedTarget { get; set; } = false;
+        public bool GimmickSignificant {get; set;} = false;
     }
 }
