@@ -1345,6 +1345,30 @@ public class NextMoveModel() // Class to make next move decision
             (mon.Item == "Iron Ball" && !mon.ItemRemoved) || mon.VolStatus.Contains("Grounded") || theGame.CurrentArena.Gravity;
     }
 
+    private static bool GimmickImmune(int target, int user, int moveNo, Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages)
+    {
+        if (gimmickDamages.ContainsKey(user) && gimmickDamages[user].ContainsKey(target) && gimmickDamages[user][target].ContainsKey(moveNo))
+        {
+            if (gimmickDamages[user][target][moveNo][1] == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool GimmickSave(int target, int user, int moveNo, Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages)
+    {
+        if (gimmickDamages.ContainsKey(user) && gimmickDamages[user].ContainsKey(target) && gimmickDamages[user][target].ContainsKey(moveNo))
+        {
+            if (gimmickDamages[user][target][moveNo][1] < theGame.BotTeam[target].RemainingHP)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private bool CanSwitch(TeamModel mon)
     {
         if (theGame.Turns[^1].OppStartMons.Any(x => x > 5 &&
@@ -1494,7 +1518,7 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 TeamModel targetMon = theGame.OppTeam[target - 6];
-                if (ImmuneToFakeOut(target, targetMon,theGame.BotTeam[fakeOutUser]))
+                if (ImmuneToFakeOut(target, targetMon, theGame.BotTeam[fakeOutUser]))
                 {
                     continue;
                 }
@@ -1545,16 +1569,10 @@ public class NextMoveModel() // Class to make next move decision
                     matchup.TKOGuaranteed = matchup.MinDamage >= 50;
                     matchup.MoveName = theGame.OppTeam[matchup.MonNo].Moves[move];
                     matchup.OutspeedTarget = allOptions.AllMoves[matchup.MoveName].priotity > 0;
-                    if (gimmickDamages.ContainsKey(matchup.MonNo) && gimmickDamages[matchup.MonNo].ContainsKey(matchup.Target) && gimmickDamages[matchup.MonNo][matchup.Target].ContainsKey(move))
+                    if ((matchup.OKOChance && GimmickSave(matchup.Target, matchup.MonNo, move, gimmickDamages)) ||
+                        (matchup.TKOGuaranteed && GimmickImmune(matchup.Target, matchup.MonNo, move, gimmickDamages)))
                     {
-                        if (matchup.OKOChance && gimmickDamages[matchup.MonNo][matchup.Target][move][1] < theGame.BotTeam[matchup.Target].RemainingHP)
-                        {
-                            matchup.GimmickSignificant = true;
-                        }
-                        else
-                        {
-                            matchup.GimmickSignificant = false;
-                        }
+                        matchup.GimmickSignificant = true;
                     }
                     else
                     {
