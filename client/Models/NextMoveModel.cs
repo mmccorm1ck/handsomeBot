@@ -1622,19 +1622,78 @@ public class NextMoveModel() // Class to make next move decision
             }
             TeamModel user = theGame.BotTeam[monNo];
             int allyMon = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
-            if (user.Moves.Any(_protectionMoves.Contains))
+            bool canProtect = user.Moves.Any(_protectionMoves.Contains) && !ProtectedLastTurn(monNo) && !protectionBreakingMove &&
+                !theGame.Turns[^1].OppStartMons.Any(x => x > 5 && theGame.OppTeam[x - 6].Ability == "Unseen Fist" && theGame.OppTeam[x - 6].Item != "Punching Glove");
+            bool threatOfFakeOut = OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user, theGame.OppTeam[theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)]]);
+            bool underPressure = underOffensvePressure[monNo] && !Moves.Any(x => x.MoveType != "Calculating...");
+            if (allyMon >= 0)
             {
-                if (((OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user, theGame.OppTeam[theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)]])) ||
-                    underOffensvePressure[monNo]) && !ProtectedLastTurn(monNo) && !providingOffensvePressure[allyMon] &&
-                    Moves.Find(x => x.MoveType != "Calculating...") == null && !protectionBreakingMove &&
-                    !theGame.Turns[^1].OppStartMons.Any(x => x > 5 && theGame.OppTeam[x - 6].Ability == "Unseen Fist" && theGame.OppTeam[x - 6].Item != "Punching Glove"))
+                underPressure = underPressure && !providingOffensvePressure[allyMon];
+            }
+            if (canProtect && (threatOfFakeOut || underPressure))
+            {
+                move.UserNo = monNo;
+                move.TargetNo = monNo;
+                string? moveName = user.Moves.Find(_protectionMoves.Contains);
+                moveName ??= "Protect";
+                move.MoveType = moveName;
+                continue;
+            }
+            if (!usedGimmick)
+            {
+                if (threatOfFakeOut)
                 {
-                    move.UserNo = monNo;
-                    move.TargetNo = monNo;
-                    string? moveName = user.Moves.Find(_protectionMoves.Contains);
-                    moveName ??= "Protect";
-                    move.MoveType = moveName;
-                    continue;
+                    int fakeOutUser = theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)];
+                    BestDamages? bestDamage = bestDamagesOpp.Find(x => x.MonNo == fakeOutUser && x.Target == monNo);
+                    if (bestDamage == null)
+                    {
+                        break;
+                    }
+                    bool gimmickNotWorse = gimmickDamages[fakeOutUser][monNo][theGame.OppTeam[fakeOutUser].Moves.IndexOf(bestDamage.MoveName)][0] <= bestDamage.MinDamage;
+                    int nonFakeOutUserIndex = theGame.Turns[^1].OppStartMons.FindIndex(x => x != fakeOutUser);
+                    if (nonFakeOutUserIndex != -1)
+                    {
+                        int nonFakeOutUser = theGame.Turns[^1].OppStartMons[nonFakeOutUserIndex];
+                        bestDamage = bestDamagesOpp.Find(x => x.MonNo == nonFakeOutUser && x.Target == monNo);
+                        if (bestDamage != null)
+                        {
+                            gimmickNotWorse = gimmickNotWorse && gimmickDamages[nonFakeOutUser][monNo][theGame.OppTeam[nonFakeOutUser].Moves.IndexOf(bestDamage.MoveName)][0] <= bestDamage.MinDamage;
+                        }
+                    }
+                    if(GimmickImmune(monNo, fakeOutUser, theGame.OppTeam[fakeOutUser].Moves.IndexOf("Fake Out"), gimmickDamages) && gimmickNotWorse)
+                    {
+                        move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                        usedGimmick = true;
+                    }
+                }
+                else if (underPressure)
+                {
+                    bool gimmickNotWorse = true;
+                    bool gimmickSignificant = false;
+                    foreach (int opp in theGame.Turns[^1].OppStartMons)
+                    {
+                        if (opp == -1)
+                        {
+                            continue;
+                        }
+                        BestDamages? bestDamage = bestDamagesOpp.Find(x => x.MonNo == opp && x.Target == monNo);
+                        if (bestDamage != null)
+                        {
+                            if (bestDamage.GimmickSignificant)
+                            {
+                                gimmickSignificant = true;
+                            }
+                            if (gimmickDamages[opp][monNo][theGame.OppTeam[opp].Moves.IndexOf(bestDamage.MoveName)][0] > bestDamage.MinDamage)
+                            {
+                                gimmickNotWorse = false;
+                            }
+                        }
+                    }
+                    if (gimmickNotWorse && gimmickSignificant)
+                    {
+                        move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                        usedGimmick = true;
+                    }
                 }
             }
 
