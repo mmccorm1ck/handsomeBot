@@ -1747,7 +1747,7 @@ public class NextMoveModel() // Class to make next move decision
                             move.UserNo = monNo;
                             move.TargetNo = target;
                             move.MoveType = user.Moves[i];
-                            if (!theGame.GimmickUsed[0] && !Moves.Any(x => x.UsingGimmick()) && (theGame.Gimmicks.GetGimmick() == "Tera" || theGame.Gimmicks.GetGimmick() == "Mega"))
+                            if (!usedGimmick && (theGame.Gimmicks.GetGimmick() == "Tera" || theGame.Gimmicks.GetGimmick() == "Mega"))
                             {
                                 if (gimmickDamages.ContainsKey(move.UserNo) && gimmickDamages[move.UserNo].ContainsKey(move.TargetNo) && gimmickDamages[move.UserNo][move.TargetNo].ContainsKey(i))
                                 {
@@ -1797,7 +1797,7 @@ public class NextMoveModel() // Class to make next move decision
                             move.UserNo = monNo;
                             move.TargetNo = matchup.MonNo;
                             move.MoveType = user.Moves[moveNo];
-                            if (!theGame.GimmickUsed[0] && !Moves.Any(x => x.UsingGimmick()) && (theGame.Gimmicks.GetGimmick() == "Tera" || theGame.Gimmicks.GetGimmick() == "Mega"))
+                            if (!usedGimmick && (theGame.Gimmicks.GetGimmick() == "Tera" || theGame.Gimmicks.GetGimmick() == "Mega"))
                             {
                                 if (gimmickDamages.ContainsKey(move.UserNo) && gimmickDamages[move.UserNo].ContainsKey(move.TargetNo) && gimmickDamages[move.UserNo][move.TargetNo].ContainsKey(moveNo))
                                 {
@@ -1827,7 +1827,7 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage) || (matchup.GimmickSignificant && matchup.OutspeedTarget && !Moves.Any(x => x.UsingGimmick())))
+                    if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage) || (matchup.GimmickSignificant && matchup.OutspeedTarget && !usedGimmick))
                     {
                         currBest = matchup;
                     }
@@ -1837,7 +1837,7 @@ public class NextMoveModel() // Class to make next move decision
                     move.UserNo = monNo;
                     move.TargetNo = currBest.Target;
                     move.MoveType = currBest.MoveName;
-                    if (currBest.GimmickSignificant && !Moves.Any(x => x.UsingGimmick()))
+                    if (currBest.GimmickSignificant && !usedGimmick)
                     {
                         move.UseGimmick(theGame.Gimmicks.GetGimmick());
                     }
@@ -2398,7 +2398,7 @@ public class NextMoveModel() // Class to make next move decision
                 move.UserNo = monNo;
                 move.TargetNo = bestOption.Target;
                 move.MoveType = bestOption.MoveName;        
-                if (bestOption.GimmickSignificant && !Moves.Any(x => x.UsingGimmick()))
+                if (bestOption.GimmickSignificant && !usedGimmick)
                 {
                     move.UseGimmick(theGame.Gimmicks.GetGimmick());
                 }
