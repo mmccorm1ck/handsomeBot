@@ -1697,7 +1697,7 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
-            if (underOffensvePressure[monNo])
+            if (underOffensvePressure[monNo] && !move.UsingGimmick())
             {
                 float damageToBeat = 0;
                 foreach (BestDamages matchup in bestDamagesOpp)
