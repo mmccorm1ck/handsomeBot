@@ -1722,6 +1722,10 @@ public class NextMoveModel() // Class to make next move decision
             {
                 for (int i = 0; i < 4; i++)
                 {
+                    if (move.TargetNo != -1)
+                    {
+                        break;
+                    }
                     string moveName = user.Moves[i];
                     MoveInfoModel moveInfo = allOptions.AllMoves[moveName];
                     if (moveInfo.target == "AllAdjacentFoes" || moveInfo.target == "AllAdjacent" || moveInfo.priotity > 0)
@@ -1754,6 +1758,7 @@ public class NextMoveModel() // Class to make next move decision
                                     if (expectedDamages[move.UserNo][move.TargetNo][i][1] < theGame.OppTeam[move.TargetNo - 6].RemainingHP && gimmickDamages[move.UserNo][move.TargetNo][i][0] >= theGame.OppTeam[move.TargetNo - 6].RemainingHP)
                                     {
                                         move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                                        usedGimmick = true;
                                     }
                                     else
                                     {
@@ -1804,6 +1809,7 @@ public class NextMoveModel() // Class to make next move decision
                                     if (highestDamage < theGame.OppTeam[move.TargetNo - 6].RemainingHP && gimmickDamages[move.UserNo][move.TargetNo][moveNo][0] >= theGame.OppTeam[move.TargetNo - 6].RemainingHP)
                                     {
                                         move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                                        usedGimmick = true;
                                     }
                                     else
                                     {
@@ -1840,6 +1846,7 @@ public class NextMoveModel() // Class to make next move decision
                     if (currBest.GimmickSignificant && !usedGimmick)
                     {
                         move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                        usedGimmick = true;
                     }
                     continue;
                 }
@@ -2401,6 +2408,7 @@ public class NextMoveModel() // Class to make next move decision
                 if (bestOption.GimmickSignificant && !usedGimmick)
                 {
                     move.UseGimmick(theGame.Gimmicks.GetGimmick());
+                    usedGimmick = true;
                 }
             }
         }
