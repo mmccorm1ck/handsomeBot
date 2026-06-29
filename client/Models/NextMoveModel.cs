@@ -1720,6 +1720,15 @@ public class NextMoveModel() // Class to make next move decision
 
             if (providingOffensvePressure[monNo])
             {
+                Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> damagesToUse;
+                if (move.UsingGimmick())
+                {
+                    damagesToUse = gimmickDamages;
+                }
+                else
+                {
+                    damagesToUse = expectedDamages;
+                }
                 for (int i = 0; i < 4; i++)
                 {
                     if (move.TargetNo != -1)
@@ -1731,7 +1740,7 @@ public class NextMoveModel() // Class to make next move decision
                     if (moveInfo.target == "AllAdjacentFoes" || moveInfo.target == "AllAdjacent" || moveInfo.priotity > 0)
                     {
                         int target = -1;
-                        foreach (int key in expectedDamages[monNo].Keys)
+                        foreach (int key in damagesToUse[monNo].Keys)
                         {
                             if (!theGame.Turns[^1].OppStartMons.Contains(key))
                             {
@@ -1741,7 +1750,7 @@ public class NextMoveModel() // Class to make next move decision
                             {
                                 continue;
                             }
-                            if (expectedDamages[monNo][key][i][0] >= theGame.OppTeam[key - 6].RemainingHP)
+                            if (damagesToUse[monNo][key][i][0] >= theGame.OppTeam[key - 6].RemainingHP)
                             {
                                 target = key;
                             }
@@ -1766,7 +1775,6 @@ public class NextMoveModel() // Class to make next move decision
                                     }
                                 }
                             }
-                            break;
                         }
                     }
                 }
@@ -1790,9 +1798,9 @@ public class NextMoveModel() // Class to make next move decision
                             string moveName = user.Moves[i];
                             if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && !ImmuneToMove(moveName, theGame.OppTeam[matchup.MonNo], user, matchup.MonNo))
                             {
-                                if (expectedDamages[monNo][matchup.MonNo][i][0] > highestDamage)
+                                if (damagesToUse[monNo][matchup.MonNo][i][0] > highestDamage)
                                 {
-                                    highestDamage = expectedDamages[monNo][matchup.MonNo][i][0];
+                                    highestDamage = damagesToUse[monNo][matchup.MonNo][i][0];
                                     moveNo = i;
                                 }
                             }
@@ -1817,7 +1825,6 @@ public class NextMoveModel() // Class to make next move decision
                                     }
                                 }
                             }
-                            break;
                         }
                     }
                 }
@@ -1833,7 +1840,8 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage) || (matchup.GimmickSignificant && matchup.OutspeedTarget && !usedGimmick))
+                    if ((matchup.OKOChance && !currBest.OKOChance) || (matchup.TKOGuaranteed && matchup.MinDamage > currBest.MinDamage) ||
+                        (matchup.GimmickSignificant && matchup.OutspeedTarget && (!usedGimmick || move.UsingGimmick())))
                     {
                         currBest = matchup;
                     }
