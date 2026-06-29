@@ -1852,6 +1852,11 @@ public class NextMoveModel() // Class to make next move decision
                 }
             }
 
+            if (move.Dynamax)
+            {
+                continue;
+            }
+
             if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
             {
                 move.UserNo = monNo;
@@ -2398,7 +2403,20 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
             }
+        }
 
+        for (int i = 0; i < 2; i++)
+        {
+            int monNo = theGame.Turns[^1].BotStartMons[i];
+            if (monNo == -1)
+            {
+                continue;
+            }
+            MoveModel move = Moves[i];
+            if (move.TargetNo != -1)
+            {
+                continue;
+            }
             BestDamages? bestOption = bestDamages.Find(x => x.MonNo == monNo);
             if (bestOption != null)
             {
@@ -2411,7 +2429,7 @@ public class NextMoveModel() // Class to make next move decision
                     usedGimmick = true;
                 }
             }
-        }
+        } 
 
         foreach (TeamModel mon in theGame.BotTeam)
         {
