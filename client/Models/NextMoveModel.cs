@@ -1591,7 +1591,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             if (!providingOffensvePressure.TryAdd(matchup.MonNo, matchup.TKOGuaranteed))
             {
-                providingOffensvePressure[matchup.MonNo] = providingOffensvePressure[matchup.MonNo] || matchup.TKOGuaranteed;
+                providingOffensvePressure[matchup.MonNo] = providingOffensvePressure[matchup.MonNo] || matchup.TKOGuaranteed || matchup.GimmickSignificant;
             }
         }
 
