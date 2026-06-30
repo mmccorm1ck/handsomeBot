@@ -103,6 +103,9 @@ public class EventTypeListener : INotifyPropertyChanged // Listener to update wh
             case "Move":
             case "Move Reveal":
             case "Z-Move":
+            case "Move Disabled":
+            case "Disable Ended":
+            case "PP Depleated":
                 MoveEvent = true;
                 break;
             case "Item Activation":
