@@ -409,6 +409,8 @@ public class NextMoveModel() // Class to make next move decision
             }
             theGame.OppTeam[eventModel.UserMon - 6].Transform = null;
             theGame.OppTeam[eventModel.UserMon - 6].AbilityActive = false;
+            theGame.OppTeam[eventModel.UserMon - 6].VolStatus = [];
+            theGame.OppTeam[eventModel.UserMon - 6].DisabledMoves = [];
             return;
         }
         if (eventModel.UserMon < 6 && eventModel.TargetMons[0].MonNo < 6)
@@ -419,6 +421,8 @@ public class NextMoveModel() // Class to make next move decision
             theGame.BotTeam[eventModel.TargetMons[0].MonNo].Position = "Active";
             theGame.BotTeam[eventModel.UserMon].Transform = null;
             theGame.BotTeam[eventModel.UserMon].AbilityActive = false;
+            theGame.BotTeam[eventModel.UserMon].VolStatus = [];
+            theGame.BotTeam[eventModel.UserMon].DisabledMoves = [];
         }
     }
 
