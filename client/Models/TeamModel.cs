@@ -282,6 +282,36 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
+    public int[] DisabledMoves
+    {
+        get => _disabledMoves;
+        set
+        {
+            _disabledMoves = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int[] OutOfPP
+    {
+        get => _outOfPP;
+        set
+        {
+            _outOfPP = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int Choiced
+    {
+        get => _choiced;
+        set
+        {
+            _choiced = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
     private string _item = "None"; // Pokemon's held item
@@ -318,6 +348,9 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private string _baseForme = "";
     private string _typeChange = "";
     private bool _zoroSuspect = false;
+    private int[] _disabledMoves = [];
+    private int[] _outOfPP = [];
+    private int _choiced = -1;
     private TeamModel? _transform;
     private List<ImageListener> listeners = []; // List of image listeners
     public void Attach(ImageListener listener) // Add new image listener
