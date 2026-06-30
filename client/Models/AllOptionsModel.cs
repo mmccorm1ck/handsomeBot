@@ -154,6 +154,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
     };
     private string[] _availableEventsDefault { get; } = [ // List of possible events
         "Move",
+        "Move Reveal",
         "Switch",
         "KO",
         "Ability Activation",
@@ -178,7 +179,10 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Illusion Reveal",
         "HP Loss",
         "Recoil Damage",
-        "HP Restored"
+        "HP Restored",
+        "Move Disabled",
+        "Disable Ended",
+        "PP Depleated"
     ];
     public List<string> AvailableEvents { get; set; } = [];
     public string[] AvailableOpeningEvents { get; set; } = [ // List of possible events in turn 0
@@ -258,7 +262,6 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
         "Can't Escape",
         "No Retreat",
         "Octolock",
-        "Disable",
         "Embargo",
         "Heal Block",
         "Imprison",
