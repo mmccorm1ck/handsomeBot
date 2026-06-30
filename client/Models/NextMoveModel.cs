@@ -109,6 +109,15 @@ public class NextMoveModel() // Class to make next move decision
                 case "KO":
                     ParseKO(eventModel);
                     break;
+                case "Move Disabled":
+                    ParseDisable(eventModel);
+                    break;
+                case "Disable Ended":
+                    ParseDisableEnd(eventModel);
+                    break;
+                case "PP Depleated":
+                    ParsePP(eventModel);
+                    break;
             }
         }
     }
@@ -125,9 +134,19 @@ public class NextMoveModel() // Class to make next move decision
             ParseForme(eventModel);
             return;
         }
+        TeamModel userMon;
         if (eventModel.UserMon > 5)
         {
             SaveMove(eventModel);
+            userMon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        else
+        {
+            userMon = theGame.BotTeam[eventModel.UserMon];
+        }
+        if (userMon.Item.Contains("Choice ") && !userMon.ItemRemoved && eventModel.EventType == "Move")
+        {
+            userMon.Choiced = userMon.Moves.FindIndex(x => x == eventModel.MoveName);
         }
         if (eventModel.MoveName == "Transform")
         {
@@ -532,6 +551,57 @@ public class NextMoveModel() // Class to make next move decision
                     return;
                 }
             }
+        }
+    }
+
+    private void ParseDisable(EventModel eventModel)
+    {
+        TeamModel mon;
+        if (eventModel.UserMon < 6)
+        {
+            mon = theGame.BotTeam[eventModel.UserMon];
+        }
+        else
+        {
+            mon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        int moveNo = mon.Moves.FindIndex(x => x == eventModel.MoveName);
+        if (moveNo != -1 && !mon.DisabledMoves.Contains(moveNo))
+        {
+            mon.DisabledMoves.Add([moveNo]);
+        }
+    }
+
+    private void ParseDisableEnd(EventModel eventModel)
+    {
+        TeamModel mon;
+        if (eventModel.UserMon < 6)
+        {
+            mon = theGame.BotTeam[eventModel.UserMon];
+        }
+        else
+        {
+            mon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        int moveNo = mon.Moves.FindIndex(x => x == eventModel.MoveName);
+        mon.DisabledMoves.Remove([moveNo]);
+    }
+
+    private void ParsePP(EventModel eventModel)
+    {
+        TeamModel mon;
+        if (eventModel.UserMon < 6)
+        {
+            mon = theGame.BotTeam[eventModel.UserMon];
+        }
+        else
+        {
+            mon = theGame.OppTeam[eventModel.UserMon - 6];
+        }
+        int moveNo = mon.Moves.FindIndex(x => x == eventModel.MoveName);
+        if (moveNo != -1 && !mon.OutOfPP.Contains(moveNo))
+        {
+            mon.OutOfPP.Add([moveNo]);
         }
     }
 

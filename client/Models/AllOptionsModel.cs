@@ -186,6 +186,7 @@ public class AllOptionsModel() : INotifyPropertyChanged // Class holding lists o
     ];
     public List<string> AvailableEvents { get; set; } = [];
     public string[] AvailableOpeningEvents { get; set; } = [ // List of possible events in turn 0
+        "Move Reveal",
         "Ability Activation",
         "Ability Change",
         "Ability Reveal",
