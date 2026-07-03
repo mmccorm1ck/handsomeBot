@@ -77,7 +77,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             NextMove.Moves[i].TargetMon.Attach(TargetSprites[i]);
         }
         Task.Run(NextMove.LoadMonData).Wait();
-        Task.Run(NextMove.UpdateNextMove);
+        Task.Run(NextMove.UpdateTurnInfo).Wait();
+        NextMove.ChooseNextMove();
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged; // Event handler to update UI when variables change

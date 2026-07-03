@@ -25,8 +25,10 @@ public class NextMoveModel() // Class to make next move decision
     private AllOptionsModel allOptions = new();
     private Dictionary<string, int> _nameToNo = [];
     private Dictionary<int, string> noToName = [];
+    private Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] _calcedDamages = [];
+    private List<int> _turnOrder = [];
     public List<MoveModel> Moves { get; set; } = [];
-    public async Task UpdateNextMove()
+    public async Task<List<int>> UpdateTurnInfo()
     {
         foreach (MoveModel move in Moves)
         {
@@ -41,9 +43,10 @@ public class NextMoveModel() // Class to make next move decision
         ParseTurn();
         List<CalcRespModel> damages = await CalcDamages(false);
         ParseCalc(damages);
-        List<int> turnOrder = UpdateSpeeds(trickRoomActive);
+        _turnOrder = UpdateSpeeds(trickRoomActive);
         damages = await CalcDamages(true);
-        ChooseNextMove(damages, turnOrder);
+        _calcedDamages = FormatCalcs(damages);
+        return ChooseKOSwitch(_calcedDamages[0]);
     }
     private void ParseTurn()
     {
@@ -144,7 +147,11 @@ public class NextMoveModel() // Class to make next move decision
         {
             userMon = theGame.BotTeam[eventModel.UserMon];
         }
-        if (userMon.Item.Contains("Choice ") && !userMon.ItemRemoved && eventModel.EventType == "Move")
+        if (eventModel.EventType != "Move")
+        {
+            return;
+        }
+        if (userMon.Item.Contains("Choice ") && !userMon.ItemRemoved)
         {
             userMon.Choiced = userMon.Moves.FindIndex(x => x == eventModel.MoveName);
         }
@@ -450,6 +457,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.OppTeam[eventModel.UserMon - 6].RemainingHP = 0;
             theGame.OppTeam[eventModel.UserMon - 6].Position = "KO";
+            theGame.Turns[^1].OppStartMons.Replace(eventModel.UserMon, -1);
         }
     }
 
@@ -1107,11 +1115,12 @@ public class NextMoveModel() // Class to make next move decision
         return expectedDamages;
     }
 
-    private void ChooseKOSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
+    private List<int> ChooseKOSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
     {
+        List<int> switchIn = [];
         if (!theGame.BotTeam.Any(x => x.Position == "Reserve"))
         {
-            return;
+            return switchIn;
         }
         for (int i = 0; i < 2; i++)
         {
@@ -1125,8 +1134,10 @@ public class NextMoveModel() // Class to make next move decision
                 continue;
             }
             theGame.Turns[^1].BotStartMons[i] = switchMon;
-            theGame.BotTeam[switchMon].Position = "Switching";
+            theGame.BotTeam[switchMon].Position = "Active";
+            switchIn.Add(switchMon);
         }
+        return switchIn;
     }
 
     private int ChooseSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages, float damageToBeat)
@@ -1457,15 +1468,14 @@ public class NextMoveModel() // Class to make next move decision
         return true;
     }
 
-    private void ChooseNextMove(List<CalcRespModel> damages, List<int> speedOrder)
+    public void ChooseNextMove()
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] calcedDamages = FormatCalcs(damages);
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = calcedDamages[0];
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages  = calcedDamages[1];
-        ChooseKOSwitch(expectedDamages);
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = _calcedDamages[0];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages  = _calcedDamages[1];
+
         if (theGame.CurrentArena.TrickRoom)
         {
-            speedOrder.Reverse();
+            _turnOrder.Reverse();
         }
 
         List<BestDamages> bestDamages = [];
@@ -1526,7 +1536,7 @@ public class NextMoveModel() // Class to make next move decision
                     }
                 }
             }
-            if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
+            if (_turnOrder.IndexOf(matchup.MonNo) < _turnOrder.IndexOf(matchup.Target))
             {
                 matchup.OutspeedTarget = true;
             }
@@ -1585,7 +1595,7 @@ public class NextMoveModel() // Class to make next move decision
             }
             int fakeOutUser = theGame.Turns[^1].BotStartMons[BotCanFakeOut.IndexOf(true)];
             MoveModel fakeOutMove = Moves[BotCanFakeOut.IndexOf(true)];
-            foreach (int target in speedOrder)
+            foreach (int target in _turnOrder)
             {
                 if (target < 6)
                 {
@@ -1654,7 +1664,7 @@ public class NextMoveModel() // Class to make next move decision
                     }
                 }
             }
-            if (speedOrder.IndexOf(matchup.MonNo) < speedOrder.IndexOf(matchup.Target))
+            if (_turnOrder.IndexOf(matchup.MonNo) < _turnOrder.IndexOf(matchup.Target))
             {
                 matchup.OutspeedTarget = true;
             }
@@ -1683,7 +1693,7 @@ public class NextMoveModel() // Class to make next move decision
 
         // Also need to calculate support pressures
         
-        foreach (int monNo in speedOrder)
+        foreach (int monNo in _turnOrder)
         {
             if (!theGame.Turns[^1].BotStartMons.Contains(monNo))
             {
@@ -1862,7 +1872,7 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    if (speedOrder.IndexOf(monNo) < speedOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
+                    if (_turnOrder.IndexOf(monNo) < _turnOrder.IndexOf(matchup.MonNo) && matchup.OKOChance &&
                         user.Moves.Any(x => allOptions.AllMoves[x].priotity > 0 && x != "Fake Out"))
                     {
                         int moveNo = -1;
