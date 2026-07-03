@@ -5,6 +5,7 @@ using HandsomeBot.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
+using DialogHostAvalonia;
 
 namespace HandsomeBot.ViewModels;
 
@@ -335,5 +336,33 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         TargetList = [];
         CurrEvent.Attach(EventType); // Attach event type listener
         UserMonName = ""; // Reset user mon name to clear sprite
+    }
+
+    /* ------------------------
+    Handling switch information
+    ------------------------ */
+    
+    private bool _switchesOpen = false;
+    public bool SwitchesOpen
+    {
+        get => _switchesOpen;
+        set
+        {
+            _switchesOpen = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public async void ShowSwitches()
+    {
+        DialogHost.Close("EventsDialogHost");
+        List<int> switches = await NextMove.UpdateTurnInfo();
+        SwitchesOpen = true;
+    }
+
+    public void CalcMove()
+    {
+        SwitchesOpen = false;
+        NextMove.ChooseNextMove();
     }
 }

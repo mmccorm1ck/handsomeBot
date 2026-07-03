@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:HandsomeBot.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
-        x:Class="HandsomeBot.Views.BattlePageView"
-        x:DataType="vm:BattlePageViewModel">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HandsomeBot.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+             x:Class="HandsomeBot.Views.BattlePageView"
+             x:DataType="vm:BattlePageViewModel">
 
-    <dialogHost:DialogHost Name="EventsDialogHost">
+    <dialogHost:DialogHost Name="EventsDialogHost" Identifier="EventsDialogHost">
         <dialogHost:DialogHost.DialogContent>
             <StackPanel HorizontalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
@@ -19,279 +19,286 @@
                     <StackPanel>
                         <Label HorizontalAlignment="Center">Event Type</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AllOptions.AvailableEvents}"
-                            SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
+                                  MaxDropDownHeight="100" Name="eventCbx" ItemsSource="{Binding AllOptions.AvailableEvents}"
+                                  SelectedItem="{Binding CurrEvent.EventType, Mode=TwoWay}"/>
                         <Label HorizontalAlignment="Center">User Pokemon</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
-                            SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
+                                  MaxDropDownHeight="100" Name="userCbx" ItemsSource="{Binding AvailablePokemon}"
+                                  SelectedItem="{Binding UserMonName, Mode=TwoWay}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.MoveEvent}">Move:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
-                            MaxDropDownHeight="100" Name="moveCbx" ItemsSource="{Binding AllOptions.AllMoveNames}"
-                            Text="{Binding CurrEvent.MoveName}" IsVisible="{Binding EventType.MoveEvent}"/>
+                                         MaxDropDownHeight="100" Name="moveCbx" ItemsSource="{Binding AllOptions.AllMoveNames}"
+                                         Text="{Binding CurrEvent.MoveName}" IsVisible="{Binding EventType.MoveEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.ItemEvent}">Item:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
-                            MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllOptions.AllItems}"
-                            Text="{Binding CurrEvent.ItemName}" IsVisible="{Binding EventType.ItemEvent}"/>
+                                         MaxDropDownHeight="100" Name="itemCbx" ItemsSource="{Binding AllOptions.AllItems}"
+                                         Text="{Binding CurrEvent.ItemName}" IsVisible="{Binding EventType.ItemEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.AbilityEvent}">Ability:</Label>
                         <AutoCompleteBox HorizontalAlignment="Center" FilterMode="Contains"
-                            MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllOptions.AllAbilities}"
-                            Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
+                                         MaxDropDownHeight="100" Name="abilityCbx" ItemsSource="{Binding AllOptions.AllAbilities}"
+                                         Text="{Binding CurrEvent.AbilityName}" IsVisible="{Binding EventType.AbilityEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FieldEvent}">Field Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding AllOptions.FieldList}"
-                            SelectedItem="{Binding CurrEvent.FieldChange}" IsVisible="{Binding EventType.FieldEvent}"/>
+                                  MaxDropDownHeight="100" Name="fieldCbx" ItemsSource="{Binding AllOptions.FieldList}"
+                                  SelectedItem="{Binding CurrEvent.FieldChange}" IsVisible="{Binding EventType.FieldEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatEvent}">Stat Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding AllOptions.StatList}"
-                            SelectedItem="{Binding CurrEvent.StatChange}" IsVisible="{Binding EventType.StatEvent}"/>
+                                  MaxDropDownHeight="100" Name="statCbx" ItemsSource="{Binding AllOptions.StatList}"
+                                  SelectedItem="{Binding CurrEvent.StatChange}" IsVisible="{Binding EventType.StatEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatEvent}">Stat Adjustment:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="adjstmntCbx" ItemsSource="{Binding AllOptions.StatAdjustments}"
-                            SelectedItem="{Binding CurrEvent.StatAdjustment}" IsVisible="{Binding EventType.StatEvent}"/>
+                                  MaxDropDownHeight="100" Name="adjstmntCbx" ItemsSource="{Binding AllOptions.StatAdjustments}"
+                                  SelectedItem="{Binding CurrEvent.StatAdjustment}" IsVisible="{Binding EventType.StatEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.StatusEvent}">Status Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="statusCbx" ItemsSource="{Binding AllOptions.StatusList}"
-                            SelectedItem="{Binding CurrEvent.StatusChange}" IsVisible="{Binding EventType.StatusEvent}"/>
+                                  MaxDropDownHeight="100" Name="statusCbx" ItemsSource="{Binding AllOptions.StatusList}"
+                                  SelectedItem="{Binding CurrEvent.StatusChange}" IsVisible="{Binding EventType.StatusEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.TypeEvent}">Type Change:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding AllOptions.TypeList}"
-                            SelectedItem="{Binding CurrEvent.TypeChange}" IsVisible="{Binding EventType.TypeEvent}"/>
+                                  MaxDropDownHeight="100" Name="typeCbx" ItemsSource="{Binding AllOptions.TypeList}"
+                                  SelectedItem="{Binding CurrEvent.TypeChange}" IsVisible="{Binding EventType.TypeEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.FormeEvent}">Forme:</Label>
                         <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                            MaxDropDownHeight="100" Name="formeCbx" ItemsSource="{Binding FormeList}"
-                            SelectedItem="{Binding CurrEvent.FormeName}" IsVisible="{Binding EventType.FormeEvent}"/>
+                                  MaxDropDownHeight="100" Name="formeCbx" ItemsSource="{Binding FormeList}"
+                                  SelectedItem="{Binding CurrEvent.FormeName}" IsVisible="{Binding EventType.FormeEvent}"/>
                         <Label HorizontalAlignment="Center" IsVisible="{Binding EventType.DamageEvent}">Remaining HP:</Label>
-                        <TextBox HorizontalAlignment="Center" Name="damageTbx" 
-                            Text="{Binding CurrEvent.RemainingHPString, Mode=TwoWay}" IsVisible="{Binding EventType.DamageEvent}"/>
+                        <TextBox HorizontalAlignment="Center" Name="damageTbx"
+                                 Text="{Binding CurrEvent.RemainingHPString, Mode=TwoWay}" IsVisible="{Binding EventType.DamageEvent}"/>
                     </StackPanel>
                     <Image Margin="10" Source="{Binding UserSprite.Image}"/>
                 </StackPanel>
                 <Label HorizontalAlignment="Center">Target(s):</Label>
                 <ItemsControl ItemsSource="{Binding TargetList}">
-                <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="0,10,0,0" CornerRadius="5" Padding="5"
-                        BorderBrush="White" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel>
-                                <StackPanel>
-                                    <Label HorizontalAlignment="Left">Target Mon</Label>
-                                    <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                                        MaxDropDownHeight="100" ItemsSource="{Binding AvailablePokemon}"
-                                        SelectedItem="{Binding Target.MonName, Mode=TwoWay}"/>
-                                </StackPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,10,0,0" CornerRadius="5" Padding="5"
+                                    BorderBrush="White" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
                                     <StackPanel>
-                                        <Label HorizontalAlignment="Left">Result</Label>
-                                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
-                                            MaxDropDownHeight="100" ItemsSource="{Binding AllOptions.MoveResults}"
-                                            SelectedItem="{Binding Target.MoveResult, Mode=TwoWay}"/>
+                                        <StackPanel>
+                                            <Label HorizontalAlignment="Left">Target Mon</Label>
+                                            <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                                                      MaxDropDownHeight="100" ItemsSource="{Binding AvailablePokemon}"
+                                                      SelectedItem="{Binding Target.MonName, Mode=TwoWay}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel>
+                                                <Label HorizontalAlignment="Left">Result</Label>
+                                                <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                                                          MaxDropDownHeight="100" ItemsSource="{Binding AllOptions.MoveResults}"
+                                                          SelectedItem="{Binding Target.MoveResult, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <Label HorizontalAlignment="Left">Damage</Label>
+                                                <TextBox Watermark="Damage Dealt" Text="{Binding Target.Damage, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <Label HorizontalAlignment="Left">Crit?</Label>
+                                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Target.Crit, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel>
-                                        <Label HorizontalAlignment="Left">Damage</Label>
-                                        <TextBox Watermark="Damage Dealt" Text="{Binding Target.Damage, Mode=TwoWay}"/>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <Label HorizontalAlignment="Left">Crit?</Label>
-                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Target.Crit, Mode=TwoWay}"/>
-                                    </StackPanel>
+                                    <Image Margin="10" Source="{Binding Image.Image}"/>
                                 </StackPanel>
-                            </StackPanel>
-                            <Image Margin="10" Source="{Binding Image.Image}"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <Grid HorizontalAlignment="Center" ColumnDefinitions="200,200" RowDefinitions="50,50">
                     <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding AddTarget}">Add Target</Button>
                     <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Command="{Binding RemoveTarget}">Remove Target</Button>
                     <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding NextEvent}">Next Event</Button>
-                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding #EventsDialogHost.CloseDialogCommand}">Finish</Button>
+                    <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Command="{Binding ShowSwitches}">Finish</Button>
                 </Grid>
             </StackPanel>
         </dialogHost:DialogHost.DialogContent>
-    <StackPanel>
-        <Border Margin="5" 
-            CornerRadius="10"
-            Background="DarkBlue"
-            BoxShadow="0 0 10 0 Blue">
-            <TextBlock Margin="5"
-                FontSize="24" 
-                HorizontalAlignment="Center"
-                Text="Battle">
-            </TextBlock>
-        </Border>
-        <Grid ShowGridLines="False" Margin="5"
-            ColumnDefinitions="Auto, 200, Auto"
-            RowDefinitions="Auto, Auto, 150, Auto, 150, Auto"
-            HorizontalAlignment="Center" >
-            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Bot</Label>
-            <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="10">Opponent</Label>
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="10">
-                <Label HorizontalAlignment="Right" Content="Turn"/>
-                <Label HorizontalAlignment="Left" Content="{Binding CurrTurn.TurnNo}"/>
+        <dialogHost:DialogHost Name="KOSwitchDialogHost" Identifier="KOSwitchDialogHost" IsOpen="{Binding SwitchesOpen}">
+            <dialogHost:DialogHost.DialogContent>
+                <StackPanel HorizontalAlignment="Center">
+                    <Button HorizontalAlignment="Center" Command="{Binding CalcMove}">Calculate Next Move</Button>
+                </StackPanel>
+            </dialogHost:DialogHost.DialogContent>
+            <StackPanel>
+                <Border Margin="5"
+                        CornerRadius="10"
+                        Background="DarkBlue"
+                        BoxShadow="0 0 10 0 Blue">
+                    <TextBlock Margin="5"
+                               FontSize="24"
+                               HorizontalAlignment="Center"
+                               Text="Battle">
+                    </TextBlock>
+                </Border>
+                <Grid ShowGridLines="False" Margin="5"
+                      ColumnDefinitions="Auto, 200, Auto"
+                      RowDefinitions="Auto, Auto, 150, Auto, 150, Auto"
+                      HorizontalAlignment="Center" >
+                    <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="10">Bot</Label>
+                    <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="10">Opponent</Label>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="10">
+                        <Label HorizontalAlignment="Right" Content="Turn"/>
+                        <Label HorizontalAlignment="Left" Content="{Binding CurrTurn.TurnNo}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Grid.Column="0"
+                          ShowGridLines="False" Margin="5"
+                          ColumnDefinitions="150, 150"
+                          RowDefinitions="150, Auto, Auto, 150, Auto, Auto, 150, Auto, Auto"
+                          HorizontalAlignment="Center" >
+                        <Panel Grid.Row="0" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[0].BorderColour}" IsVisible="{Binding Sprites[0].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[0].Image}"/>
+                        </Panel>
+                        <Label HorizontalAlignment="Center" Margin="3" Grid.Row="1" Grid.Column="0"
+                               Content="{Binding TheGame.BotTeam[0].Name}" Foreground="{Binding Sprites[0].TextColour}"/>
+                        <ProgressBar Grid.Row="2" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[0].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="0" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[1].BorderColour}" IsVisible="{Binding Sprites[1].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[1].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.BotTeam[1].Name}" Foreground="{Binding Sprites[1].TextColour}"/>
+                        <ProgressBar Grid.Row="2" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[1].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="3" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[2].BorderColour}" IsVisible="{Binding Sprites[2].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[2].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.BotTeam[2].Name}" Foreground="{Binding Sprites[2].TextColour}"/>
+                        <ProgressBar Grid.Row="5" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[2].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="3" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[3].BorderColour}" IsVisible="{Binding Sprites[3].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[3].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.BotTeam[3].Name}" Foreground="{Binding Sprites[3].TextColour}"/>
+                        <ProgressBar Grid.Row="5" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[3].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="6" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[4].BorderColour}" IsVisible="{Binding Sprites[4].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[4].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.BotTeam[4].Name}" Foreground="{Binding Sprites[4].TextColour}"/>
+                        <ProgressBar Grid.Row="8" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[4].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="6" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[5].BorderColour}" IsVisible="{Binding Sprites[5].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.BotTeam[5].Name}" Foreground="{Binding Sprites[5].TextColour}"/>
+                        <ProgressBar Grid.Row="8" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.BotTeam[5].RemainingHP}" ShowProgressText="False"/>
+                    </Grid>
+                    <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">VS</Label>
+                    <Grid Grid.Row="1" Grid.Column="2"
+                          ShowGridLines="False" Margin="5"
+                          ColumnDefinitions="150, 150"
+                          RowDefinitions="150, Auto, Auto, 150, Auto, Auto, 150, Auto, Auto"
+                          HorizontalAlignment="Center" >
+                        <Panel Grid.Row="0" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[6].BorderColour}" IsVisible="{Binding Sprites[6].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[6].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[0].Name}" Foreground="{Binding Sprites[6].TextColour}"/>
+                        <ProgressBar Grid.Row="2" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[0].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="0" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[7].BorderColour}" IsVisible="{Binding Sprites[7].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[7].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[1].Name}" Foreground="{Binding Sprites[7].TextColour}"/>
+                        <ProgressBar Grid.Row="2" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[1].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="3" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[8].BorderColour}" IsVisible="{Binding Sprites[8].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[8].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[2].Name}" Foreground="{Binding Sprites[8].TextColour}"/>
+                        <ProgressBar Grid.Row="5" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[2].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="3" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[9].BorderColour}" IsVisible="{Binding Sprites[9].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[9].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[3].Name}" Foreground="{Binding Sprites[9].TextColour}"/>
+                        <ProgressBar Grid.Row="5" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[3].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="6" Grid.Column="0">
+                            <Border BorderBrush="{Binding Sprites[10].BorderColour}" IsVisible="{Binding Sprites[10].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[10].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[4].Name}" Foreground="{Binding Sprites[10].TextColour}"/>
+                        <ProgressBar Grid.Row="8" Grid.Column="0" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[4].RemainingHP}" ShowProgressText="False"/>
+                        <Panel Grid.Row="6" Grid.Column="1">
+                            <Border BorderBrush="{Binding Sprites[11].BorderColour}" IsVisible="{Binding Sprites[11].BorderVisible}"
+                                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
+                            <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[11].Image}"/>
+                        </Panel>
+                        <Label Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
+                               Content="{Binding TheGame.OppTeam[5].Name}" Foreground="{Binding Sprites[11].TextColour}"/>
+                        <ProgressBar Grid.Row="8" Grid.Column="1" MinWidth="100" Margin="0 3"
+                                     Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
+                                     Value="{Binding TheGame.OppTeam[5].RemainingHP}" ShowProgressText="False"/>
+                    </Grid>
+                    <Image Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[0].Image}"/>
+                    <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].UserMon.Name}"/>
+                    <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[0].Image}"/>
+                    <Label Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].TargetMon.Name}"/>
+                    <Image Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[1].Image}"/>
+                    <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].UserMon.Name}"/>
+                    <Image Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[1].Image}"/>
+                    <Label Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].TargetMon.Name}"/>
+                    <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Tera}">TERA</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Mega}">MEGA EVO</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Dynamax}">DYNAMAX</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].ZMove}">Z MOVE</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Tera}">TERA</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Mega}">MEGA EVO</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Dynamax}">DYNAMAX</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].ZMove}">Z MOVE</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
+                    </StackPanel>
+                    <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].MoveType}"/>
+                    <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].MoveType}"/>
+                </Grid>
+                <Button HorizontalAlignment="Center" Margin="50" Command="{Binding #EventsDialogHost.OpenDialogCommand}">Enter Results</Button>
             </StackPanel>
-            <Grid Grid.Row="1" Grid.Column="0"
-                ShowGridLines="False" Margin="5"
-                ColumnDefinitions="150, 150"
-                RowDefinitions="150, Auto, Auto, 150, Auto, Auto, 150, Auto, Auto"
-                HorizontalAlignment="Center" >
-                <Panel Grid.Row="0" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[0].BorderColour}" IsVisible="{Binding Sprites[0].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[0].Image}"/>
-                </Panel>
-                <Label HorizontalAlignment="Center" Margin="3" Grid.Row="1" Grid.Column="0" 
-                    Content="{Binding TheGame.BotTeam[0].Name}" Foreground="{Binding Sprites[0].TextColour}"/>
-                <ProgressBar Grid.Row="2" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[0].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="0" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[1].BorderColour}" IsVisible="{Binding Sprites[1].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[1].Image}"/>
-                </Panel>
-                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.BotTeam[1].Name}" Foreground="{Binding Sprites[1].TextColour}"/>
-                <ProgressBar Grid.Row="2" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[1].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="3" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[2].BorderColour}" IsVisible="{Binding Sprites[2].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[2].Image}"/>
-                </Panel>
-                <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.BotTeam[2].Name}" Foreground="{Binding Sprites[2].TextColour}"/>
-                <ProgressBar Grid.Row="5" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[2].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="3" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[3].BorderColour}" IsVisible="{Binding Sprites[3].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[3].Image}"/>
-                </Panel>
-                <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.BotTeam[3].Name}" Foreground="{Binding Sprites[3].TextColour}"/>
-                <ProgressBar Grid.Row="5" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[3].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="6" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[4].BorderColour}" IsVisible="{Binding Sprites[4].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[4].Image}"/>
-                </Panel>
-                <Label Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.BotTeam[4].Name}" Foreground="{Binding Sprites[4].TextColour}"/>
-                <ProgressBar Grid.Row="8" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[4].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="6" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[5].BorderColour}" IsVisible="{Binding Sprites[5].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="10" Source="{Binding Sprites[5].Image}"/>
-                </Panel>
-                <Label Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.BotTeam[5].Name}" Foreground="{Binding Sprites[5].TextColour}"/>
-                <ProgressBar Grid.Row="8" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.BotTeam[5].RemainingHP}" ShowProgressText="False"/>
-            </Grid>
-            <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">VS</Label>
-            <Grid Grid.Row="1" Grid.Column="2"
-                ShowGridLines="False" Margin="5"
-                ColumnDefinitions="150, 150"
-                RowDefinitions="150, Auto, Auto, 150, Auto, Auto, 150, Auto, Auto"
-                HorizontalAlignment="Center" >
-                <Panel Grid.Row="0" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[6].BorderColour}" IsVisible="{Binding Sprites[6].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[6].Image}"/>
-                </Panel>
-                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[0].Name}" Foreground="{Binding Sprites[6].TextColour}"/>
-                <ProgressBar Grid.Row="2" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[0].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="0" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[7].BorderColour}" IsVisible="{Binding Sprites[7].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[7].Image}"/>
-                </Panel>
-                <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[1].Name}" Foreground="{Binding Sprites[7].TextColour}"/>
-                <ProgressBar Grid.Row="2" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[1].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="3" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[8].BorderColour}" IsVisible="{Binding Sprites[8].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[8].Image}"/>
-                </Panel>
-                <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[2].Name}" Foreground="{Binding Sprites[8].TextColour}"/>
-                <ProgressBar Grid.Row="5" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[2].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="3" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[9].BorderColour}" IsVisible="{Binding Sprites[9].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[9].Image}"/>
-                </Panel>
-                <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[3].Name}" Foreground="{Binding Sprites[9].TextColour}"/>
-                <ProgressBar Grid.Row="5" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[3].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="6" Grid.Column="0">
-                    <Border BorderBrush="{Binding Sprites[10].BorderColour}" IsVisible="{Binding Sprites[10].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[10].Image}"/>
-                </Panel>
-                <Label Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[4].Name}" Foreground="{Binding Sprites[10].TextColour}"/>
-                <ProgressBar Grid.Row="8" Grid.Column="0" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[4].RemainingHP}" ShowProgressText="False"/>
-                <Panel Grid.Row="6" Grid.Column="1">
-                    <Border BorderBrush="{Binding Sprites[11].BorderColour}" IsVisible="{Binding Sprites[11].BorderVisible}"
-                    BorderThickness="2" CornerRadius="3" Padding="6" Margin="2"/>
-                    <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Sprites[11].Image}"/>
-                </Panel>
-                <Label Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Margin="3"
-                    Content="{Binding TheGame.OppTeam[5].Name}" Foreground="{Binding Sprites[11].TextColour}"/>
-                <ProgressBar Grid.Row="8" Grid.Column="1" MinWidth="100" Margin="0 3"
-                    Minimum="0" Maximum="100" Foreground="Green" HorizontalAlignment="Center"
-                    Value="{Binding TheGame.OppTeam[5].RemainingHP}" ShowProgressText="False"/>
-            </Grid>
-            <Image Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[0].Image}"/>
-            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].UserMon.Name}"/>
-            <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[0].Image}"/>
-            <Label Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].TargetMon.Name}"/>
-            <Image Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Source="{Binding ActiveSprites[1].Image}"/>
-            <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].UserMon.Name}"/>
-            <Image Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Source="{Binding TargetSprites[1].Image}"/>
-            <Label Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].TargetMon.Name}"/>
-            <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Tera}">TERA</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Mega}">MEGA EVO</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].Dynamax}">DYNAMAX</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[0].ZMove}">Z MOVE</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
-            </StackPanel>
-            <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Tera}">TERA</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Mega}">MEGA EVO</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].Dynamax}">DYNAMAX</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" IsVisible="{Binding NextMove.Moves[1].ZMove}">Z MOVE</Label>
-                <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30">→</Label>
-            </StackPanel>
-            <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[0].MoveType}"/>
-            <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Margin="10" Content="{Binding NextMove.Moves[1].MoveType}"/>
-        </Grid>
-        <Button HorizontalAlignment="Center" Margin="50" Command="{Binding #EventsDialogHost.OpenDialogCommand}">Enter Results</Button>
-    </StackPanel>
+        </dialogHost:DialogHost>
     </dialogHost:DialogHost>
 </UserControl>
