@@ -1158,6 +1158,10 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
                 float maxMonDamage = 0;
+                if (!expectedDamages.TryGetValue(targetmon, out Dictionary<int, Dictionary<int, List<float>>>? value) || !value.ContainsKey(monNo))
+                {
+                    continue;
+                }
                 foreach (List<float> move in expectedDamages[targetmon][monNo].Values)
                 {
                     maxMonDamage = maxMonDamage < move[0] ? move[0] : maxMonDamage;
