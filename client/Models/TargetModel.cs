@@ -15,7 +15,7 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
         {
             _monName = value;
             _monNo = _nameToNo[value];
-            _targetMonModel.Name = _monName;
+            _targetMonModel.Name = _monName.Replace("Opponent's ", "");
             OnPropertyChanged();
         }
     }
