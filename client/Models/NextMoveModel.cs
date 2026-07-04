@@ -457,7 +457,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             theGame.OppTeam[eventModel.UserMon - 6].RemainingHP = 0;
             theGame.OppTeam[eventModel.UserMon - 6].Position = "KO";
-            theGame.Turns[^1].OppStartMons.Replace(eventModel.UserMon, -1);
+            theGame.Turns[^1].OppStartMons.Replace(eventModel.UserMon - 6, -1);
         }
     }
 
