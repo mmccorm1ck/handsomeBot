@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using DynamicData;
 using DialogHostAvalonia;
+using System;
 
 namespace HandsomeBot.ViewModels;
 
@@ -368,10 +369,29 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private ObservableCollection<TargetImageModel> _koSwitches = [];
+    public ObservableCollection<TargetImageModel> KOSwitches
+    {
+        get => _koSwitches;
+        set
+        {
+            _koSwitches = value;
+            OnPropertyChanged();
+        }
+    }
+
     public async void ShowSwitches()
     {
         DialogHost.Close("EventsDialogHost");
+        NextTurn();
         List<int> switches = await NextMove.UpdateTurnInfo();
+        foreach (int sw in switches)
+        {
+            TargetImageModel switchTarget = new(new(NameToNo), new(), AllOptions, []);
+            switchTarget.Target.Attach(switchTarget.Image);
+            switchTarget.Target.MonName = TheGame.BotTeam[sw].Name;
+            KOSwitches.Add(switchTarget);
+        }
         SwitchesOpen = true;
     }
 

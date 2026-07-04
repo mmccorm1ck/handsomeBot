@@ -115,6 +115,20 @@
         <dialogHost:DialogHost Name="KOSwitchDialogHost" Identifier="KOSwitchDialogHost" IsOpen="{Binding SwitchesOpen}">
             <dialogHost:DialogHost.DialogContent>
                 <StackPanel HorizontalAlignment="Center">
+                    <Grid HorizontalAlignment="Center" ColumnDefinitions="200,100,200" RowDefinitions="50,Auto">
+                        <Label HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" FontSize="18">Bot Switch-Ins:</Label>
+                        <Label HorizontalAlignment="Right" Grid.Column="3" Grid.Row="0" FontSize="18">Opponent Switch-Ins:</Label>
+                        <ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding KOSwitches}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Image.Image}"/>
+                                        <Label HorizontalAlignment="Center" Content="{Binding Target.MonName}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
                     <Button HorizontalAlignment="Center" Command="{Binding CalcMove}">Calculate Next Move</Button>
                 </StackPanel>
             </dialogHost:DialogHost.DialogContent>
