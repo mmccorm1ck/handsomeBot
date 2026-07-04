@@ -870,9 +870,9 @@ public class NextMoveModel() // Class to make next move decision
             }
             botPokemon.Add(new PokemonModel(theGame.Gen, theGame.BotTeam[i]));
         }
-        foreach (int i in theGame.MonsSeen)
+        for (int i = 0; i < 6; i++)
         {
-            if (theGame.OppTeam[i].Position == "KO")
+            if (theGame.OppTeam[i].Position == "KO" || theGame.OppTeam[i].Position == "Not Brought")
             {
                 continue;
             }
