@@ -1703,7 +1703,7 @@ public class NextMoveModel() // Class to make next move decision
             }
         }
 
-        bool protectionBreakingMove = theGame.Turns[^1].OppStartMons.Any(x => theGame.OppTeam[x].Moves.Any(_protectionBreakingMoves.Contains));
+        bool protectionBreakingMove = theGame.Turns[^1].OppStartMons.Any(x => x != -1 && theGame.OppTeam[x].Moves.Any(_protectionBreakingMoves.Contains));
         bool usedGimmick = theGame.GimmickUsed[0];
 
         // Also need to calculate support pressures
