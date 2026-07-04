@@ -338,6 +338,25 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         UserMonName = ""; // Reset user mon name to clear sprite
     }
 
+    public void NextTurn()
+    {
+        TheGame.Turns.Add(
+            new()
+            {
+                TurnNo = CurrTurn.TurnNo + 1,
+                EventList = [new()]
+            }
+        );
+        CurrTurn = TheGame.Turns[^1];
+        CurrEvent = CurrTurn.EventList[0];
+        for (int i = 0; i < 2; i++)
+        {
+            CurrTurn.BotStartMons[i] = TheGame.Turns[^2].BotEndMons[i];
+            CurrTurn.OppStartMons[i] = TheGame.Turns[^2].OppEndMons[i];
+        }
+        
+    }
+
     /* ------------------------
     Handling switch information
     ------------------------ */
