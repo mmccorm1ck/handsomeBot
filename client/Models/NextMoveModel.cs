@@ -862,10 +862,13 @@ public class NextMoveModel() // Class to make next move decision
     {
         ObservableCollection<PokemonModel> botPokemon = []; // Collection of bot's pokemon in server compatable format
         ObservableCollection<PokemonModel> oppPokemon = []; // Collection of opponent's pokemon in server compatable format
-        for (int i = 0; i < 2; i++) // Add all mons to collections
+        foreach (int i in theGame.MonsBrought) // Add all brought mons to collections
         {
-            botPokemon.Add(new PokemonModel(theGame.Gen, theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]])); // This needs updating to account for switches in future
-            oppPokemon.Add(new PokemonModel(theGame.Gen, theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]]));
+            botPokemon.Add(new PokemonModel(theGame.Gen, theGame.BotTeam[i]));
+        }
+        foreach (int i in theGame.MonsSeen)
+        {
+            oppPokemon.Add(new PokemonModel(theGame.Gen, theGame.OppTeam[i]));
         }
         CalcCallModel callData = new() // Collect all data together for calc
         {
