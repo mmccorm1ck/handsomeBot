@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using DialogHostAvalonia;
 using System;
+using System.Linq;
 
 namespace HandsomeBot.ViewModels;
 
@@ -380,17 +381,55 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
+    private ObservableCollection<TargetImageModel> _oppKoSwitches = [];
+    public ObservableCollection<TargetImageModel> OppKOSwitches
+    {
+        get => _oppKoSwitches;
+        set
+        {
+            _oppKoSwitches = value;
+            OnPropertyChanged();
+        }
+    }
+
     public async void ShowSwitches()
     {
         DialogHost.Close("EventsDialogHost");
         NextTurn();
         List<int> switches = await NextMove.UpdateTurnInfo();
+        int opSwitchNo = CurrTurn.OppStartMons.Count(x => x == -1);
+        while (opSwitchNo + 2 > TheGame.OppTeam.Count(x => x.Position == "Reserve" || x.Position == "Not Brought"))
+        {
+            opSwitchNo --;
+        }
+        if (switches.Count == 0 && opSwitchNo == 0)
+        {
+            CalcMove();
+            return;
+        }
+        KOSwitches = [];
+        OppKOSwitches = [];
         foreach (int sw in switches)
         {
             TargetImageModel switchTarget = new(new(NameToNo), new(), AllOptions, []);
             switchTarget.Target.Attach(switchTarget.Image);
             switchTarget.Target.MonName = TheGame.BotTeam[sw].Name;
             KOSwitches.Add(switchTarget);
+        }
+        List<string> oppSwitchOptions = [];
+        foreach (TeamModel mon in TheGame.OppTeam)
+        {
+            if (mon.Position != "Reserve")
+            {
+                continue;
+            }
+            oppSwitchOptions.Add("Opponent's " + mon.Name);
+        }
+        for (int i = 0; i < opSwitchNo; i++)
+        {
+            TargetImageModel switchTarget = new(new(NameToNo), new(), AllOptions, [.. oppSwitchOptions]);
+            switchTarget.Target.Attach(switchTarget.Image);
+            OppKOSwitches.Add(switchTarget);
         }
         SwitchesOpen = true;
     }

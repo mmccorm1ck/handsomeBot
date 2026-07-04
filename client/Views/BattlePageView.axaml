@@ -117,13 +117,25 @@
                 <StackPanel HorizontalAlignment="Center">
                     <Grid HorizontalAlignment="Center" ColumnDefinitions="200,100,200" RowDefinitions="50,Auto">
                         <Label HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0" FontSize="18">Bot Switch-Ins:</Label>
-                        <Label HorizontalAlignment="Right" Grid.Column="3" Grid.Row="0" FontSize="18">Opponent Switch-Ins:</Label>
+                        <Label HorizontalAlignment="Right" Grid.Column="2" Grid.Row="0" FontSize="18">Opponent Switch-Ins:</Label>
                         <ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding KOSwitches}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
                                         <Image HorizontalAlignment="Center" Margin="10" Source="{Binding Image.Image}"/>
                                         <Label HorizontalAlignment="Center" Content="{Binding Target.MonName}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl Grid.Column="2" Grid.Row="1" ItemsSource="{Binding OppKOSwitches}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Image Margin="10" Source="{Binding Image.Image}"/>
+                                        <ComboBox HorizontalAlignment="Center" SelectedIndex="0"
+                                                  MaxDropDownHeight="100" ItemsSource="{Binding AvailablePokemon}"
+                                                  SelectedItem="{Binding Target.MonName, Mode=TwoWay}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
