@@ -132,7 +132,6 @@ public class OpenerPageViewModel : ViewModelBase, INotifyPropertyChanged
         {
             _openerMonNos = value;
             TheGame.Turns[0].BotStartMons = _openerMonNos;
-            TheGame.Turns[0].BotEndMons = _openerMonNos;
             OnPropertyChanged();
         }
     }

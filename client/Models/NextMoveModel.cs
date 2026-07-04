@@ -406,7 +406,7 @@ public class NextMoveModel() // Class to make next move decision
     {
         if (eventModel.UserMon > 5 && eventModel.TargetMons[0].MonNo > 5)
         {
-            theGame.Turns[^2].OppEndMons[theGame.Turns[^2].OppEndMons.IndexOf(eventModel.UserMon - 6)] =
+            theGame.Turns[^1].OppStartMons[theGame.Turns[^1].OppStartMons.IndexOf(eventModel.UserMon - 6)] =
                 eventModel.TargetMons[0].MonNo - 6;
             theGame.OppTeam[eventModel.UserMon - 6].Position = "Reserve";
             theGame.OppTeam[eventModel.TargetMons[0].MonNo - 6].Position = "Active";
@@ -422,7 +422,7 @@ public class NextMoveModel() // Class to make next move decision
         }
         if (eventModel.UserMon < 6 && eventModel.TargetMons[0].MonNo < 6)
         {
-            theGame.Turns[^2].BotEndMons[theGame.Turns[^2].BotEndMons.IndexOf(eventModel.UserMon)] =
+            theGame.Turns[^1].BotStartMons[theGame.Turns[^2].BotStartMons.IndexOf(eventModel.UserMon)] =
                 eventModel.TargetMons[0].MonNo;
             theGame.BotTeam[eventModel.UserMon].Position = "Reserve";
             theGame.BotTeam[eventModel.TargetMons[0].MonNo].Position = "Active";
@@ -484,7 +484,7 @@ public class NextMoveModel() // Class to make next move decision
             {
                 continue;
             }
-            theGame.Turns[^2].OppEndMons[theGame.Turns[^2].OppEndMons.IndexOf(eventModel.UserMon - 6)] = zoroNum;
+            theGame.Turns[^1].OppStartMons[theGame.Turns[^1].OppStartMons.IndexOf(eventModel.UserMon - 6)] = zoroNum;
             if (!theGame.MonsSeen.Contains(zoroNum))
             {
                 theGame.MonsSeen.Add(zoroNum);

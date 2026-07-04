@@ -51,23 +51,31 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             AvailablePokemon[i + 4] = OpponentsPokemon[i]; // Add opponent's pokemon to list of mons in battle
             NameToNo.Add(OpponentsPokemon[i], i + 6); // Add opponent's pokemon to NameToNo dictionary
         }
-        TheGame.Turns[0].BotEndMons = TheGame.Turns[0].BotStartMons;
-        TheGame.Turns[0].OppEndMons = TheGame.Turns[0].OppStartMons;
+        for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
+        {
+            CurrTurn.BotStartMons[i] = TheGame.Turns[0].BotStartMons[i];
+            CurrTurn.OppStartMons[i] = TheGame.Turns[0].OppStartMons[i];
+        }
         foreach (EventModel ev in TheGame.Turns[0].EventList)
         {
             if (ev.EventType == "Switch")
             {
-                if (TheGame.Turns[0].BotEndMons.Contains(ev.UserMon)) TheGame.Turns[0].BotEndMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
-                else if (TheGame.Turns[0].OppEndMons.Contains(ev.UserMon)) TheGame.Turns[0].OppEndMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
+                if (CurrTurn.BotStartMons.Contains(ev.UserMon))
+                {
+                    CurrTurn.BotStartMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
+                }
+                else if (CurrTurn.OppStartMons.Contains(ev.UserMon))
+                {
+                    CurrTurn.OppStartMons.Replace(ev.UserMon, ev.TargetMons[0].MonNo);
+                }
             }
         }
-        for (int i = 0; i < 2; i++) // Set starting mons to previous turn's ending mons
+        for (int i = 0; i < 2; i++)
         {
-            CurrTurn.BotStartMons[i] = TheGame.Turns[0].BotEndMons[i];
-            CurrTurn.OppStartMons[i] = TheGame.Turns[0].OppEndMons[i];
-            TheGame.MonsSeen.Add(TheGame.Turns[1].OppStartMons[i]);
-            TheGame.BotTeam[TheGame.Turns[1].BotStartMons[i]].Position = "Active";
-            TheGame.OppTeam[TheGame.Turns[1].OppStartMons[i]].Position = "Active";
+            TheGame.MonsSeen.ReplaceOrAdd(TheGame.Turns[0].OppStartMons[i], TheGame.Turns[0].OppStartMons[i]);
+            TheGame.MonsSeen.ReplaceOrAdd(CurrTurn.OppStartMons[i], CurrTurn.OppStartMons[i]);
+            TheGame.BotTeam[CurrTurn.BotStartMons[i]].Position = "Active";
+            TheGame.OppTeam[CurrTurn.OppStartMons[i]].Position = "Active";
         }
         UserMonModel.Attach(UserSprite); // Attach UserSprite image listener to user mon model
         CurrEvent.Attach(EventType); // Attach event type listener to current event
@@ -142,18 +150,6 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    /*private ObservableCollection<TeamModel> _activeMons = [new(), new()];
-
-    public ObservableCollection<TeamModel> ActiveMons
-    {
-        get => _activeMons;
-        set
-        {
-            _activeMons = value;
-            OnPropertyChanged();
-        }
-    }*/
 
     private ObservableCollection<ImageListener> _targetSprites = [new(), new()];
 
@@ -351,8 +347,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
         CurrEvent = CurrTurn.EventList[0];
         for (int i = 0; i < 2; i++)
         {
-            CurrTurn.BotStartMons[i] = TheGame.Turns[^2].BotEndMons[i];
-            CurrTurn.OppStartMons[i] = TheGame.Turns[^2].OppEndMons[i];
+            CurrTurn.BotStartMons[i] = TheGame.Turns[^2].BotStartMons[i];
+            CurrTurn.OppStartMons[i] = TheGame.Turns[^2].OppStartMons[i];
         }
         
     }
