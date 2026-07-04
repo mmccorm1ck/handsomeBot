@@ -346,7 +346,12 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             }
         );
         CurrTurn = TheGame.Turns[^1];
+        CurrEvent.Clear();
+        EventNumber = 0;
         CurrEvent = CurrTurn.EventList[0];
+        TargetList = [];
+        CurrEvent.Attach(EventType);
+        UserMonName = "";
         for (int i = 0; i < 2; i++)
         {
             CurrTurn.BotStartMons[i] = TheGame.Turns[^2].BotStartMons[i];
