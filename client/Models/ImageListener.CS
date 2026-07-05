@@ -95,7 +95,7 @@ public class ImageListener : INotifyPropertyChanged // Listener for updating spr
         TextColour = position switch
         {
             "Active" => "LightGreen",
-            "KO" => "LightRed",
+            "KO" => "Red",
             "Not Brought" => "Gray",
             _ => "LightBlue"
         };
