@@ -401,6 +401,8 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     {
         DialogHost.Close("EventsDialogHost");
         NextTurn();
+        KOSwitches = [];
+        OppKOSwitches = [];
         List<int> switches = await NextMove.UpdateTurnInfo();
         int opSwitchNo = CurrTurn.OppStartMons.Count(x => x == -1);
         while (opSwitchNo + 2 > TheGame.OppTeam.Count(x => x.Position == "Reserve" || x.Position == "Not Brought"))
@@ -412,8 +414,6 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
             CalcMove();
             return;
         }
-        KOSwitches = [];
-        OppKOSwitches = [];
         foreach (int sw in switches)
         {
             TargetImageModel switchTarget = new(new(NameToNo), new(), AllOptions, []);
@@ -442,6 +442,15 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
     public void CalcMove()
     {
         SwitchesOpen = false;
+        foreach (TargetImageModel sw in OppKOSwitches)
+        {
+            int i = CurrTurn.OppStartMons.FindIndex(x => x == -1);
+            if (i != -1)
+            {
+                CurrTurn.OppStartMons[i] = sw.Target.MonNo - 6;
+                TheGame.OppTeam[sw.Target.MonNo - 6].Position = "Active";
+            }
+        }
         NextMove.ChooseNextMove();
     }
 }
