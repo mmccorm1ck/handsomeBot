@@ -107,7 +107,7 @@ public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    string dataFileName = "Data/data.json"; // Path to where TheGame is stored
+    readonly string dataFileName = "Data/data.json"; // Path to where TheGame is stored
 
     public ObservableCollection<PageNumberTemplate> PageNumberList { get; } = new() // Collection of pages to cycle through
     {

@@ -8,6 +8,8 @@ using DynamicData;
 using DialogHostAvalonia;
 using System;
 using System.Linq;
+using System.Text.Json;
+using System.IO;
 
 namespace HandsomeBot.ViewModels;
 
@@ -451,6 +453,19 @@ public class BattlePageViewModel : ViewModelBase, INotifyPropertyChanged
                 TheGame.OppTeam[sw.Target.MonNo - 6].Position = "Active";
             }
         }
+        SaveData();
         NextMove.ChooseNextMove();
+    }
+
+    readonly string dataFileName = "Data/data.json"; // Path to where TheGame is stored
+
+    readonly JsonSerializerOptions writeOptions = new() { WriteIndented = true }; // Options for serialising data for writing
+
+    void SaveData() // Saves TheGame data
+    {
+        using StreamWriter sw = File.CreateText(dataFileName); // Open file for writing
+        string dataJsonString = JsonSerializer.Serialize(TheGame, writeOptions); // Serialise data for writing
+        sw.Write(dataJsonString);
+        sw.Close();
     }
 }
