@@ -31,10 +31,19 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     }
     public string Item
     {
-        get => _item;
+        get => _item ?? _possibleItem;
         set
         {
             _item = value;
+            OnPropertyChanged();
+        }
+    }
+    public string PossibleItem
+    {
+        get => _possibleItem;
+        set
+        {
+            _possibleItem = value;
             OnPropertyChanged();
         }
     }
@@ -314,7 +323,8 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
 
     private string _name = "None"; // Pokemon's name
     private char _gender = 'R'; // Pokemon's gender
-    private string _item = "None"; // Pokemon's held item
+    private string? _item = null; // Pokemon's held item
+    private string _possibleItem = "None";
     private int _level = 50; // Pokemon's level
     private string? _ability; // Pokemon's ability
     private string? _megaAbility;
