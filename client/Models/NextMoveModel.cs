@@ -1084,7 +1084,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] FormatCalcs(List<CalcRespModel> damages)
     {
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] expectedDamages = [[],[]];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>>[] expectedDamages = [[], []];
         foreach (CalcRespModel damage in damages)
         {
             int monNo;
@@ -1124,6 +1124,43 @@ public class NextMoveModel() // Class to make next move decision
             parsedDamages[monNo][targetMon].Add(damage.MoveNo, [damage.MinDamage, damage.MaxDamage]);
         }
         return expectedDamages;
+    }
+
+    private bool CouldBeChoiced(int monNo)
+    {
+        if (monNo > 5)
+        {
+            return false;
+        }
+        string? moveName = null;
+        for (int turnNo = theGame.Turns.Count; turnNo >= 0; turnNo--)
+        {
+            if (!theGame.Turns[turnNo].OppStartMons.Contains(monNo))
+            {
+                moveName = null;
+                continue;
+            }
+            foreach (EventModel ev in theGame.Turns[turnNo].EventList)
+            {
+                if (ev.UserMon != monNo + 6 || ev.EventType != "Move")
+                {
+                    continue;
+                }
+                if (allOptions.AllMoves[ev.MoveName].isMax != null || allOptions.AllMoves[ev.MoveName].isZ != null || ev.MoveName == "Struggle")
+                {
+                    continue;
+                }
+                if (moveName == null)
+                {
+                    moveName = ev.MoveName;
+                }
+                else if (moveName != ev.MoveName)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private List<int> ChooseKOSwitch(Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages)
@@ -1190,7 +1227,7 @@ public class NextMoveModel() // Class to make next move decision
 
     private bool ImmuneToFakeOut(int target, TeamModel targetMon, TeamModel user) // Probably more things to consider in here
     {
-        return ImmuneToMove("Fake Out", targetMon, user, target) || (targetMon.Tera == "Ghost" && !theGame.GimmickUsed[target/6]) ||
+        return ImmuneToMove("Fake Out", targetMon, user, target) || (targetMon.Tera == "Ghost" && !theGame.GimmickUsed[target / 6]) ||
             (targetMon.Item == "Covert Cloak" && !targetMon.ItemRemoved) || targetMon.VolStatus.Contains("Substitute") ||
             (targetMon.TurnDynamaxed >= theGame.Turns.Count - 3 && targetMon.TurnDynamaxed != -1);
     }
@@ -1201,7 +1238,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             int partnerMon = theGame.Turns[^1].BotStartMons.Find(x => x != target);
             if (partnerMon != -1)
-            {    
+            {
                 if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty" || theGame.BotTeam[partnerMon].Ability == "Dazzling" || theGame.BotTeam[partnerMon].Ability == "Armor Tail")
                 {
                     return true;
@@ -1212,7 +1249,7 @@ public class NextMoveModel() // Class to make next move decision
         {
             int partnerMon = theGame.Turns[^1].OppStartMons.Find(x => x != target - 6);
             if (partnerMon != -1)
-            {    
+            {
                 if (theGame.BotTeam[partnerMon].Ability == "Queenly Magesty" || theGame.BotTeam[partnerMon].Ability == "Dazzling" || theGame.BotTeam[partnerMon].Ability == "Armor Tail")
                 {
                     return true;
@@ -1375,8 +1412,8 @@ public class NextMoveModel() // Class to make next move decision
 
     private bool ImmuneToStatus(TeamModel target, string status, MoveInfoModel move)
     {
-            if (target.Ability == "Purifying Salt" || target.Ability == "Comatose" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) || target.Ability == "Synchronize" ||
-                target.VolStatus.Contains("Substitute") || (theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || (move.category != null && target.Ability == "Shield Dust"))
+        if (target.Ability == "Purifying Salt" || target.Ability == "Comatose" || (target.Ability == "Leaf Guard" && theGame.CurrentArena.Weather.Contains("Harsh Sunlight")) || target.Ability == "Synchronize" ||
+            target.VolStatus.Contains("Substitute") || (theGame.CurrentArena.Terrain == "Misty Terrain" && Grounded(target)) || theGame.CurrentArena.OppSide.Safeguard || (move.category != null && target.Ability == "Shield Dust"))
         {
             return true;
         }
@@ -1486,7 +1523,7 @@ public class NextMoveModel() // Class to make next move decision
     public void ChooseNextMove()
     {
         Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> expectedDamages = _calcedDamages[0];
-        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages  = _calcedDamages[1];
+        Dictionary<int, Dictionary<int, Dictionary<int, List<float>>>> gimmickDamages = _calcedDamages[1];
 
         if (theGame.CurrentArena.TrickRoom)
         {
@@ -1560,7 +1597,7 @@ public class NextMoveModel() // Class to make next move decision
                 matchup.OutspeedTarget = true;
             }
         }
-        bestDamages.Sort(delegate(BestDamages a, BestDamages b)
+        bestDamages.Sort(delegate (BestDamages a, BestDamages b)
         {
             return (int)(b.MinDamage - a.MinDamage - (a.OutspeedTarget ? 100 : 0) + (b.OutspeedTarget ? 100 : 0));
         });
@@ -1601,11 +1638,11 @@ public class NextMoveModel() // Class to make next move decision
             {
                 int move = theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].Moves.FindIndex(x => x == "Fake Out");
                 if (theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].DisabledMoves.Contains(move))
-                if (theGame.Turns.Count <= 2)
-                {
-                    OppCanFakeOut[i] = true;
-                    continue;
-                }
+                    if (theGame.Turns.Count <= 2)
+                    {
+                        OppCanFakeOut[i] = true;
+                        continue;
+                    }
                 if (!theGame.Turns[^2].OppStartMons.Contains(theGame.Turns[^1].OppStartMons[i]))
                 {
                     OppCanFakeOut[i] = true;
@@ -1699,7 +1736,7 @@ public class NextMoveModel() // Class to make next move decision
                 matchup.OutspeedTarget = true;
             }
         }
-        
+
         Dictionary<int, bool> providingOffensvePressure = [];
         foreach (BestDamages matchup in bestDamages)
         {
@@ -1722,7 +1759,7 @@ public class NextMoveModel() // Class to make next move decision
         bool usedGimmick = theGame.GimmickUsed[0];
 
         // Also need to calculate support pressures
-        
+
         foreach (int monNo in _turnOrder)
         {
             if (!theGame.Turns[^1].BotStartMons.Contains(monNo))
@@ -1775,7 +1812,7 @@ public class NextMoveModel() // Class to make next move decision
                             gimmickNotWorse = gimmickNotWorse && gimmickDamages[nonFakeOutUser][monNo][theGame.OppTeam[nonFakeOutUser].Moves.IndexOf(bestDamage.MoveName)][0] <= bestDamage.MinDamage;
                         }
                     }
-                    if(GimmickImmune(monNo, fakeOutUser, theGame.OppTeam[fakeOutUser].Moves.IndexOf("Fake Out"), gimmickDamages) && gimmickNotWorse)
+                    if (GimmickImmune(monNo, fakeOutUser, theGame.OppTeam[fakeOutUser].Moves.IndexOf("Fake Out"), gimmickDamages) && gimmickNotWorse)
                     {
                         move.UseGimmick(theGame.Gimmicks.GetGimmick());
                         usedGimmick = true;
@@ -1955,7 +1992,7 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
-                
+
                 BestDamages? currBest = new(monNo, -1);
                 foreach (BestDamages matchup in bestDamages)
                 {
@@ -2047,7 +2084,7 @@ public class NextMoveModel() // Class to make next move decision
                     }
                     if (_statusCausingMoves[moveName] != "Sleep")
                     {
-                        continue;   
+                        continue;
                     }
                     if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
                     {
@@ -2167,7 +2204,7 @@ public class NextMoveModel() // Class to make next move decision
                             if (targetSpe < CalcStat("Spe", allyMon))
                             {
                                 continue;
-                            }   
+                            }
                         }
                         if (ImmuneToStatus(target, "Para", allOptions.AllMoves[moveName]) || ImmuneToMove(moveName, target, user, targetNo))
                         {
@@ -2223,7 +2260,7 @@ public class NextMoveModel() // Class to make next move decision
                             if (targetSpe < CalcStat("Spe", allyMon))
                             {
                                 continue;
-                            }   
+                            }
                         }
                         move.UserNo = monNo;
                         move.TargetNo = targetNo;
@@ -2373,7 +2410,7 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    int monSpeed =  CalcStat("Spe", monNo);
+                    int monSpeed = CalcStat("Spe", monNo);
                     bool outsped = false;
                     foreach (int target in theGame.Turns[^1].OppStartMons)
                     {
@@ -2431,7 +2468,7 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
-                bestDamagesOpp.Sort(delegate(BestDamages a, BestDamages b)
+                bestDamagesOpp.Sort(delegate (BestDamages a, BestDamages b)
                     {
                         return (int)(b.MinDamage - a.MinDamage);
                     });
@@ -2469,8 +2506,8 @@ public class NextMoveModel() // Class to make next move decision
                     continue;
                 }
             }
-            
-            
+
+
             if (user.Moves.Any(_statRaisingMovesAlly.ContainsKey) && allyMon != -1)
             {
                 TeamModel ally = theGame.BotTeam[allyMon];
@@ -2492,7 +2529,7 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
-                    int monSpeed =  CalcStat("Spe", allyMon);
+                    int monSpeed = CalcStat("Spe", allyMon);
                     bool outsped = false;
                     foreach (int target in theGame.Turns[^1].OppStartMons)
                     {
@@ -2550,7 +2587,7 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue;
                 }
-                bestDamagesOpp.Sort(delegate(BestDamages a, BestDamages b)
+                bestDamagesOpp.Sort(delegate (BestDamages a, BestDamages b)
                     {
                         return (int)(b.MinDamage - a.MinDamage);
                     });
@@ -2607,14 +2644,14 @@ public class NextMoveModel() // Class to make next move decision
             {
                 move.UserNo = monNo;
                 move.TargetNo = bestOption.Target;
-                move.MoveType = bestOption.MoveName;        
+                move.MoveType = bestOption.MoveName;
                 if (bestOption.GimmickSignificant && !usedGimmick)
                 {
                     move.UseGimmick(theGame.Gimmicks.GetGimmick());
                     usedGimmick = true;
                 }
             }
-        } 
+        }
 
         foreach (TeamModel mon in theGame.BotTeam)
         {
@@ -2912,7 +2949,7 @@ public class NextMoveModel() // Class to make next move decision
     private readonly List<string> _specialScreenMoves = [
         "Aurora Veil",
         "Glitzy Glow",
-        "Light Screen"  
+        "Light Screen"
     ];
     private readonly Dictionary<string, string> _statusCausingMoves = new()
     {
@@ -3113,6 +3150,6 @@ public class NextMoveModel() // Class to make next move decision
         public bool OKOChance { get; set; } = false;
         public bool TKOGuaranteed { get; set; } = false;
         public bool OutspeedTarget { get; set; } = false;
-        public bool GimmickSignificant {get; set;} = false;
+        public bool GimmickSignificant { get; set; } = false;
     }
 }
