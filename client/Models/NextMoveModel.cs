@@ -1515,6 +1515,10 @@ public class NextMoveModel() // Class to make next move decision
             }
             foreach (int move in expectedDamages[matchup.MonNo][matchup.Target].Keys)
             {
+                if (theGame.BotTeam[matchup.MonNo].DisabledMoves.Contains(move) || theGame.BotTeam[matchup.MonNo].OutOfPP.Contains(move))
+                {
+                    continue;
+                }
                 if (theGame.BotTeam[matchup.MonNo].Moves[move] == "Fake Out")
                 {
                     continue;
@@ -1571,6 +1575,11 @@ public class NextMoveModel() // Class to make next move decision
             }
             if (theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]].Moves.Contains("Fake Out"))
             {
+                int move = theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]].Moves.FindIndex(x => x == "Fake Out");
+                if (theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]].DisabledMoves.Contains(move) || theGame.BotTeam[theGame.Turns[^1].BotStartMons[i]].OutOfPP.Contains(move))
+                {
+                    continue;
+                }
                 if (theGame.Turns.Count <= 2)
                 {
                     BotCanFakeOut[i] = true;
@@ -1590,6 +1599,8 @@ public class NextMoveModel() // Class to make next move decision
             }
             if (theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].Moves.Contains("Fake Out"))
             {
+                int move = theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].Moves.FindIndex(x => x == "Fake Out");
+                if (theGame.OppTeam[theGame.Turns[^1].OppStartMons[i]].DisabledMoves.Contains(move))
                 if (theGame.Turns.Count <= 2)
                 {
                     OppCanFakeOut[i] = true;
@@ -1649,6 +1660,10 @@ public class NextMoveModel() // Class to make next move decision
             }
             foreach (int move in expectedDamages[matchup.MonNo][matchup.Target].Keys)
             {
+                if (theGame.OppTeam[matchup.MonNo].DisabledMoves.Contains(move))
+                {
+                    continue;
+                }
                 if (theGame.OppTeam[matchup.MonNo - 6].Moves[move] == "Fake Out" || theGame.OppTeam[matchup.MonNo - 6].Moves[move] == "")
                 {
                     continue;
@@ -1703,7 +1718,7 @@ public class NextMoveModel() // Class to make next move decision
             }
         }
 
-        bool protectionBreakingMove = theGame.Turns[^1].OppStartMons.Any(x => x != -1 && theGame.OppTeam[x].Moves.Any(_protectionBreakingMoves.Contains));
+        bool protectionBreakingMove = theGame.Turns[^1].OppStartMons.Any(x => x != -1 && theGame.OppTeam[x].Moves.Any(y => _protectionBreakingMoves.Contains(y) && !theGame.OppTeam[x].DisabledMoves.Contains(theGame.OppTeam[x].Moves.IndexOf(y))));
         bool usedGimmick = theGame.GimmickUsed[0];
 
         // Also need to calculate support pressures
@@ -1721,7 +1736,8 @@ public class NextMoveModel() // Class to make next move decision
             }
             TeamModel user = theGame.BotTeam[monNo];
             int allyMon = theGame.Turns[^1].BotStartMons.Find(x => x != monNo);
-            bool canProtect = user.Moves.Any(_protectionMoves.Contains) && !ProtectedLastTurn(monNo) && !protectionBreakingMove &&
+            bool canProtect = user.Moves.Any(x => _protectionMoves.Contains(x) && !user.DisabledMoves.Contains(user.Moves.IndexOf(x)) && !user.OutOfPP.Contains(user.Moves.IndexOf(x))) &&
+                !ProtectedLastTurn(monNo) && !protectionBreakingMove &&
                 !theGame.Turns[^1].OppStartMons.Any(x => x > 5 && theGame.OppTeam[x - 6].Ability == "Unseen Fist" && theGame.OppTeam[x - 6].Item != "Punching Glove");
             bool threatOfFakeOut = OppCanFakeOut.Contains(true) && !ImmuneToFakeOut(monNo, user, theGame.OppTeam[theGame.Turns[^1].OppStartMons[OppCanFakeOut.IndexOf(true)]]);
             bool underPressure = underOffensvePressure[monNo] && !Moves.Any(x => x.MoveType != "Calculating...");
@@ -1834,6 +1850,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                    if (user.DisabledMoves.Contains(i) || user.OutOfPP.Contains(i))
+                    {
+                        continue;
+                    }
                     string moveName = user.Moves[i];
                     MoveInfoModel moveInfo = allOptions.AllMoves[moveName];
                     if (moveInfo.target == "AllAdjacentFoes" || moveInfo.target == "AllAdjacent" || moveInfo.priotity > 0)
@@ -1894,6 +1914,10 @@ public class NextMoveModel() // Class to make next move decision
                         float highestDamage = 0;
                         for (int i = 0; i < 4; i++)
                         {
+                            if (user.DisabledMoves.Contains(i) || user.OutOfPP.Contains(i))
+                            {
+                                continue;
+                            }
                             string moveName = user.Moves[i];
                             if (allOptions.AllMoves[moveName].priotity > 0 && moveName != "Fake Out" && !ImmuneToMove(moveName, theGame.OppTeam[matchup.MonNo], user, matchup.MonNo))
                             {
@@ -1964,14 +1988,16 @@ public class NextMoveModel() // Class to make next move decision
                 continue;
             }
 
-            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
+            if (user.Moves.Contains("Tailwind") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room") &&
+                !user.DisabledMoves.Contains(user.Moves.IndexOf("Tailwind")) && !user.OutOfPP.Contains(user.Moves.IndexOf("Tailwind")))
             {
                 move.UserNo = monNo;
                 move.TargetNo = monNo;
                 move.MoveType = "Tailwind";
                 continue;
             }
-            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget) && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room"))
+            if (user.Moves.Contains("Trick Room") && !theGame.CurrentArena.BotSide.Tailwind && !theGame.CurrentArena.TrickRoom && !bestDamages.Any(x => x.OutspeedTarget) && !Moves.Any(x => x.MoveType == "Tailwind" || x.MoveType == "Trick Room") &&
+                !user.DisabledMoves.Contains(user.Moves.IndexOf("Trick Room")) && !user.OutOfPP.Contains(user.Moves.IndexOf("Trick Room")))
             {
                 move.UserNo = monNo;
                 move.TargetNo = monNo;
@@ -1984,6 +2010,10 @@ public class NextMoveModel() // Class to make next move decision
                 List<string> screenMoves = user.Moves.FindAll(_screenMoves.Contains);
                 foreach (string moveName in screenMoves)
                 {
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     if (moveName == "Aurora Veil" && !(theGame.CurrentArena.Weather == "Snow" || theGame.CurrentArena.Weather == "Hail"))
                     {
                         continue;
@@ -2018,6 +2048,10 @@ public class NextMoveModel() // Class to make next move decision
                     if (_statusCausingMoves[moveName] != "Sleep")
                     {
                         continue;   
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
                     }
                     for (int i = 0; i < 2; i++)
                     {
@@ -2056,6 +2090,10 @@ public class NextMoveModel() // Class to make next move decision
                         continue;
                     }
                     if (_statusCausingMoves[moveName] != "Burn")
+                    {
+                        continue;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
                     {
                         continue;
                     }
@@ -2100,6 +2138,10 @@ public class NextMoveModel() // Class to make next move decision
                         continue;
                     }
                     if (_statusCausingMoves[moveName] != "Para")
+                    {
+                        continue;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
                     {
                         continue;
                     }
@@ -2159,6 +2201,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         continue;
                     }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     for (int i = 0; i < 2; i++)
                     {
                         int targetNo = theGame.Turns[^1].OppStartMons[i];
@@ -2200,6 +2246,10 @@ public class NextMoveModel() // Class to make next move decision
                         continue;
                     }
                     if (!_statLoweringMoves[moveName].Contains("Atk") && !_statLoweringMoves[moveName].Contains("SpA"))
+                    {
+                        continue;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
                     {
                         continue;
                     }
@@ -2256,6 +2306,10 @@ public class NextMoveModel() // Class to make next move decision
                     if (allyMon == -1)
                     {
                         break;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
                     }
                     for (int i = 0; i < 2; i++)
                     {
@@ -2315,6 +2369,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     int monSpeed =  CalcStat("Spe", monNo);
                     bool outsped = false;
                     foreach (int target in theGame.Turns[^1].OppStartMons)
@@ -2360,6 +2418,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     move.UserNo = monNo;
                     move.TargetNo = monNo;
                     move.MoveType = moveName;
@@ -2393,6 +2455,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     move.UserNo = monNo;
                     move.TargetNo = monNo;
                     move.MoveType = moveName;
@@ -2421,6 +2487,10 @@ public class NextMoveModel() // Class to make next move decision
                     if (ally.Ability == "Contrary")
                     {
                         break;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
                     }
                     int monSpeed =  CalcStat("Spe", allyMon);
                     bool outsped = false;
@@ -2467,6 +2537,10 @@ public class NextMoveModel() // Class to make next move decision
                     {
                         break;
                     }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
+                    }
                     move.UserNo = monNo;
                     move.TargetNo = allyMon;
                     move.MoveType = moveName;
@@ -2499,6 +2573,10 @@ public class NextMoveModel() // Class to make next move decision
                     if (ally.Ability == "Contrary")
                     {
                         break;
+                    }
+                    if (user.DisabledMoves.Contains(user.Moves.IndexOf(moveName)) || user.OutOfPP.Contains(user.Moves.IndexOf(moveName)))
+                    {
+                        continue;
                     }
                     move.UserNo = monNo;
                     move.TargetNo = monNo;
