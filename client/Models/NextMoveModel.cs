@@ -3096,6 +3096,587 @@ public class NextMoveModel() // Class to make next move decision
         {"Spicy Extract", ["Atk"]},
         {"Swagger", ["Atk"]}
     };
+    private readonly Dictionary<string, List<string>> _invisibleAbilities = new()
+    {
+        {"Adaptability", [
+            "Eevee",
+            "Corphish",
+            "Crawdaunt",
+            "Feebas",
+            "Basculin",
+            "Basculin-Blue-Striped",
+            "Basculin-White-Striped",
+            "Skrelp",
+            "Dragalge",
+            "Yungoos",
+            "Gumshoos",
+            "Basculegion",
+            "Basculegion-F"
+        ]},
+        {"Analytic", [
+            "Magnemite",
+            "Magneton",
+            "Staryu",
+            "Starmie",
+            "Porygon",
+            "Porygon2",
+            "Magnezone",
+            "Porygon-Z",
+            "Patrat",
+            "Watchog",
+            "Elgyem",
+            "Beheeyem"
+        ]},
+        {"Aura Break", []},
+        {"Battery", []},
+        {"Battle Armor", [
+            "Cubone",
+            "Marowak",
+            "Kabuto",
+            "Kabutops"
+        ]},
+        {"Blaze", [
+            "Pansear",
+            "Simisear" 
+        ]},
+        {"Chlorophyll", [
+            "Sewaddle",
+            "Swadloon",
+            "Leavanny",
+            "Maractus",
+            "Bulbasaur",
+            "Ivysaur",
+            "Venusaur",
+            "Leafeon",
+            "Cottonee",
+            "Whimsicott"
+            ]},
+        {"Dark Aura", []},
+        {"Dragon\'s Maw", []},
+        {"Dry Skin", [
+            "Paras",
+            "Parasect",
+            "Jynx",
+            "Croagunk",
+            "Toxicroak"
+        ]},
+        {"Eelevate", []},
+        {"Fairy Aura", []},
+        {"Filter", [
+            "Mr. Mime",
+            "Mime Jr.",
+            "Revavroom"
+        ]},
+        {"Fire Mane", []},
+        {"Flare Boost", [
+            "Drifloon",
+            "Drifblim"
+        ]},
+        {"Fluffy", [
+            "Greavard",
+            "Houndstone"
+        ]},
+        {"Friend Guard", [
+            "Clefairy",
+            "Jigglypuff",
+            "Cleffa",
+            "Igglybuff",
+            "Happiny",
+            "Scatterbug",
+            "Spewpa",
+            "Vivillon"
+        ]},
+        {"Fur Coat", []},
+        {"Gale Wings", [
+            "Fletchling",
+            "Fletchinder",
+            "Talonflame"
+        ]},
+        {"Gorilla Tactics", []},
+        {"Grass Pelt", [
+            "Skiddo",
+            "Gogoat" 
+        ]},
+        {"Guts", [
+            "Rattata",
+            "Raticate",
+            "Heracross",
+            "Makuhita",
+            "Hariyama",
+            "Obstagoon",
+            "Flareon",
+            "Shinx",
+            "Luxio",
+            "Luxray",
+            "Squawkabilly",
+            "Squawkabilly-Blue"
+        ]},
+        {"Heatproof", [
+            "Bronzor",
+            "Bronzong",
+            "Rolycoly",
+            "Poltchageist",
+            "Sinistcha"
+        ]},
+        {"Heavy Metal", [
+            "Aron",
+            "Lairon",
+            "Aggron",
+            "Bronzor",
+            "Bronzong",
+            "Cufant",
+            "Copperajah",
+            "Duraludon"
+        ]},
+        {"Huge Power", [
+            "Marill",
+            "Azumarill",
+            "Azurill",
+            "Bunnelby",
+            "Diggersby"
+        ]},
+        {"Hustle", [
+            "Rattata-Alola",
+            "Raticate-Alola",
+            "Delibird",
+            "Lilligant-Hisui",
+            "Durant",
+            "Dracozolt",
+            "Squawkabilly",
+            "Rattata",
+            "Raticate",
+            "Nidoran-F",
+            "Nidorina",
+            "Nidoran-M",
+            "Nidorino",
+            "Combee",
+            "Rufflet",
+            "Flapple"
+        ]},
+        {"Ice Scales", [
+            "Snom",
+            "Frosmoth"
+        ]},
+        {"Infiltrator", [
+            "Zubat",
+            "Golbat",
+            "Crobat",
+            "Hoppip",
+            "Skiploom",
+            "Jumpluff",
+            "Ninjask",
+            "Seviper",
+            "Spiritomb",
+            "Cottonee",
+            "Whimsicott",
+            "Litwick",
+            "Lampent",
+            "Chandelure",
+            "Espurr",
+            "Meowstic",
+            "Meowstic-F",
+            "Inkay",
+            "Malamar",
+            "Noibat",
+            "Noivern",
+            "Dreepy",
+            "Drakloak",
+            "Dragapult",
+            "Bramblin",
+            "Brambleghast"
+        ]},
+        {"Iron Fist", [
+            "Hitmonchan",
+            "Ledian",
+            "Chimchar",
+            "Monferno",
+            "Infernape",
+            "Timburr",
+            "Gurdurr",
+            "Conkeldurr",
+            "Crabrawler",
+            "Crabominable",
+            "Pawmi",
+            "Pawmo",
+            "Pawmot" 
+        ]},
+        {"Light Metal", [
+            "Scizor",
+            "Beldum",
+            "Metang",
+            "Metagross",
+            "Registeel" 
+        ]},
+        {"Marvel Scale", [
+            "Dratini",
+            "Dragonair" 
+        ]},
+        {"Mega Launcher", []},
+        {"Mind\'s Eye", []},
+        {"Minus", [
+            "Electrike",
+            "Manectric",
+            "Klink",
+            "Klang",
+            "Klinklang",
+            "Toxtricity-Low-Key" 
+        ]},
+        {"Multiscale", [
+            "Dragonite",
+            "Lugia" 
+        ]},
+        {"Overgrow", [
+            "Pansage",
+            "Simisage" 
+        ]},
+        {"Plus", [
+            "Mareep",
+            "Flaaffy",
+            "Ampharos",
+            "Dedenne",
+            "Toxtricity" 
+        ]},
+        {"Prism Armor", []},
+        {"Prankster", [
+            "Murkrow",
+            "Sableye",
+            "Volbeat",
+            "Illumise",
+            "Riolu",
+            "Purrloin",
+            "Liepard",
+            "Meowstic",
+            "Shroodle",
+            "Grafaiai" 
+        ]},
+        {"Punk Rock", []},
+        {"Pure Power", []},
+        {"Quick Feet", [
+            "Teddiursa",
+            "Ursaring",
+            "Poochyena",
+            "Mightyena",
+            "Jolteon",
+            "Zigzagoon",
+            "Zigzagoon-Galar",
+            "Linoon",
+            "Linoon-Galar",
+            "Shroomish"
+        ]},
+        {"Reckless", [
+            "Hitmonlee",
+            "Rhyhorn",
+            "Rhydon",
+            "Starly",
+            "Staravia",
+            "Staraptor",
+            "Rhyperior",
+            "Emboar",
+            "Mienfoo",
+            "Mienshao" 
+        ]},
+        {"Rivalry", [
+            "Nidoran-F",
+            "Nidorina",
+            "Nidoqueen",
+            "Nidoran-M",
+            "Nidorino",
+            "Nidoking",
+            "Beautifly",
+            "Pidove",
+            "Tranquill",
+            "Unfezant"
+        ]},
+        {"Rock Head", [
+            "Growlithe-Hisui",
+            "Arcanine-Hisui",
+            "Marowak-Alola",
+            "Rhyhorn",
+            "Rhydon",
+            "Sudowoodo",
+            "Aron",
+            "Lairon",
+            "Aggron",
+            "Relicanth",
+            "Bonsly",
+            "Tyrantrum"
+        ]},
+        {"Rocky Payload", [
+            "Bombirdier" 
+        ]},
+        {"Sand Force", [
+            "Diglett",
+            "Diglett-Alola",
+            "Dugtrio",
+            "Dugtrio-Alola",
+            "Nosepass",
+            "Shellos",
+            "Gastrodon",
+            "Hippopotas",
+            "Hippowdon",
+            "Probopass",
+            "Roggenrola",
+            "Boldore",
+            "Gigalith",
+            "Drilbur",
+            "Exadrill" 
+        ]},
+        {"Sand Rush", [
+            "Herdier",
+            "Stoutland",
+            "Lycanroc-Midday",
+            "Sandshrew",
+            "Sandslash",
+            "Dracozolt",
+            "Dracovish"
+        ]},
+        {"Scrappy", [
+            "Farfetch\'d-Galar",
+            "Kangaskhan",
+            "Miltank",
+            "Taillow",
+            "Swellow",
+            "Loudred",
+            "Exploud",
+            "Herdier",
+            "Stoutland",
+            "Pancham",
+            "Pangoro",
+            "Decidueye-Hisui",
+            "Sirfetch\'d"
+        ]},
+        {"Shadow Shield", []},
+        {"Sharpness", [
+            "Gallade",
+            "Samurott-Hisui",
+            "Kleavor",
+            "Veluza"
+        ]},
+        {"Sheer Force", [
+            "Timburr",
+            "Gurdurr",
+            "Conkeldurr",
+            "Druddigon",
+            "Rufflet",
+            "Braviary",
+            "Braviary-Hisui",
+            "Kleavor",
+            "Nidoqueen",
+            "Nidoking",
+            "Krabby",
+            "Kingler",
+            "Tauros",
+            "Totodile",
+            "Croconaw",
+            "Feraligatr",
+            "Steelix",
+            "Makuhita",
+            "Hariyama",
+            "Mawile",
+            "Trapinch",
+            "Bagon",
+            "Cranidos",
+            "Rampardos",
+            "Landorus",
+            "Toucannon",
+            "Squawkabilly-Yellow",
+            "Squawkabilly-White",
+            "Cetoddle",
+            "Cetitan"
+        ]},
+        {"Skill Link", [
+            "Shellder",
+            "Cloyster",
+            "Aipom",
+            "Ambipom",
+            "Minccino",
+            "Cinccino",
+            "Pikipek",
+            "Trumbeak",
+            "Toucannon"
+        ]},
+        {"Slush Rush", [
+            "Cubchu",
+            "Beartic",
+            "Cetitan",
+            "Sandshrew-Alola",
+            "Sandslash-Alola",
+            "Arctozolt",
+            "Arctovish"
+        ]},
+        {"Sniper", [
+            "Beedrill",
+            "Spearow",
+            "Fearow",
+            "Horsea",
+            "Seadra",
+            "Spinarak",
+            "Ariados",
+            "Remoraid",
+            "Octillery",
+            "Kingdra",
+            "Skorupi",
+            "Drapion",
+            "Sobble",
+            "Drizzile",
+            "Inteleon" 
+        ]},
+        {"Solid Rock", [
+            "Camerupt",
+            "Rhyperior" 
+        ]},
+        {"Stakeout", [
+            "Nickit",
+            "Thievul",
+            "Tarountula",
+            "Spidops",
+            "Maschiff",
+            "Mabosstiff"
+        ]},
+        {"Stall", [
+            "Sableye" 
+        ]},
+        {"Steely Spirit", [
+           "Perrserker" 
+        ]},
+        {"Strong Jaw", [
+            "Yungoos",
+            "Gumshoos",
+            "Bruxish",
+            "Dracovish" 
+        ]},
+        {"Surge Surfer", []},
+        {"Swarm", [
+            "Volbeat",
+            "Venipede",
+            "Whirlipede",
+            "Scolipede",
+            "Joltik",
+            "Galvantula",
+            "Larvesta",
+            "Volcarona" 
+        ]},
+        {"Swift Swim", [
+            "Quilfish",
+            "Quilfish-Hisui",
+            "Basculegion",
+            "Basculegion-F",
+            "Overquil",
+            "Psyduck",
+            "Golduck",
+            "Poliwag",
+            "Poliwhirl",
+            "Poliwrath",
+            "Anorith",
+            "Armaldo",
+            "Tirtouga",
+            "Carracosta",
+            "Beartic",
+            "Chewtle",
+            "Dreadnaw"
+        ]},
+        {"Technician", [
+            "Meowth",
+            "Meowth-Alola",
+            "Persian",
+            "Persian-Alola",
+            "Mr. Mime",
+            "Scyther",
+            "Scizor",
+            "Smeargle",
+            "Hitmontop",
+            "Breloom",
+            "Kricketune",
+            "Roserade",
+            "Mime Jr.",
+            "Minccino",
+            "Cinccino",
+            "Toxtricity",
+            "Toxtricity-Low-Key",
+            "Clobbopus",
+            "Grapploct",
+            "Maushold",
+            "Fezandipiti"
+        ]},
+        {"Tera Shell", []},
+        {"Thick Fat", [
+            "Rattata-Alola",
+            "Raticate-Alola",
+            "Snorlax",
+            "Swinub",
+            "Piloswine",
+            "Munchlax",
+            "Mamoswine",
+            "Tepig",
+            "Pignite",
+            "Appletun",
+            "Lechonk",
+            "Oinkologne",
+            "Oinkologne-F"
+        ]},
+        {"Tinted Lens", [
+            "Butterfree",
+            "Venonat",
+            "Venomoth",
+            "Hoothoot",
+            "Noctowl",
+            "Illumise",
+            "Mothim",
+            "Yanmega",
+            "Sigilyph",
+            "Braviary-Hisui",
+            "Nymble",
+            "Lokix"
+        ]},
+        {"Torrent", [
+            "Panpour",
+            "Simipour"
+        ]},
+        {"Tough Claws", [
+            "Meowth-Galar",
+            "Binacle",
+            "Barbaracle",
+            "Perrserker"
+        ]},
+        {"Toxic Boost", [
+            "Zangoose"
+        ]},
+        {"Transistor", []},
+        {"Triage", [
+            "Comfey"
+        ]},
+        {"Unaware", [
+            "Clefable",
+            "Wooper",
+            "Wooper-Paldea",
+            "Quagsire",
+            "Bidoof",
+            "Bibarel",
+            "Pyukumuku",
+            "Fuecoco",
+            "Crocalor",
+            "Skeledirge",
+            "Clodsire"
+        ]},
+        {"Unburden", [
+            "Hitmonlee",
+            "Treecko",
+            "Grovyle",
+            "Sceptile",
+            "Drifloon",
+            "Drifblim",
+            "Purrloin",
+            "Liepard",
+            "Accelgor",
+            "Swirlix",
+            "Slurpuff",
+            "Nickit",
+            "Thievul",
+            "Sneasler"
+        ]},
+        {"Unseen Fist", []},
+        {"Water Bubble", []}
+    };
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
         {"Hardy",   new()},
