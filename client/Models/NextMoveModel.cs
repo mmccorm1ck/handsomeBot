@@ -720,10 +720,40 @@ public class NextMoveModel() // Class to make next move decision
                             mon.NatureBoost = "Spe";
                         }
                     }
+                    else if (mon.PossibleAbility == null)
+                    {
+                        if (theGame.CurrentArena.Weather.Contains("Harsh Sunlight") && _invisibleAbilities["Chlorophyll"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Chlorophyll";
+                        }
+                        else if (theGame.CurrentArena.Weather.Contains("Rain") && _invisibleAbilities["Swift Swim"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Swift Swim";
+                        }
+                        else if (theGame.CurrentArena.Weather == "Sandstorm" && _invisibleAbilities["Sand Rush"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Sand Rush";
+                        }
+                        else if ((theGame.CurrentArena.Weather == "Snow" || theGame.CurrentArena.Weather == "Hail") && _invisibleAbilities["Slush Rush"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Slush Rush";
+                        }
+                        else if ((mon.NonVolStatus != "" || mon.VolStatus.Count > 0) && _invisibleAbilities["Quick Feet"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Quick Feet";
+                        }
+                        else if (mon.ItemRemoved && _invisibleAbilities["Unburden"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Unburden";
+                        }
+                        else if (theGame.CurrentArena.Terrain == "Electric Terrain" && _invisibleAbilities["Surge Surfer"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Surge Surfer";
+                        }
+                    }
                     else
                     {
-                        // Parse items/abilities etc
-                        break; // break to prevent infinite loops
+                        break;
                     }
                     speeds[monNo] = CalcStat("Spe", monNo);
                     continue;
@@ -3141,7 +3171,7 @@ public class NextMoveModel() // Class to make next move decision
         ]},
         {"Blaze", [
             "Pansear",
-            "Simisear" 
+            "Simisear"
         ]},
         {"Chlorophyll", [
             "Sewaddle",
@@ -3199,7 +3229,7 @@ public class NextMoveModel() // Class to make next move decision
         {"Gorilla Tactics", []},
         {"Grass Pelt", [
             "Skiddo",
-            "Gogoat" 
+            "Gogoat"
         ]},
         {"Guts", [
             "Rattata",
@@ -3302,18 +3332,18 @@ public class NextMoveModel() // Class to make next move decision
             "Crabominable",
             "Pawmi",
             "Pawmo",
-            "Pawmot" 
+            "Pawmot"
         ]},
         {"Light Metal", [
             "Scizor",
             "Beldum",
             "Metang",
             "Metagross",
-            "Registeel" 
+            "Registeel"
         ]},
         {"Marvel Scale", [
             "Dratini",
-            "Dragonair" 
+            "Dragonair"
         ]},
         {"Mega Launcher", []},
         {"Mind\'s Eye", []},
@@ -3323,22 +3353,22 @@ public class NextMoveModel() // Class to make next move decision
             "Klink",
             "Klang",
             "Klinklang",
-            "Toxtricity-Low-Key" 
+            "Toxtricity-Low-Key"
         ]},
         {"Multiscale", [
             "Dragonite",
-            "Lugia" 
+            "Lugia"
         ]},
         {"Overgrow", [
             "Pansage",
-            "Simisage" 
+            "Simisage"
         ]},
         {"Plus", [
             "Mareep",
             "Flaaffy",
             "Ampharos",
             "Dedenne",
-            "Toxtricity" 
+            "Toxtricity"
         ]},
         {"Prism Armor", []},
         {"Prankster", [
@@ -3351,7 +3381,7 @@ public class NextMoveModel() // Class to make next move decision
             "Liepard",
             "Meowstic",
             "Shroodle",
-            "Grafaiai" 
+            "Grafaiai"
         ]},
         {"Punk Rock", []},
         {"Pure Power", []},
@@ -3377,7 +3407,7 @@ public class NextMoveModel() // Class to make next move decision
             "Rhyperior",
             "Emboar",
             "Mienfoo",
-            "Mienshao" 
+            "Mienshao"
         ]},
         {"Rivalry", [
             "Nidoran-F",
@@ -3406,7 +3436,7 @@ public class NextMoveModel() // Class to make next move decision
             "Tyrantrum"
         ]},
         {"Rocky Payload", [
-            "Bombirdier" 
+            "Bombirdier"
         ]},
         {"Sand Force", [
             "Diglett",
@@ -3423,7 +3453,7 @@ public class NextMoveModel() // Class to make next move decision
             "Boldore",
             "Gigalith",
             "Drilbur",
-            "Exadrill" 
+            "Exadrill"
         ]},
         {"Sand Rush", [
             "Herdier",
@@ -3523,11 +3553,11 @@ public class NextMoveModel() // Class to make next move decision
             "Drapion",
             "Sobble",
             "Drizzile",
-            "Inteleon" 
+            "Inteleon"
         ]},
         {"Solid Rock", [
             "Camerupt",
-            "Rhyperior" 
+            "Rhyperior"
         ]},
         {"Stakeout", [
             "Nickit",
@@ -3538,16 +3568,16 @@ public class NextMoveModel() // Class to make next move decision
             "Mabosstiff"
         ]},
         {"Stall", [
-            "Sableye" 
+            "Sableye"
         ]},
         {"Steely Spirit", [
-           "Perrserker" 
+           "Perrserker"
         ]},
         {"Strong Jaw", [
             "Yungoos",
             "Gumshoos",
             "Bruxish",
-            "Dracovish" 
+            "Dracovish"
         ]},
         {"Surge Surfer", []},
         {"Swarm", [
@@ -3558,7 +3588,7 @@ public class NextMoveModel() // Class to make next move decision
             "Joltik",
             "Galvantula",
             "Larvesta",
-            "Volcarona" 
+            "Volcarona"
         ]},
         {"Swift Swim", [
             "Quilfish",
@@ -3681,7 +3711,7 @@ public class NextMoveModel() // Class to make next move decision
         {"Unseen Fist", []},
         {"Water Bubble", []}
     };
-    private readonly Dictionary<string, TypeChangeAbility> typeChangeAbilities = new()
+    private readonly Dictionary<string, TypeChangeAbility> _typeChangeAbilities = new()
     {
           {"Aerilate",  new("Normal", "Flying", [])},
           {"Dragonize", new("Normal", "Dragon", [])},
