@@ -2779,6 +2779,10 @@ public class NextMoveModel() // Class to make next move decision
         {
             calcedStat = (int)Math.Floor(calcedStat / 2.0);
         }
+        if (tempMon.Ability == "Slow Start" && tempMon.AbilityActive == true)
+        {
+            calcedStat = (int)Math.Floor(calcedStat / 2.0);
+        }
         if ((monNo < 6 && theGame.CurrentArena.BotSide.Tailwind) ||
             (monNo > 5 && theGame.CurrentArena.OppSide.Tailwind))
         {
