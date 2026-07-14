@@ -3677,6 +3677,29 @@ public class NextMoveModel() // Class to make next move decision
         {"Unseen Fist", []},
         {"Water Bubble", []}
     };
+    private readonly Dictionary<string, TypeChangeAbility> typeChangeAbilities = new()
+    {
+          {"Aerilate",  new("Normal", "Flying", [])},
+          {"Dragonize", new("Normal", "Dragon", [])},
+          {"Galvanize", new("Normal", "Electric", [
+              "Geodude-Alola",
+              "Graveler-Alola",
+              "Golem-Alola"
+          ])},
+          {"Liquid Voice", new(null, "Water", [
+              "Popplio",
+              "Brionne",
+              "Primarina"
+          ])},
+          {"Normalize", new(null, "Normal", [
+              "Skitty",
+              "Delcatty"
+          ])},
+          {"Pixilate", new("Normal", "Fairy", [
+              "Sylveon"
+          ])},
+          {"Refrigerate", new("Normal", "Ice", [])},
+    };
     private readonly Dictionary<string, Dictionary<string, double>> _natures = new()
     {
         {"Hardy",   new()},
@@ -3732,5 +3755,11 @@ public class NextMoveModel() // Class to make next move decision
         public bool TKOGuaranteed { get; set; } = false;
         public bool OutspeedTarget { get; set; } = false;
         public bool GimmickSignificant { get; set; } = false;
+    }
+    private class TypeChangeAbility(string? source, string result, List<string> users)
+    {
+        public string? source = source;
+        public string result = result;
+        public List<string> users = users;
     }
 }
