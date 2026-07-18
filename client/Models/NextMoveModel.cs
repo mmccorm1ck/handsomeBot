@@ -3161,7 +3161,6 @@ public class NextMoveModel() // Class to make next move decision
             "Elgyem",
             "Beheeyem"
         ]},
-        {"Aura Break", []},
         {"Battery", []},
         {"Battle Armor", [
             "Cubone",
@@ -3185,7 +3184,16 @@ public class NextMoveModel() // Class to make next move decision
             "Cottonee",
             "Whimsicott"
             ]},
-        {"Dark Aura", []},
+        {"Contrary", [
+            "Shuckle",
+            "Spinda",
+            "Snivy",
+            "Servine",
+            "Serperior",
+            "Fomantis",
+            "Lurantis",
+            "Enamorus"
+        ]},
         {"Dragon\'s Maw", []},
         {"Dry Skin", [
             "Paras",
@@ -3195,7 +3203,6 @@ public class NextMoveModel() // Class to make next move decision
             "Toxicroak"
         ]},
         {"Eelevate", []},
-        {"Fairy Aura", []},
         {"Filter", [
             "Mr. Mime",
             "Mime Jr.",
@@ -3319,6 +3326,31 @@ public class NextMoveModel() // Class to make next move decision
             "Bramblin",
             "Brambleghast"
         ]},
+        {"Inner Focus", [
+            "Abra",
+            "Kadabra",
+            "Alakazam",
+            "Farfetch\'d",
+            "Drowzee",
+            "Hypno",
+            "Hitmonchan",
+            "Kangaskhan",
+            "Umbreon",
+            "Raikou",
+            "Entei",
+            "Suicune",
+            "Riolu",
+            "Lucario",
+            "Throh",
+            "Sawk",
+            "Darumaka",
+            "Darumaka-Galar",
+            "Pawniard",
+            "Bisharp",
+            "Mudbray",
+            "Mudsdale",
+            "Annihilape"
+        ]},
         {"Iron Fist", [
             "Hitmonchan",
             "Ledian",
@@ -3341,11 +3373,31 @@ public class NextMoveModel() // Class to make next move decision
             "Metagross",
             "Registeel"
         ]},
+        {"Long Reach", [
+            "Rowlet",
+            "Dartrix",
+            "Decidueye"
+        ]},
+        {"Magic Guard", [
+            "Clefairy",
+            "Clefable",
+            "Abra",
+            "Kadabra",
+            "Alakazam",
+            "Cleffa",
+            "Sigilyph",
+            "Solosis",
+            "Duosion",
+            "Reuniclus"
+        ]},
+        {"Magma Armor", []},
         {"Marvel Scale", [
             "Dratini",
             "Dragonair"
         ]},
         {"Mega Launcher", []},
+        {"Mega Sol", []},
+        {"Merciless", []},
         {"Mind\'s Eye", []},
         {"Minus", [
             "Electrike",
@@ -3359,6 +3411,23 @@ public class NextMoveModel() // Class to make next move decision
             "Dragonite",
             "Lugia"
         ]},
+        {"Mycelium Might", []},
+        {"Neuroforce", []},
+        {"Oblivious", [
+            "Lickitung",
+            "Wailmer",
+            "Wailord",
+            "Feebas",
+            "Spheal",
+            "Sealeo",
+            "Walrein",
+            "Lickilicky",
+            "Salandit",
+            "Salazzle",
+            "Bounsweet",
+            "Steenee",
+            "Dondozo"
+        ]},
         {"Overgrow", [
             "Pansage",
             "Simisage"
@@ -3370,7 +3439,7 @@ public class NextMoveModel() // Class to make next move decision
             "Dedenne",
             "Toxtricity"
         ]},
-        {"Prism Armor", []},
+        {"Power Spot", []},
         {"Prankster", [
             "Murkrow",
             "Sableye",
@@ -3383,8 +3452,14 @@ public class NextMoveModel() // Class to make next move decision
             "Shroodle",
             "Grafaiai"
         ]},
+        {"Prism Armor", []},
+        {"Propeller Tail", [
+            "Arrokuda",
+            "Barraskewda" 
+        ]},
         {"Punk Rock", []},
         {"Pure Power", []},
+        {"Purifying Salt", []},
         {"Quick Feet", [
             "Teddiursa",
             "Ursaring",
@@ -3518,6 +3593,35 @@ public class NextMoveModel() // Class to make next move decision
             "Cetoddle",
             "Cetitan"
         ]},
+        {"Shell Armor", [
+            "Krabby",
+            "Kingler",
+            "Lapras",
+            "Omanyte",
+            "Omastar",
+            "Torkoal",
+            "Corphish",
+            "Crawdaunt",
+            "Turtwig",
+            "Grotle",
+            "Torterra",
+            "Oshawott",
+            "Dewott",
+            "Samurott",
+            "Dwebble",
+            "Crustle",
+            "Escavalier",
+            "Shelmet",
+            "Sliggoo-Hisui",
+            "Goodra-Hisui",
+            "Chewtle",
+            "Drednaw",
+            "Klawf"
+        ]},
+        {"Shield Dust", [
+            "Cutiefly",
+            "Ribombee" 
+        ]},
         {"Skill Link", [
             "Shellder",
             "Cloyster",
@@ -3570,8 +3674,18 @@ public class NextMoveModel() // Class to make next move decision
         {"Stall", [
             "Sableye"
         ]},
+        {"Stalwart", [
+            "Duraludon",
+            "Archaludon" 
+        ]},
+        {"Steelworker", []},
         {"Steely Spirit", [
            "Perrserker"
+        ]},
+        {"Stench", [
+            "Gloom",
+            "Koffing",
+            "Weezing"
         ]},
         {"Strong Jaw", [
             "Yungoos",
@@ -3632,7 +3746,6 @@ public class NextMoveModel() // Class to make next move decision
             "Maushold",
             "Fezandipiti"
         ]},
-        {"Tera Shell", []},
         {"Thick Fat", [
             "Rattata-Alola",
             "Raticate-Alola",
