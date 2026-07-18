@@ -643,14 +643,19 @@ public class NextMoveModel() // Class to make next move decision
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
         {
             int priority = DecidePriority(eventModel);
-            if (priority > turnPos)
+            if (priority >= 10 && turnPos < 10)
             {
                 continue;
             }
             turnPos = priority;
-            if (!eventOrders[priority].Contains(eventModel.UserMon))
+            if (!eventOrders.TryGetValue(priority, out List<int>? value))
             {
-                eventOrders[priority].Add(eventModel.UserMon);
+                value = [];
+                eventOrders.Add(priority, value);
+            }
+            if (!value.Contains(eventModel.UserMon))
+            {
+                value.Add(eventModel.UserMon);
             }
         }
         if (trickRoomActive)
@@ -741,7 +746,24 @@ public class NextMoveModel() // Class to make next move decision
                     }
                     else if (mon.PossibleAbility == null)
                     {
-                        if (theGame.CurrentArena.Weather.Contains("Harsh Sunlight") && _invisibleAbilities["Chlorophyll"].Contains(mon.Name))
+                        bool priorityPos = PriorityPossible(eventOrders, monNo, trickRoomActive);
+                        EventModel moveEvent = theGame.Turns[^2].EventList.Find(x => x.EventType == "Move" && x.UserMon == monNo) ?? new EventModel{MoveName = "Struggle"};
+                        if (priorityPos && allOptions.AllMoves[moveEvent.MoveName].category == null && _invisibleAbilities["Prankster"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Prankster";
+                            break;
+                        }
+                        else if (priorityPos && _healingMoves.Contains(moveEvent.MoveName) && _invisibleAbilities["Triage"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Triage";
+                            break;
+                        }
+                        else if (priorityPos && allOptions.AllMoves[moveEvent.MoveName].type == "Flying" && _invisibleAbilities["Gale Wings"].Contains(mon.Name) && moveEvent.UserStartingHP == 100)
+                        {
+                            mon.PossibleAbility = "Gale Wings";
+                            break;
+                        }
+                        else if (theGame.CurrentArena.Weather.Contains("Harsh Sunlight") && _invisibleAbilities["Chlorophyll"].Contains(mon.Name))
                         {
                             mon.PossibleAbility = "Chlorophyll";
                         }
@@ -770,6 +792,7 @@ public class NextMoveModel() // Class to make next move decision
                             mon.PossibleAbility = "Surge Surfer";
                         }
                     }
+                    // Items go here
                     else
                     {
                         break;
