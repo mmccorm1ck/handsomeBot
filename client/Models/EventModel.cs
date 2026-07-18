@@ -135,6 +135,15 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public int UserStartingHP
+    {
+        get => _userStartingHP;
+        set
+        {
+            _userStartingHP = value;
+            OnPropertyChanged();
+        }
+    }
     public int UserMon // Pokemon that caused the event
     {
         get => _userMon;
@@ -165,6 +174,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private string _typeChange = "";
     private string _formeName = "";
     private int _remainingHP = 100;
+    private int _userStartingHP = 100;
     private int _userMon = -1;
     private ObservableCollection<TargetModel> _targetMons = [];
     private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility

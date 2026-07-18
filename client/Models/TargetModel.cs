@@ -44,6 +44,16 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
             OnPropertyChanged();
         }
     }
+    private int _startingHP;
+    public int StartingHP
+    {
+        get => _startingHP;
+        set
+        {
+            _startingHP = value;
+            OnPropertyChanged();
+        }
+    }
     private bool _crit = false;
     public bool Crit
     {
