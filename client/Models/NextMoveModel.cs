@@ -859,6 +859,29 @@ public class NextMoveModel() // Class to make next move decision
         return priority;
     }
 
+public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo, bool trickRoomActive)
+    {
+        foreach (int key in order.Keys)
+        {
+            if (key >= 10)
+            {
+                continue;
+            }
+            if (order[key].Count > 0)
+            {
+                if (trickRoomActive && order[key][^1] == monNo)
+                {
+                    return true;
+                }
+                if (!trickRoomActive && order[key][0] == monNo)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public async Task LoadMonData()
     {
         HttpClient client = new();
