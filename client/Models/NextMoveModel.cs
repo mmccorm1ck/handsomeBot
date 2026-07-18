@@ -53,6 +53,25 @@ public class NextMoveModel() // Class to make next move decision
         if (theGame.Turns.Count < 2) return;
         foreach (EventModel eventModel in theGame.Turns[^2].EventList)
         {
+            if (eventModel.UserMon == -1)
+            {
+                continue;
+            }
+            TeamModel user = eventModel.UserMon < 6 ? theGame.BotTeam[eventModel.UserMon] : theGame.OppTeam[eventModel.UserMon - 6];
+            eventModel.UserStartingHP = user.RemainingHP;
+            foreach (TargetModel target in eventModel.TargetMons)
+            {
+                if (target.MonNo == -1)
+                {
+                    continue;
+                }
+                TeamModel targetMon = target.MonNo < 6 ? theGame.BotTeam[target.MonNo] : theGame.OppTeam[target.MonNo - 6];
+                target.StartingHP = targetMon.RemainingHP;
+                if (target.Damage != null)
+                {
+                    targetMon.RemainingHP -= (int)target.Damage;
+                }                
+            }
             switch (eventModel.EventType)
             {
                 case "Move":
