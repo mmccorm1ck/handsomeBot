@@ -1033,7 +1033,7 @@ public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo,
             {
                 continue;
             }
-            if (allOptions.AllMoves[eventModel.MoveName].category == "Status")
+            if (allOptions.AllMoves[eventModel.MoveName].category == null)
             {
                 continue;
             }
