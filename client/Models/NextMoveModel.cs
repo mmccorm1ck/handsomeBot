@@ -647,6 +647,17 @@ public class NextMoveModel() // Class to make next move decision
             {
                 continue;
             }
+            if (eventModel.EventType == "Move")
+            {
+                TeamModel userMon = eventModel.UserMon > 5 ?
+                    theGame.OppTeam[eventModel.UserMon - 6] : theGame.BotTeam[eventModel.UserMon];
+                if (userMon.Ability == "Stall" || (allOptions.AllMoves[eventModel.MoveName].category == null && userMon.Ability == "Mycelium Might") ||
+                    (userMon.Ability == "Quick Draw" && userMon.AbilityActive) || ((userMon.Item == "Lagging Tail" || userMon.Item == "Full Insence") && !userMon.ItemRemoved) ||
+                    ((userMon.Item == "Quick Claw" || userMon.Item == "Custap Berry") && theGame.Turns[^2].EventList.Any(x => x.EventType == "Item Activation" && x.UserMon == eventModel.UserMon)))
+                {
+                    continue;
+                }
+            }
             turnPos = priority;
             if (!eventOrders.TryGetValue(priority, out List<int>? value))
             {
