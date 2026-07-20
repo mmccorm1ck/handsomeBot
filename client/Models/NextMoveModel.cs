@@ -822,9 +822,23 @@ public class NextMoveModel() // Class to make next move decision
                             mon.NatureDrop = "Spe";
                         }
                     }
+                    else if (PriorityPossible(eventOrders, monNo, !trickRoomActive) && mon.PossibleAbility == null)
+                    {
+                        EventModel moveEvent = theGame.Turns[^2].EventList.Find(x => x.EventType == "Move" && x.UserMon == monNo) ?? new EventModel{MoveName = "Struggle"};
+                        if (allOptions.AllMoves[moveEvent.MoveName].category == null && _invisibleAbilities["Mycelium Might"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Mycelium Might";
+                            break;
+                        }
+                        if (_invisibleAbilities["Stall"].Contains(mon.Name))
+                        {
+                            mon.PossibleAbility = "Stall";
+                            break;
+                        }
+                    }
                     else
                     {
-                        // Parse items/abilities etc
+                        // Parse items here
                         break;// break to prevent infinite loops
                     }
                     speeds[monNo] = CalcStat("Spe", monNo);
@@ -3267,7 +3281,6 @@ public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo,
             "Croagunk",
             "Toxicroak"
         ]},
-        {"Eelevate", []},
         {"Filter", [
             "Mr. Mime",
             "Mime Jr.",
