@@ -1033,11 +1033,12 @@ public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo,
             {
                 continue;
             }
-            if (allOptions.AllMoves[eventModel.MoveName].category == null)
+            MoveInfoModel moveInfo = allOptions.AllMoves[eventModel.MoveName];
+            if (moveInfo.category == null)
             {
                 continue;
             }
-            string atkCategory = allOptions.AllMoves[eventModel.MoveName].category == "Physical" ? "Atk" : "SpA";
+            string atkCategory = moveInfo.category == "Physical" ? "Atk" : "SpA";
             string defCategory = atkCategory == "Atk" ? "Def" :
                 _SpaDefMoves.Contains(eventModel.MoveName) ? "Def" : "SpD";
             TeamModel userMon = eventModel.UserMon > 5 ?
