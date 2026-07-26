@@ -1106,6 +1106,21 @@ public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo,
                 }
                 TeamModel targetMon = target.MonNo > 5 ?
                     theGame.OppTeam[target.MonNo - 6] : userMon;
+                TeamModel allyMon = new();
+                if (target.MonNo > 5)
+                {
+                    if (target.AllyNo > 5)
+                    {
+                        allyMon = theGame.OppTeam[target.AllyNo - 6];
+                    }    
+                }
+                else
+                {
+                    if (eventModel.AllyMon != -1)
+                    {
+                        allyMon = theGame.BotTeam[eventModel.AllyMon];
+                    }
+                }
                 float mult = (float)(target.Damage < minExpected ?
                     minExpected / target.Damage : maxExpected / target.Damage);
                 string statName;
