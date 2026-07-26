@@ -24,6 +24,16 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
     {
         get => _monNo;
     }
+    private int _allyNo = -1;
+    public int AllyNo
+    {
+        get => _allyNo;
+        set
+        {
+            _allyNo = value;
+            OnPropertyChanged();
+        }
+    }
     private string _moveResult = "";
     public string MoveResult
     {
