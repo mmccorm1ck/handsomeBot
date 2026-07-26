@@ -59,6 +59,23 @@ public class NextMoveModel() // Class to make next move decision
             }
             TeamModel user = eventModel.UserMon < 6 ? theGame.BotTeam[eventModel.UserMon] : theGame.OppTeam[eventModel.UserMon - 6];
             eventModel.UserStartingHP = user.RemainingHP;
+            ObservableCollection<TeamModel> posAllies = eventModel.UserMon < 6 ? theGame.BotTeam : theGame.OppTeam;
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == eventModel.UserMon)
+                {
+                    continue;
+                }
+                if (posAllies[i].Position == "Active")
+                {
+                    eventModel.AllyMon = i;
+                    if (eventModel.UserMon > 6)
+                    {
+                        eventModel.AllyMon += 6;
+                    }
+                    break;
+                }
+            }
             foreach (TargetModel target in eventModel.TargetMons)
             {
                 if (target.MonNo == -1)
@@ -67,10 +84,27 @@ public class NextMoveModel() // Class to make next move decision
                 }
                 TeamModel targetMon = target.MonNo < 6 ? theGame.BotTeam[target.MonNo] : theGame.OppTeam[target.MonNo - 6];
                 target.StartingHP = targetMon.RemainingHP;
+                ObservableCollection<TeamModel> TargetAllies = target.MonNo < 6 ? theGame.BotTeam : theGame.OppTeam;
                 if (target.Damage != null)
                 {
                     targetMon.RemainingHP -= (int)target.Damage;
                 }                
+                for (int i = 0; i < 6; i++)
+                {
+                    if (i == target.MonNo)
+                    {
+                        continue;
+                    }
+                    if (TargetAllies[i].Position == "Active")
+                    {
+                        target.AllyNo = i;
+                        if (target.MonNo > 6)
+                        {
+                            target.AllyNo += 6;
+                        }
+                        break;
+                    }
+                }
             }
             switch (eventModel.EventType)
             {
