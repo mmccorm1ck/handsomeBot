@@ -69,7 +69,7 @@ public class NextMoveModel() // Class to make next move decision
                 if (posAllies[i].Position == "Active")
                 {
                     eventModel.AllyMon = i;
-                    if (eventModel.UserMon > 6)
+                    if (eventModel.UserMon > 5)
                     {
                         eventModel.AllyMon += 6;
                     }
@@ -98,7 +98,7 @@ public class NextMoveModel() // Class to make next move decision
                     if (TargetAllies[i].Position == "Active")
                     {
                         target.AllyNo = i;
-                        if (target.MonNo > 6)
+                        if (target.MonNo > 5)
                         {
                             target.AllyNo += 6;
                         }
