@@ -270,7 +270,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
         }
     }
 
-    public string TypeChange
+    public string? TypeChange
     {
         get => _typeChange;
         set
@@ -366,7 +366,7 @@ public class TeamModel() : INotifyPropertyChanged // Class to hold info about a 
     private int _turnDynamaxed = -1;
     private bool _gMax = false;
     private string _baseForme = "";
-    private string _typeChange = "";
+    private string? _typeChange = null;
     private bool _zoroSuspect = false;
     private int[] _disabledMoves = [];
     private int[] _outOfPP = [];
