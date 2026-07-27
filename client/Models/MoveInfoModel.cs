@@ -2,6 +2,7 @@ namespace HandsomeBot.Models;
 
 public class MoveInfoModel() // Class holding info about a move
 {
+    public int? bp;
     public string? category;
     public string? type;
     public int? priotity;
