@@ -941,7 +941,7 @@ public class NextMoveModel() // Class to make next move decision
         return priority;
     }
 
-public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo, bool trickRoomActive)
+    public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo, bool trickRoomActive)
     {
         foreach (int key in order.Keys)
         {
@@ -2968,6 +2968,31 @@ public static bool PriorityPossible(Dictionary<int, List<int>> order, int monNo,
             return 1.0 + 0.5 * statChange;
         }
         return 2.0 / (2 - statChange);
+    }
+
+    private List<string> GetMonTypes(TeamModel mon)
+    {
+        if (mon.TeraActive)
+        {
+            return [mon.Tera];
+        }
+        if (mon.TypeChange != null)
+        {
+            return [mon.TypeChange];
+        }
+        return _monData[mon.Name].types;
+    }
+
+    private bool LastToMove(int monNo)
+    {
+        for (int i = theGame.Turns[^2].EventList.Count-1; i >= 0; i--)
+        {
+            if (theGame.Turns[^2].EventList[i].EventType == "Move" || theGame.Turns[^2].EventList[i].EventType == "Z-Move")
+            {
+                return theGame.Turns[^2].EventList[i].UserMon == monNo;
+            }
+        }
+        return false;
     }
 
     private readonly Dictionary<string, int> _statAdjustmentDictionary = new()
