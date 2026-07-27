@@ -1189,7 +1189,353 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             continue;
                         }
-                        // Account for abilities/items here
+                        if (targetMon.PossibleAbility == null)
+                        {
+                            if (statName.Contains('A'))
+                            {
+                                if (_invisibleAbilities["Adaptability"].Contains(targetMon.Name))
+                                {
+                                    if (GetMonTypes(targetMon).Contains(moveInfo.type ?? "???"))
+                                    {
+                                        targetMon.PossibleAbility = "Adaptability";
+                                    }    
+                                }
+                                if (_invisibleAbilities["Analytic"].Contains(targetMon.Name))
+                                {
+                                    if (LastToMove(target.MonNo))
+                                    {
+                                        targetMon.PossibleAbility = "Analytic";
+                                    }
+                                }
+                                if (_invisibleAbilities["Blaze"].Contains(targetMon.Name))
+                                {
+                                    if ((moveInfo.type == "Fire" || (targetMon.TeraActive && targetMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
+                                    {
+                                        targetMon.PossibleAbility = "Blaze";
+                                    }
+                                }
+                                if (_invisibleAbilities["Dragon\'s Maw"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Dragon" || (targetMon.TeraActive && targetMon.Tera == "Dragon" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Dragon\'s Maw";
+                                    }
+                                }
+                                if (_invisibleAbilities["Fire Mane"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || (targetMon.TeraActive && targetMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Fire Mane";
+                                    }
+                                }
+                                if (_invisibleAbilities["Infiltrator"].Contains(targetMon.Name))
+                                {
+                                    //to do
+                                }
+                                if (_invisibleAbilities["Iron Fist"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.isPunch != null)
+                                    {
+                                        targetMon.PossibleAbility = "Iron Fist";
+                                    }
+                                }
+                                if (_invisibleAbilities["Mega Launcher"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.isPulse != null)
+                                    {
+                                        targetMon.PossibleAbility = "Mega Launcher";
+                                    }
+                                }
+                                if (_invisibleAbilities["Mega So"].Contains(targetMon.Name))
+                                {
+                                    //to do
+                                }
+                                if (_invisibleAbilities["Mind\'s Eye"].Contains(targetMon.Name))
+                                {
+                                    //to do
+                                }
+                                if (_invisibleAbilities["Neuroforce"].Contains(targetMon.Name))
+                                {
+                                    if (target.MoveResult == "Super Effective")
+                                    {
+                                        targetMon.PossibleAbility = "Neuroforce";
+                                    }
+                                }
+                                if (_invisibleAbilities["Overgrow"].Contains(targetMon.Name))
+                                {
+                                    if ((moveInfo.type == "Grass" || (targetMon.TeraActive && targetMon.Tera == "Grass" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
+                                    {
+                                        targetMon.PossibleAbility = "Overgrow";
+                                    }
+                                }
+                                if (allyMon.PossibleAbility == null && _invisibleAbilities["Power Spot"].Contains(allyMon.Name))
+                                {
+                                    allyMon.PossibleAbility = "Power Spot";
+                                }
+                                if (_invisibleAbilities["Reckless"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.recoil != null)
+                                    {
+                                        targetMon.PossibleAbility = "Reckless";
+                                    }
+                                }
+                                if (_invisibleAbilities["Rivalry"].Contains(targetMon.Name))
+                                {
+                                    if (targetMon.Gender != 'N' && targetMon.Gender == theGame.BotTeam[target.MonNo].Gender)
+                                    {
+                                        targetMon.PossibleAbility = "Rivalry";
+                                    }    
+                                }
+                                if (_invisibleAbilities["Rocky Payload"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Rock")
+                                    {
+                                        targetMon.PossibleAbility = "Rocky Payload";
+                                    }
+                                }
+                                if (_invisibleAbilities["Sand Force"].Contains(targetMon.Name))
+                                {
+                                    //to do
+                                }
+                                if (_invisibleAbilities["Scrappy"].Contains(targetMon.Name))
+                                {
+                                    //to do 
+                                }
+                                if (_invisibleAbilities["Sharpness"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.isSlicing != null)
+                                    {
+                                        targetMon.PossibleAbility = "Sharpness";
+                                    }
+                                }
+                                if (_invisibleAbilities["Sheer Force"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.secondaries != null)
+                                    {
+                                        targetMon.PossibleAbility = "Sheer Force";
+                                    }
+                                }
+                                if (_invisibleAbilities["Sniper"].Contains(targetMon.Name))
+                                {
+                                    if (target.Crit)
+                                    {
+                                        targetMon.PossibleAbility = "Sniper";
+                                    }
+                                }
+                                if (_invisibleAbilities["Stakeout"].Contains(targetMon.Name))
+                                {
+                                    //to do
+                                }
+                                if (_invisibleAbilities["Steelworker"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Steelworker";
+                                    }
+                                }
+                                if (_invisibleAbilities["Steely Spirit"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Steely Spirit";
+                                    }
+                                }
+                                if (allyMon.PossibleAbility == null && _invisibleAbilities["Steely Spirit"].Contains(allyMon.Name))
+                                {
+                                    if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        allyMon.PossibleAbility = "Steely Spirit";
+                                    }
+                                }
+                                if (_invisibleAbilities["Strong Jaw"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.isBite != null)
+                                    {
+                                        targetMon.PossibleAbility = "Strong Jaw";
+                                    }
+                                }
+                                if (_invisibleAbilities["Swarm"].Contains(targetMon.Name))
+                                {
+                                    if ((moveInfo.type == "Bug" || (targetMon.TeraActive && targetMon.Tera == "Bug" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
+                                    {
+                                        targetMon.PossibleAbility = "Swarm";
+                                    }
+                                }
+                                if (_invisibleAbilities["Technician"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.bp <= 60)
+                                    {
+                                        targetMon.PossibleAbility = "Technician";
+                                    }
+                                }
+                                if (_invisibleAbilities["Tinted Lens"].Contains(targetMon.Name))
+                                {
+                                    if (target.MoveResult == "Not Very Effective")
+                                    {
+                                        targetMon.PossibleAbility = "Tinted Lens";
+                                    } 
+                                }
+                                if (_invisibleAbilities["Torrent"].Contains(targetMon.Name))
+                                {
+                                    if ((moveInfo.type == "Water" || (targetMon.TeraActive && targetMon.Tera == "Water" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
+                                    {
+                                        targetMon.PossibleAbility = "Torrent";
+                                    }
+                                }
+                                if (_invisibleAbilities["Tough Claws"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.makesContact != null)
+                                    {
+                                        targetMon.PossibleAbility = "Tough Claws";
+                                    }
+                                }
+                                if (_invisibleAbilities["Transistor"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Electric" || (targetMon.TeraActive && targetMon.Tera == "Electric" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Transistor";
+                                    }
+                                }
+                                if (_invisibleAbilities["Water Bubble"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Water" || (targetMon.TeraActive && targetMon.Tera == "Water" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Water Bubble";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                            }
+                            switch (statName)
+                            {
+                                case "Atk":
+                                    if (_invisibleAbilities["Gorilla Tactics"].Contains(targetMon.Name))
+                                    {
+                                        if (CouldBeChoiced(eventModel.UserMon - 6))
+                                        {
+                                            targetMon.PossibleAbility = "Gorilla Tactics";
+                                        }
+                                    }
+                                    if (_invisibleAbilities["Guts"].Contains(targetMon.Name))
+                                    {
+                                        if (targetMon.NonVolStatus != "")
+                                        {
+                                            targetMon.PossibleAbility = "Guts";
+                                        }    
+                                    }
+                                    if (_invisibleAbilities["Huge Power"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Huge Power";
+                                    }
+                                    if (_invisibleAbilities["Hustle"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Hustle";
+                                    }
+                                    if (_invisibleAbilities["Pure Power"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Pure Power";
+                                    }
+                                    if (_invisibleAbilities["Toxic Boost"].Contains(targetMon.Name))
+                                    {
+                                        if (targetMon.NonVolStatus.Contains("Poison"))
+                                        {
+                                            targetMon.PossibleAbility = "Toxic Boost";
+                                        }
+                                    }
+                                    break;
+                                case "SpA":
+                                    if (allyMon.PossibleAbility == null && _invisibleAbilities["Battery"].Contains(allyMon.Name))
+                                    {
+                                        allyMon.PossibleAbility = "Battery";
+                                    }
+                                    if (_invisibleAbilities["Flare Boost"].Contains(targetMon.Name))
+                                    {
+                                        if (targetMon.NonVolStatus == "Burn")
+                                        {
+                                            targetMon.PossibleAbility = "Flare Boost";
+                                        }
+                                    }
+                                    if (_invisibleAbilities["Minus"].Contains(targetMon.Name))
+                                    {
+                                        if (allyMon.Ability == "Plus" || allyMon.Ability == "Minus")
+                                        {
+                                            targetMon.PossibleAbility = "Minus";
+                                        }
+                                        if (allyMon.PossibleAbility == null && _invisibleAbilities["Minus"].Contains(allyMon.Name))
+                                        {
+                                            allyMon.PossibleAbility = "Minus";
+                                            targetMon.PossibleAbility = "Minus";
+                                        }
+                                        if (allyMon.PossibleAbility == null && _invisibleAbilities["Plus"].Contains(allyMon.Name))
+                                        {
+                                            allyMon.PossibleAbility = "Plus";
+                                            targetMon.PossibleAbility = "Minus";
+                                        }
+                                    }
+                                    if (_invisibleAbilities["Plus"].Contains(targetMon.Name))
+                                    {
+                                        if (allyMon.Ability == "Plus" || allyMon.Ability == "Minus")
+                                        {
+                                            targetMon.PossibleAbility = "Plus";
+                                        }
+                                        if (allyMon.PossibleAbility == null && _invisibleAbilities["Minus"].Contains(allyMon.Name))
+                                        {
+                                            allyMon.PossibleAbility = "Minus";
+                                            targetMon.PossibleAbility = "Plus";
+                                        }
+                                        if (allyMon.PossibleAbility == null && _invisibleAbilities["Plus"].Contains(allyMon.Name))
+                                        {
+                                            allyMon.PossibleAbility = "Plus";
+                                            targetMon.PossibleAbility = "Plus";
+                                        }
+                                    }
+                                    break;
+                                case "Def":
+                                    break;
+                                case "SpD":
+                                    break;
+                            }
+                            if (_invisibleAbilities["Heavy Metal"].Contains(targetMon.Name))
+                            {
+                                if (eventModel.MoveName == "Heat Crash" || eventModel.MoveName == "Heavy Slam")
+                                {
+                                    targetMon.PossibleAbility = "Heavy Metal";
+                                }
+                            }
+                            if (_invisibleAbilities["Punk Rock"].Contains(targetMon.Name))
+                            {
+                                if (moveInfo.isSound != null)
+                                {
+                                    targetMon.PossibleAbility = "Punk Rock";
+                                }
+                            }
+                            if (_invisibleAbilities["Unaware"].Contains(targetMon.Name))
+                            {
+                                TeamModel opp = eventModel.UserMon < 6 ? userMon : theGame.BotTeam[target.MonNo];
+                                int statChange = 0;
+                                switch (statName)
+                                {
+                                    case "Atk":
+                                        statChange = opp.StatChanges.Def;
+                                        break;
+                                    case "SpA":
+                                        statChange = opp.StatChanges.SpD;
+                                        break;
+                                    case "Def":
+                                        statChange = opp.StatChanges.Atk;
+                                        break;
+                                    case "SpD":
+                                        statChange = opp.StatChanges.SpA;
+                                        break;
+                                }
+                                if (statChange > 0)
+                                {
+                                    targetMon.PossibleAbility = "Unaware";
+                                }
+                            }
+                        }
+                        // Account for items here
                         break;
                     }
                     if (calcedStat < targetStat)
