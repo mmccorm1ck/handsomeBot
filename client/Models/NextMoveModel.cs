@@ -1195,7 +1195,7 @@ public class NextMoveModel() // Class to make next move decision
                             {
                                 if (_invisibleAbilities["Adaptability"].Contains(targetMon.Name))
                                 {
-                                    if (GetMonTypes(targetMon).Contains(moveInfo.type ?? "???"))
+                                    if (HasType(targetMon, moveInfo.type ?? "???"))
                                     {
                                         targetMon.PossibleAbility = "Adaptability";
                                     }    
@@ -1778,19 +1778,15 @@ public class NextMoveModel() // Class to make next move decision
 
     private bool HasType(TeamModel mon, string type)
     {
-        if (!mon.TeraActive && _monData[mon.Name].types.Contains(type) && mon.TypeChange == "")
+        if (mon.TeraActive)
+        {
+            return mon.Tera == type;
+        }
+        if (mon.TypeChange == type)
         {
             return true;
         }
-        if (!mon.TeraActive && mon.TypeChange == type)
-        {
-            return true;
-        }
-        if (mon.Tera == type && mon.TeraActive)
-        {
-            return true;
-        }
-        return false;
+        return _monData[mon.Name].types.Contains(type);
     }
 
     private bool ImmuneToMove(string moveName, TeamModel target, TeamModel user, int targetNo)
@@ -3314,19 +3310,6 @@ public class NextMoveModel() // Class to make next move decision
             return 1.0 + 0.5 * statChange;
         }
         return 2.0 / (2 - statChange);
-    }
-
-    private List<string> GetMonTypes(TeamModel mon)
-    {
-        if (mon.TeraActive)
-        {
-            return [mon.Tera];
-        }
-        if (mon.TypeChange != null)
-        {
-            return [mon.TypeChange];
-        }
-        return _monData[mon.Name].types;
     }
 
     private bool LastToMove(int monNo)
