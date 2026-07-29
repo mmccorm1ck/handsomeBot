@@ -1782,9 +1782,9 @@ public class NextMoveModel() // Class to make next move decision
         {
             return mon.Tera == type;
         }
-        if (mon.TypeChange == type)
+        if (mon.TypeChange != "")
         {
-            return true;
+            return mon.TypeChange == type;
         }
         return _monData[mon.Name].types.Contains(type);
     }
