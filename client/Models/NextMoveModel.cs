@@ -1097,14 +1097,6 @@ public class NextMoveModel() // Class to make next move decision
                 {
                     continue; // will implement this properly down the line
                 }
-                float maxExpected =
-                    expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)][1];
-                float minExpected = (float)Math.Floor(
-                    expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)][0]);
-                if (target.Damage >= minExpected && target.Damage <= maxExpected)
-                {
-                    continue;
-                }
                 TeamModel targetMon = target.MonNo > 5 ?
                     theGame.OppTeam[target.MonNo - 6] : userMon;
                 TeamModel allyMon = new();
@@ -1122,14 +1114,11 @@ public class NextMoveModel() // Class to make next move decision
                         allyMon = theGame.BotTeam[eventModel.AllyMon];
                     }
                 }
-                float mult = (float)(target.Damage < minExpected ?
-                    minExpected / target.Damage : maxExpected / target.Damage);
                 string statName;
                 int monNoToChange;
                 if (eventModel.UserMon < 6)
                 {
                     statName = defCategory;
-                    mult = 1 / mult;
                     monNoToChange = target.MonNo;
                 }
                 else
@@ -1137,10 +1126,11 @@ public class NextMoveModel() // Class to make next move decision
                     statName = atkCategory;
                     monNoToChange = eventModel.UserMon;
                 }
-                int targetStat = (int)Math.Floor(CalcStat(statName, monNoToChange) * mult);
-                if (mult > 1)
+                StatTargets statTargets = new(target.Damage ?? 0, monNoToChange, statName, this);
+                statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                if (target.Damage >= statTargets.MinExpected && target.Damage <= statTargets.MaxExpected)
                 {
-                    targetStat++;
+                    continue;
                 }
                 string? prevBoost = null;
                 string? prevDrop = null;
@@ -1148,9 +1138,9 @@ public class NextMoveModel() // Class to make next move decision
                 while (true)
                 {
                     int calcedStat = CalcStat(statName, monNoToChange);
-                    if (calcedStat > targetStat)
+                    if (calcedStat > statTargets.TargetStat)
                     {
-                        if (mult > 1)
+                        if (statTargets.Mult > 1)
                         {
                             break;
                         }
@@ -1657,9 +1647,9 @@ public class NextMoveModel() // Class to make next move decision
                         // Account for items here
                         break;
                     }
-                    if (calcedStat < targetStat)
+                    if (calcedStat < statTargets.TargetStat)
                     {
-                        if (mult < 1)
+                        if (statTargets.Mult < 1)
                         {
                             break;
                         }
@@ -4571,5 +4561,27 @@ public class NextMoveModel() // Class to make next move decision
         public string? source = source;
         public string result = result;
         public List<string> users = users;
+    }
+    private class StatTargets(int targetValue, int monNo, string stat, NextMoveModel moveModel)
+    {
+        public float MaxExpected;
+        public float MinExpected;
+        public float Mult;
+        public int TargetStat;
+        public void Recalculate(List<float> damages)
+        {
+            MaxExpected = damages[1];
+            MinExpected = (float)Math.Floor(damages[0]);
+            Mult = targetValue < damages[0] ? damages[0] / targetValue : damages[1] / targetValue;
+            if (stat.Contains('D'))
+            {
+                Mult = 1/Mult;
+            }
+            TargetStat = (int)Math.Floor(moveModel.CalcStat(stat, monNo) * Mult);
+            if (Mult > 1)
+            {
+                TargetStat ++;
+            }
+        }
     }
 }
