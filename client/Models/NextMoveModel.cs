@@ -1437,13 +1437,6 @@ public class NextMoveModel() // Class to make next move decision
                                 {
                                     allyMon.PossibleAbility ??= "Friend Guard";
                                 }
-                                if (_invisibleAbilities["Fur Coat"].Contains(targetMon.Name))
-                                {
-                                    if (moveInfo.makesContact != null && userMon.Ability != "Long Reach" && (userMon.Item != "Punching Glove" || userMon.ItemRemoved))
-                                    {
-                                        targetMon.PossibleAbility = "Fur Coat";
-                                    }
-                                }
                                 if (_invisibleAbilities["Heatproof"].Contains(targetMon.Name))
                                 {
                                     if (moveInfo.type == "Fire" || (userMon.TeraActive && userMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast"))
@@ -1600,6 +1593,10 @@ public class NextMoveModel() // Class to make next move decision
                                     }
                                     break;
                                 case "Def":
+                                    if (_invisibleAbilities["Fur Coat"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Fur Coat";
+                                    }
                                     if (_invisibleAbilities["Grass Pelt"].Contains(targetMon.Name))
                                     {
                                         if (eventModel.ActiveTerrain == "Grassy Terrain")
@@ -1702,7 +1699,58 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             continue;
                         }
-                        // Account for abilities/items here
+                        if (targetMon.PossibleAbility == null)
+                        {
+                            if (statName.Contains('A'))
+                            {
+                                if (_invisibleAbilities["Rivalry"].Contains(targetMon.Name))
+                                {
+                                    if (theGame.BotTeam[target.MonNo].Gender != 'N' && targetMon.Gender != 'N' && theGame.BotTeam[target.MonNo].Gender != targetMon.Gender)
+                                    {
+                                        targetMon.PossibleAbility = "Rivalry";
+                                    }
+                                }
+                                if (_invisibleAbilities["Unseen Fist"].Contains(targetMon.Name))
+                                {
+                                    if (theGame.BotTeam[target.MonNo].VolStatus.Contains("Protected") && theGame.Gen == 0)
+                                    {
+                                        targetMon.PossibleAbility = "Unseen Fist";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (_invisibleAbilities["Dry Skin"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
+                                    {
+                                        targetMon.PossibleAbility = "Dry Skin";
+                                    }
+                                }
+                                if (_invisibleAbilities["Fluffy"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
+                                    {
+                                        targetMon.PossibleAbility = "Fluffy";
+                                    }
+                                }
+                                if (_invisibleAbilities["Heavy Metal"].Contains(targetMon.Name))
+                                {
+                                    if (eventModel.MoveName == "Low Kick" || eventModel.MoveName == "Grass Knot")
+                                    {
+                                        targetMon.PossibleAbility = "Heavy Metal";
+                                    }
+                                }
+                            }
+                            if (_invisibleAbilities["Light Metal"].Contains(targetMon.Name))
+                            {
+                                if (eventModel.MoveName == "Heat Crash" || eventModel.MoveName == "Heavy Slam")
+                                {
+                                    targetMon.PossibleAbility = "Light Metal";
+                                }
+                            }
+                        }
+                        // Account for items here
                         break;
                     }
                     break;
