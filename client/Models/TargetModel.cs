@@ -4,9 +4,13 @@ using System.Runtime.CompilerServices;
 
 namespace HandsomeBot.Models;
 
-public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChanged // Class for recording which pokemon are selected as targets in an event
+public class TargetModel() : INotifyPropertyChanged // Class for recording which pokemon are selected as targets in an event
 {
-    private readonly Dictionary<string, int> _nameToNo = nameToNo;
+    public TargetModel(Dictionary<string, int> nameToNo) : this()
+    {
+        _nameToNo = nameToNo;
+    }
+    private readonly Dictionary<string, int> _nameToNo = [];
     private string _monName = "";
     public string MonName
     {
@@ -14,7 +18,7 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
         set
         {
             _monName = value;
-            _monNo = _nameToNo[value];
+            _nameToNo.TryGetValue(value, out _monNo);
             _targetMonModel.Name = _monName.Replace("Opponent's ", "");
             OnPropertyChanged();
         }
@@ -23,6 +27,11 @@ public class TargetModel(Dictionary<string, int> nameToNo) : INotifyPropertyChan
     public int MonNo
     {
         get => _monNo;
+        set
+        {
+            _monNo = value;
+            OnPropertyChanged();
+        }
     }
     private int _allyNo = -1;
     public int AllyNo
