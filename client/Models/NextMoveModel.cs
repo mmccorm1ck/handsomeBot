@@ -1407,6 +1407,113 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             else
                             {
+                                if ((moveInfo.willCrit != null || userMon.StatChanges.Crt > 2 || userMon.VolStatus.Contains("Getting Pumped") || userMon.VolStatus.Contains("Laser Focus")) && !target.Crit)
+                                {
+                                    if (_invisibleAbilities["Battle Armor"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Battle Armor";
+                                    }
+                                    if (_invisibleAbilities["Shell Armor"].Contains(targetMon.Name))
+                                    {
+                                        targetMon.PossibleAbility = "Shell Armor";
+                                    }
+                                }
+                                if (_invisibleAbilities["Filter"].Contains(targetMon.Name))
+                                {
+                                    if (target.MoveResult == "Super Effective")
+                                    {
+                                        targetMon.PossibleAbility = "Filter";
+                                    }
+                                }
+                                if (_invisibleAbilities["Fluffy"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.makesContact != null && userMon.Ability != "Long Reach" && (userMon.Item != "Punching Glove" || userMon.ItemRemoved) &&
+                                        !(moveInfo.type == "Fire" || (userMon.TeraActive && userMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast")))
+                                    {
+                                        targetMon.PossibleAbility = "Fluffy";
+                                    }
+                                }
+                                if (_invisibleAbilities["Friend Guard"].Contains(allyMon.Name))
+                                {
+                                    allyMon.PossibleAbility ??= "Friend Guard";
+                                }
+                                if (_invisibleAbilities["Fur Coat"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.makesContact != null && userMon.Ability != "Long Reach" && (userMon.Item != "Punching Glove" || userMon.ItemRemoved))
+                                    {
+                                        targetMon.PossibleAbility = "Fur Coat";
+                                    }
+                                }
+                                if (_invisibleAbilities["Heatproof"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || (userMon.TeraActive && userMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Heatproof";
+                                    }
+                                }
+                                if (_invisibleAbilities["Light Metal"].Contains(targetMon.Name))
+                                {
+                                    if (eventModel.MoveName == "Low Kick" || eventModel.MoveName == "Grass Knot")
+                                    {
+                                        targetMon.PossibleAbility = "Light Metal";
+                                    }
+                                }
+                                if (_invisibleAbilities["Ice Scales"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.category == "Special")
+                                    {
+                                        targetMon.PossibleAbility = "Ice Scales";
+                                    }
+                                }
+                                if (_invisibleAbilities["Multiscale"].Contains(targetMon.Name))
+                                {
+                                    if (target.StartingHP == 100)
+                                    {
+                                        targetMon.PossibleAbility = "Multiscale";
+                                    }
+                                }
+                                if (_invisibleAbilities["Prism Armor"].Contains(targetMon.Name))
+                                {
+                                    if (target.MoveResult == "Super Effective")
+                                    {
+                                        targetMon.PossibleAbility = "Prism Armor";
+                                    }
+                                }
+                                if (_invisibleAbilities["Purifying Salt"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Ghost" || (userMon.TeraActive && userMon.Tera == "Ghost" && eventModel.MoveName == "Tera Blast"))
+                                    {
+                                        targetMon.PossibleAbility = "Purifying Salt";
+                                    }
+                                }
+                                if (_invisibleAbilities["Shadow Shield"].Contains(targetMon.Name))
+                                {
+                                    if (target.StartingHP == 100)
+                                    {
+                                        targetMon.PossibleAbility = "Shadow Shield";
+                                    }
+                                }
+                                if (_invisibleAbilities["Solid Rock"].Contains(targetMon.Name))
+                                {
+                                    if (target.MoveResult == "Super Effective")
+                                    {
+                                        targetMon.PossibleAbility = "Solid Rock";
+                                    }
+                                }
+                                if (_invisibleAbilities["Thick Fat"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || moveInfo.type == "Ice" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && (userMon.Tera == "Fire" || userMon.Tera == "Ice")))
+                                    {
+                                        targetMon.PossibleAbility = "Thick Fat";
+                                    }
+                                }
+                                if (_invisibleAbilities["Water Bubble"].Contains(targetMon.Name))
+                                {
+                                    if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
+                                    {
+                                        targetMon.PossibleAbility = "Water Bubble";
+                                    }
+                                }
                             }
                             switch (statName)
                             {
@@ -1493,6 +1600,20 @@ public class NextMoveModel() // Class to make next move decision
                                     }
                                     break;
                                 case "Def":
+                                    if (_invisibleAbilities["Grass Pelt"].Contains(targetMon.Name))
+                                    {
+                                        if (eventModel.ActiveTerrain == "Grassy Terrain")
+                                        {
+                                            targetMon.PossibleAbility = "Grass Pelt";
+                                        }
+                                    }
+                                    if (_invisibleAbilities["Marvel Scale"].Contains(targetMon.Name))
+                                    {
+                                        if (targetMon.NonVolStatus != "")
+                                        {
+                                            targetMon.PossibleAbility = "Marvel Scale";
+                                        }
+                                    }
                                     break;
                                 case "SpD":
                                     break;
