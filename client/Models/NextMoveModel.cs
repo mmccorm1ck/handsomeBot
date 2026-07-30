@@ -1189,6 +1189,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (HasType(targetMon, moveInfo.type ?? "???"))
                                     {
                                         targetMon.PossibleAbility = "Adaptability";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }    
                                 }
                                 if (_invisibleAbilities["Analytic"].Contains(targetMon.Name))
@@ -1196,6 +1199,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (LastToMove(target.MonNo))
                                     {
                                         targetMon.PossibleAbility = "Analytic";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Blaze"].Contains(targetMon.Name))
@@ -1203,6 +1209,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if ((moveInfo.type == "Fire" || (targetMon.TeraActive && targetMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
                                     {
                                         targetMon.PossibleAbility = "Blaze";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Dragon\'s Maw"].Contains(targetMon.Name))
@@ -1210,6 +1219,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Dragon" || (targetMon.TeraActive && targetMon.Tera == "Dragon" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Dragon\'s Maw";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Fire Mane"].Contains(targetMon.Name))
@@ -1217,6 +1229,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Fire" || (targetMon.TeraActive && targetMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Fire Mane";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Infiltrator"].Contains(targetMon.Name))
@@ -1228,6 +1243,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.isPunch != null)
                                     {
                                         targetMon.PossibleAbility = "Iron Fist";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Mega Launcher"].Contains(targetMon.Name))
@@ -1235,6 +1253,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.isPulse != null)
                                     {
                                         targetMon.PossibleAbility = "Mega Launcher";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Mega So"].Contains(targetMon.Name))
@@ -1250,6 +1271,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.MoveResult == "Super Effective")
                                     {
                                         targetMon.PossibleAbility = "Neuroforce";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Overgrow"].Contains(targetMon.Name))
@@ -1257,17 +1281,26 @@ public class NextMoveModel() // Class to make next move decision
                                     if ((moveInfo.type == "Grass" || (targetMon.TeraActive && targetMon.Tera == "Grass" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
                                     {
                                         targetMon.PossibleAbility = "Overgrow";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (allyMon.PossibleAbility == null && _invisibleAbilities["Power Spot"].Contains(allyMon.Name))
                                 {
                                     allyMon.PossibleAbility = "Power Spot";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                                 if (_invisibleAbilities["Reckless"].Contains(targetMon.Name))
                                 {
                                     if (moveInfo.recoil != null)
                                     {
                                         targetMon.PossibleAbility = "Reckless";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Rivalry"].Contains(targetMon.Name))
@@ -1275,6 +1308,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (targetMon.Gender != 'N' && targetMon.Gender == theGame.BotTeam[target.MonNo].Gender)
                                     {
                                         targetMon.PossibleAbility = "Rivalry";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }    
                                 }
                                 if (_invisibleAbilities["Rocky Payload"].Contains(targetMon.Name))
@@ -1282,6 +1318,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Rock")
                                     {
                                         targetMon.PossibleAbility = "Rocky Payload";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Sand Force"].Contains(targetMon.Name))
@@ -1297,6 +1336,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.isSlicing != null)
                                     {
                                         targetMon.PossibleAbility = "Sharpness";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Sheer Force"].Contains(targetMon.Name))
@@ -1304,6 +1346,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.secondaries != null)
                                     {
                                         targetMon.PossibleAbility = "Sheer Force";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Sniper"].Contains(targetMon.Name))
@@ -1311,6 +1356,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.Crit)
                                     {
                                         targetMon.PossibleAbility = "Sniper";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Stakeout"].Contains(targetMon.Name))
@@ -1322,6 +1370,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Steelworker";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Steely Spirit"].Contains(targetMon.Name))
@@ -1329,6 +1380,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Steely Spirit";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (allyMon.PossibleAbility == null && _invisibleAbilities["Steely Spirit"].Contains(allyMon.Name))
@@ -1336,6 +1390,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Steel" || (targetMon.TeraActive && targetMon.Tera == "Steel" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         allyMon.PossibleAbility = "Steely Spirit";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Strong Jaw"].Contains(targetMon.Name))
@@ -1343,6 +1400,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.isBite != null)
                                     {
                                         targetMon.PossibleAbility = "Strong Jaw";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Swarm"].Contains(targetMon.Name))
@@ -1350,6 +1410,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if ((moveInfo.type == "Bug" || (targetMon.TeraActive && targetMon.Tera == "Bug" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
                                     {
                                         targetMon.PossibleAbility = "Swarm";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Technician"].Contains(targetMon.Name))
@@ -1357,6 +1420,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.bp <= 60)
                                     {
                                         targetMon.PossibleAbility = "Technician";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Tinted Lens"].Contains(targetMon.Name))
@@ -1364,6 +1430,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.MoveResult == "Not Very Effective")
                                     {
                                         targetMon.PossibleAbility = "Tinted Lens";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     } 
                                 }
                                 if (_invisibleAbilities["Torrent"].Contains(targetMon.Name))
@@ -1371,6 +1440,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if ((moveInfo.type == "Water" || (targetMon.TeraActive && targetMon.Tera == "Water" && eventModel.MoveName == "Tera Blast")) && eventModel.RemainingHP < 34)
                                     {
                                         targetMon.PossibleAbility = "Torrent";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Tough Claws"].Contains(targetMon.Name))
@@ -1378,6 +1450,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.makesContact != null)
                                     {
                                         targetMon.PossibleAbility = "Tough Claws";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Transistor"].Contains(targetMon.Name))
@@ -1385,6 +1460,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Electric" || (targetMon.TeraActive && targetMon.Tera == "Electric" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Transistor";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Water Bubble"].Contains(targetMon.Name))
@@ -1392,6 +1470,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Water" || (targetMon.TeraActive && targetMon.Tera == "Water" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Water Bubble";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                             }
@@ -1402,10 +1483,16 @@ public class NextMoveModel() // Class to make next move decision
                                     if (_invisibleAbilities["Battle Armor"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Battle Armor";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Shell Armor"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Shell Armor";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Filter"].Contains(targetMon.Name))
@@ -1413,6 +1500,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.MoveResult == "Super Effective")
                                     {
                                         targetMon.PossibleAbility = "Filter";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Fluffy"].Contains(targetMon.Name))
@@ -1421,17 +1511,26 @@ public class NextMoveModel() // Class to make next move decision
                                         !(moveInfo.type == "Fire" || (userMon.TeraActive && userMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast")))
                                     {
                                         targetMon.PossibleAbility = "Fluffy";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Friend Guard"].Contains(allyMon.Name))
                                 {
                                     allyMon.PossibleAbility ??= "Friend Guard";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                                 if (_invisibleAbilities["Heatproof"].Contains(targetMon.Name))
                                 {
                                     if (moveInfo.type == "Fire" || (userMon.TeraActive && userMon.Tera == "Fire" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Heatproof";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Light Metal"].Contains(targetMon.Name))
@@ -1439,6 +1538,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (eventModel.MoveName == "Low Kick" || eventModel.MoveName == "Grass Knot")
                                     {
                                         targetMon.PossibleAbility = "Light Metal";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Ice Scales"].Contains(targetMon.Name))
@@ -1446,6 +1548,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.category == "Special")
                                     {
                                         targetMon.PossibleAbility = "Ice Scales";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Multiscale"].Contains(targetMon.Name))
@@ -1453,6 +1558,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.StartingHP == 100)
                                     {
                                         targetMon.PossibleAbility = "Multiscale";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Prism Armor"].Contains(targetMon.Name))
@@ -1460,6 +1568,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.MoveResult == "Super Effective")
                                     {
                                         targetMon.PossibleAbility = "Prism Armor";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Purifying Salt"].Contains(targetMon.Name))
@@ -1467,6 +1578,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Ghost" || (userMon.TeraActive && userMon.Tera == "Ghost" && eventModel.MoveName == "Tera Blast"))
                                     {
                                         targetMon.PossibleAbility = "Purifying Salt";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Shadow Shield"].Contains(targetMon.Name))
@@ -1474,6 +1588,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.StartingHP == 100)
                                     {
                                         targetMon.PossibleAbility = "Shadow Shield";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Solid Rock"].Contains(targetMon.Name))
@@ -1481,6 +1598,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (target.MoveResult == "Super Effective")
                                     {
                                         targetMon.PossibleAbility = "Solid Rock";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Thick Fat"].Contains(targetMon.Name))
@@ -1488,6 +1608,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Fire" || moveInfo.type == "Ice" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && (userMon.Tera == "Fire" || userMon.Tera == "Ice")))
                                     {
                                         targetMon.PossibleAbility = "Thick Fat";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Water Bubble"].Contains(targetMon.Name))
@@ -1495,6 +1618,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
                                     {
                                         targetMon.PossibleAbility = "Water Bubble";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                             }
@@ -1506,6 +1632,9 @@ public class NextMoveModel() // Class to make next move decision
                                         if (CouldBeChoiced(eventModel.UserMon - 6))
                                         {
                                             targetMon.PossibleAbility = "Gorilla Tactics";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                         }
                                     }
                                     if (_invisibleAbilities["Guts"].Contains(targetMon.Name))
@@ -1513,25 +1642,40 @@ public class NextMoveModel() // Class to make next move decision
                                         if (targetMon.NonVolStatus != "")
                                         {
                                             targetMon.PossibleAbility = "Guts";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                         }    
                                     }
                                     if (_invisibleAbilities["Huge Power"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Huge Power";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Hustle"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Hustle";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Pure Power"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Pure Power";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Toxic Boost"].Contains(targetMon.Name))
                                     {
                                         if (targetMon.NonVolStatus.Contains("Poison"))
                                         {
                                             targetMon.PossibleAbility = "Toxic Boost";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     break;
@@ -1539,12 +1683,18 @@ public class NextMoveModel() // Class to make next move decision
                                     if (allyMon.PossibleAbility == null && _invisibleAbilities["Battery"].Contains(allyMon.Name))
                                     {
                                         allyMon.PossibleAbility = "Battery";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Flare Boost"].Contains(targetMon.Name))
                                     {
                                         if (targetMon.NonVolStatus == "Burn")
                                         {
                                             targetMon.PossibleAbility = "Flare Boost";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     if (_invisibleAbilities["Minus"].Contains(targetMon.Name))
@@ -1552,16 +1702,25 @@ public class NextMoveModel() // Class to make next move decision
                                         if (allyMon.Ability == "Plus" || allyMon.Ability == "Minus")
                                         {
                                             targetMon.PossibleAbility = "Minus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                         if (allyMon.PossibleAbility == null && _invisibleAbilities["Minus"].Contains(allyMon.Name))
                                         {
                                             allyMon.PossibleAbility = "Minus";
                                             targetMon.PossibleAbility = "Minus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                         if (allyMon.PossibleAbility == null && _invisibleAbilities["Plus"].Contains(allyMon.Name))
                                         {
                                             allyMon.PossibleAbility = "Plus";
                                             targetMon.PossibleAbility = "Minus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     if (_invisibleAbilities["Plus"].Contains(targetMon.Name))
@@ -1569,16 +1728,25 @@ public class NextMoveModel() // Class to make next move decision
                                         if (allyMon.Ability == "Plus" || allyMon.Ability == "Minus")
                                         {
                                             targetMon.PossibleAbility = "Plus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                         if (allyMon.PossibleAbility == null && _invisibleAbilities["Minus"].Contains(allyMon.Name))
                                         {
                                             allyMon.PossibleAbility = "Minus";
                                             targetMon.PossibleAbility = "Plus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                         if (allyMon.PossibleAbility == null && _invisibleAbilities["Plus"].Contains(allyMon.Name))
                                         {
                                             allyMon.PossibleAbility = "Plus";
                                             targetMon.PossibleAbility = "Plus";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     break;
@@ -1586,12 +1754,18 @@ public class NextMoveModel() // Class to make next move decision
                                     if (_invisibleAbilities["Fur Coat"].Contains(targetMon.Name))
                                     {
                                         targetMon.PossibleAbility = "Fur Coat";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                     if (_invisibleAbilities["Grass Pelt"].Contains(targetMon.Name))
                                     {
                                         if (eventModel.ActiveTerrain == "Grassy Terrain")
                                         {
                                             targetMon.PossibleAbility = "Grass Pelt";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     if (_invisibleAbilities["Marvel Scale"].Contains(targetMon.Name))
@@ -1599,6 +1773,9 @@ public class NextMoveModel() // Class to make next move decision
                                         if (targetMon.NonVolStatus != "")
                                         {
                                             targetMon.PossibleAbility = "Marvel Scale";
+                                            expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                            statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                            continue;
                                         }
                                     }
                                     break;
@@ -1610,6 +1787,9 @@ public class NextMoveModel() // Class to make next move decision
                                 if (eventModel.MoveName == "Heat Crash" || eventModel.MoveName == "Heavy Slam")
                                 {
                                     targetMon.PossibleAbility = "Heavy Metal";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                             }
                             if (_invisibleAbilities["Punk Rock"].Contains(targetMon.Name))
@@ -1617,6 +1797,9 @@ public class NextMoveModel() // Class to make next move decision
                                 if (moveInfo.isSound != null)
                                 {
                                     targetMon.PossibleAbility = "Punk Rock";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                             }
                             if (_invisibleAbilities["Unaware"].Contains(targetMon.Name))
@@ -1641,6 +1824,9 @@ public class NextMoveModel() // Class to make next move decision
                                 if (statChange > 0)
                                 {
                                     targetMon.PossibleAbility = "Unaware";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                             }
                         }
@@ -1698,6 +1884,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (theGame.BotTeam[target.MonNo].Gender != 'N' && targetMon.Gender != 'N' && theGame.BotTeam[target.MonNo].Gender != targetMon.Gender)
                                     {
                                         targetMon.PossibleAbility = "Rivalry";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Unseen Fist"].Contains(targetMon.Name))
@@ -1705,6 +1894,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (theGame.BotTeam[target.MonNo].VolStatus.Contains("Protected") && theGame.Gen == 0)
                                     {
                                         targetMon.PossibleAbility = "Unseen Fist";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                             }
@@ -1715,6 +1907,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
                                     {
                                         targetMon.PossibleAbility = "Dry Skin";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Fluffy"].Contains(targetMon.Name))
@@ -1722,6 +1917,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (moveInfo.type == "Fire" || (userMon.TeraActive && eventModel.MoveName == "Tera Blast" && userMon.Tera == "Fire"))
                                     {
                                         targetMon.PossibleAbility = "Fluffy";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                                 if (_invisibleAbilities["Heavy Metal"].Contains(targetMon.Name))
@@ -1729,6 +1927,9 @@ public class NextMoveModel() // Class to make next move decision
                                     if (eventModel.MoveName == "Low Kick" || eventModel.MoveName == "Grass Knot")
                                     {
                                         targetMon.PossibleAbility = "Heavy Metal";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        continue;
                                     }
                                 }
                             }
@@ -1737,6 +1938,9 @@ public class NextMoveModel() // Class to make next move decision
                                 if (eventModel.MoveName == "Heat Crash" || eventModel.MoveName == "Heavy Slam")
                                 {
                                     targetMon.PossibleAbility = "Light Metal";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    continue;
                                 }
                             }
                         }
