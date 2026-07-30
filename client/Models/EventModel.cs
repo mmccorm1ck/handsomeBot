@@ -162,6 +162,15 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
             OnPropertyChanged();
         }
     }
+    public string ActiveTerrain
+    {
+        get => _activeTerrain;
+        set
+        {
+            _activeTerrain = value;
+            OnPropertyChanged();
+        }
+    }
     public ObservableCollection<TargetModel> TargetMons // Mons that were targeted
     {
         get => _targetMons;
@@ -186,6 +195,7 @@ public class EventModel() : INotifyPropertyChanged // Class to hold info about a
     private int _userStartingHP = 100;
     private int _userMon = -1;
     private int _allyMon = -1;
+    private string _activeTerrain = "None";
     private ObservableCollection<TargetModel> _targetMons = [];
     private List<EventTypeListener> listeners = []; // List of event listeners used to update dropdown menu visibility
     public void Attach(EventTypeListener listener) // Add new event listener

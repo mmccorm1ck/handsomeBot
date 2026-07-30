@@ -59,6 +59,7 @@ public class NextMoveModel() // Class to make next move decision
             }
             TeamModel user = eventModel.UserMon < 6 ? theGame.BotTeam[eventModel.UserMon] : theGame.OppTeam[eventModel.UserMon - 6];
             eventModel.UserStartingHP = user.RemainingHP;
+            eventModel.ActiveTerrain = theGame.CurrentArena.Terrain;
             ObservableCollection<TeamModel> posAllies = eventModel.UserMon < 6 ? theGame.BotTeam : theGame.OppTeam;
             for (int i = 0; i < 6; i++)
             {
