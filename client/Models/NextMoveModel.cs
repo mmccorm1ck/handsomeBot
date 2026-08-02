@@ -1193,11 +1193,19 @@ public class NextMoveModel() // Class to make next move decision
                                     TypeChangeAbility ability = _typeChangeAbilities[abilityName];
                                     if ((ability.source == null || ability.source == moveInfo.type) && ability.users.Contains(targetMon.Name))
                                     {
-                                        if (!ImmuneToType(theGame.BotTeam[target.MonNo], ability.result, true, false))
+                                        if (ImmuneToType(theGame.BotTeam[target.MonNo], ability.result, true, false))
                                         {
-                                            targetMon.PossibleAbility = abilityName;
+                                            continue;
                                         }
+                                        targetMon.PossibleAbility = abilityName;
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        break;
                                     }
+                                }
+                                if (targetMon.PossibleAbility != null)
+                                {
+                                    continue;
                                 }
                                 if (_invisibleAbilities["Adaptability"].Contains(targetMon.Name))
                                 {
