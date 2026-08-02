@@ -2156,7 +2156,7 @@ public class NextMoveModel() // Class to make next move decision
     private bool ImmuneToMove(string moveName, TeamModel target, TeamModel user, int targetNo)
     {
         MoveInfoModel move = allOptions.AllMoves[moveName];
-        string? moveType = move.type;
+        string? moveType = move.type ?? "???";
         if (user.VolStatus.Contains("Electrify"))
         {
             moveType = "Electric";
@@ -2197,74 +2197,10 @@ public class NextMoveModel() // Class to make next move decision
                 moveType = move.isSound != null ? "Water" : moveType;
                 break;
         }
-        switch (moveType)
+        bool hitsGhost = user.Ability == "Scrappy" || user.Ability == "Mind\'s Eye";
+        if (ImmuneToType(target, moveType, move.category != null, hitsGhost))
         {
-            case "Dragon":
-                if (move.category != null && HasType(target, "Fairy"))
-                {
-                    return true;
-                }
-                break;
-            case "Electric":
-                if (((move.category != null || moveName == "Thunder Wave") && HasType(target, "Ground")) || target.Ability == "Volt Absorb" || (target.Ability == "Lightning Rod" && theGame.Gen > 4) || target.Ability == "Motor Drive")
-                {
-                    return true;
-                }
-                break;
-            case "Fighting":
-                if (move.category != null && HasType(target, "Ghost") && !(user.Ability == "Scrappy" || user.Ability == "Mind's Eye") && !target.VolStatus.Contains("Identified"))
-                {
-                    return true;
-                }
-                break;
-            case "Fire":
-                if (target.Ability == "Flash Fire" || (theGame.CurrentArena.Weather == "Heavy Rain" && move.category != null))
-                {
-                    return true;
-                }
-                break;
-            case "Ghost":
-                if (move.category != null && HasType(target, "Normal"))
-                {
-                    return true;
-                }
-                break;
-            case "Grass":
-                if (target.Ability == "Sap Sipper")
-                {
-                    return true;
-                }
-                break;
-            case "Ground":
-                if (move.category != null && !Grounded(target))
-                {
-                    return true;
-                }
-                break;
-            case "Normal": // Need to acount for ion deluge and plasma fists
-                if (HasType(target, "Ghost"))
-                {
-                    return true;
-                }
-                break;
-            case "Poison":
-                if (HasType(target, "Steel"))
-                {
-                    return true;
-                }
-                break;
-            case "Psychic":
-                if (HasType(target, "Dark") && !target.VolStatus.Contains("Identified"))
-                {
-                    return true;
-                }
-                break;
-            case "Water":
-                if (target.Ability == "Dry Skin" || target.Ability == "Storm Drain" || (move.category != null && theGame.CurrentArena.Weather == "Extremely Harsh Sunlight"))
-                {
-                    return true;
-                }
-                break;
+            return true;
         }
         if (_powderMoves.Contains(moveName) && (HasType(target, "Grass") || target.Ability == "Overcoat" || (target.Item == "Safety Goggles" && !target.ItemRemoved)))
         {
@@ -2280,6 +2216,10 @@ public class NextMoveModel() // Class to make next move decision
             return true;
         }
         if (HasType(target, "Dark") && user.Ability == "Prankster" && move.category == null)
+        {
+            return true;
+        }
+        if ((moveName == "Thunderwave" && HasType(target, "Ground")) || target.Ability == "Volt Absorb" || (target.Ability == "Lightning Rod" && theGame.Gen > 4) || target.Ability == "Motor Drive")
         {
             return true;
         }
