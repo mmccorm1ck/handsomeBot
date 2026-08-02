@@ -4769,6 +4769,7 @@ public class NextMoveModel() // Class to make next move decision
     {
         public Dictionary<string, string> abilities { get; set; } = [];
         public List<string> types { get; set; } = [];
+        public bool nfe {get; set;} = false;
         public BaseStats bs { get; set; } = new();
         public class BaseStats()
         {
