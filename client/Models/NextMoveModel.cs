@@ -1180,6 +1180,106 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             continue;
                         }
+                        if (targetMon.PossibleItem == "None" && !targetMon.ItemRemoved)
+                        {
+                            if (statName.Contains('A'))
+                            {
+                                if (targetMon.Name.Contains("Pikachu"))
+                                {
+                                    targetMon.PossibleItem = "Light Ball";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                                if (targetMon.Name.Contains("Lati") && (moveInfo.type == "Dragon" || moveInfo.type == "Psychic"))
+                                {
+                                    targetMon.PossibleItem = "Soul Dew";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                                if (targetMon.Name == "Dialga" && (moveInfo.type == "Dragon" || moveInfo.type == "Steel"))
+                                {
+                                    targetMon.PossibleItem = "Adamant Orb";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                                if (targetMon.Name == "Palkia" && (moveInfo.type == "Dragon" || moveInfo.type == "Water"))
+                                {
+                                    targetMon.PossibleItem = "Adamant Orb";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                                if (targetMon.Name == "Giratina" && (moveInfo.type == "Dragon" || moveInfo.type == "Ghost"))
+                                {
+                                    targetMon.PossibleItem = "Adamant Orb";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if (_monData[targetMon.Name].nfe)
+                                {
+                                    targetMon.PossibleItem = "Eviolite";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }    
+                            }
+                            switch (statName)
+                            {
+                                case "Atk":
+                                    if (targetMon.Name == "Cubone" || targetMon.Name.Contains("Marowak"))
+                                    {
+                                        targetMon.PossibleItem = "Thick Club";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        break;
+                                    }
+                                    break;
+                                case "SpA":
+                                    if (targetMon.Name == "Clamperl")
+                                    {
+                                        targetMon.PossibleItem = "Deep Sea Tooth";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        break;
+                                    }
+                                    break;
+                                case "Def":
+                                    if (targetMon.Name == "Ditto")
+                                    {
+                                        targetMon.PossibleItem = "Metal Powder";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        break;
+                                    }
+                                    break;
+                                case "SpD":
+                                    if (targetMon.Name == "Clamperl")
+                                    {
+                                        targetMon.PossibleItem = "Deep Sea Scale";
+                                        expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                        statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                        break;
+                                    }
+                                    break;
+                            }
+                            if (theGame.Gen == 3 || theGame.Gen == 4)
+                            {
+                                if (targetMon.Name.Contains("Lati") && statName.Contains("Sp"))
+                                {
+                                    targetMon.PossibleItem = "Soul Dew";
+                                    expectedDamages = FormatCalcs(CalcDamages(false).Result)[0];
+                                    statTargets.Recalculate(expectedDamages[eventModel.UserMon][target.MonNo][userMon.Moves.IndexOf(eventModel.MoveName)]);
+                                    break;
+                                }
+                            }
+                        }
                         if (targetMon.PossibleAbility == null && targetMon.MegaAbility == null)
                         {
                             if (statName.Contains('A'))
@@ -1853,7 +1953,6 @@ public class NextMoveModel() // Class to make next move decision
                                 }
                             }
                         }
-                        // Account for items here
                         break;
                     }
                     if (calcedStat < statTargets.TargetStat)
@@ -1897,6 +1996,10 @@ public class NextMoveModel() // Class to make next move decision
                                 targetMon.NatureDrop = statName;
                             }
                             continue;
+                        }
+                        if (targetMon.PossibleItem == "None" && !targetMon.ItemRemoved)
+                        {
+
                         }
                         if (targetMon.PossibleAbility == null && targetMon.MegaAbility == null)
                         {
@@ -1967,7 +2070,6 @@ public class NextMoveModel() // Class to make next move decision
                                 }
                             }
                         }
-                        // Account for items here
                         break;
                     }
                     break;
