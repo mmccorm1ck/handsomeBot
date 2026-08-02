@@ -2321,6 +2321,75 @@ public class NextMoveModel() // Class to make next move decision
         return false;
     }
 
+    private bool ImmuneToType(TeamModel target, string moveType, bool attackingMove, bool hitsGhost)
+    {
+        switch (moveType)
+        {
+            case "Dragon":
+                if (attackingMove && HasType(target, "Fairy"))
+                {
+                    return true;
+                }
+                break;
+            case "Electric":
+                if ((attackingMove && HasType(target, "Ground")) || target.Ability == "Volt Absorb" || (target.Ability == "Lightning Rod" && theGame.Gen > 4) || target.Ability == "Motor Drive")
+                {
+                    return true;
+                }
+                break;
+            case "Fighting":
+            case "Normal":
+                if (attackingMove && HasType(target, "Ghost") && !hitsGhost && !target.VolStatus.Contains("Identified"))
+                {
+                    return true;
+                }
+                break;
+            case "Fire":
+                if (target.Ability == "Flash Fire" || (theGame.CurrentArena.Weather == "Heavy Rain" && attackingMove))
+                {
+                    return true;
+                }
+                break;
+            case "Ghost":
+                if (attackingMove && HasType(target, "Normal"))
+                {
+                    return true;
+                }
+                break;
+            case "Grass":
+                if (target.Ability == "Sap Sipper")
+                {
+                    return true;
+                }
+                break;
+            case "Ground":
+                if (attackingMove && !Grounded(target))
+                {
+                    return true;
+                }
+                break;
+            case "Poison":
+                if (HasType(target, "Steel"))
+                {
+                    return true;
+                }
+                break;
+            case "Psychic":
+                if (HasType(target, "Dark") && !target.VolStatus.Contains("Identified"))
+                {
+                    return true;
+                }
+                break;
+            case "Water":
+                if (target.Ability == "Dry Skin" || target.Ability == "Storm Drain" || (attackingMove && theGame.CurrentArena.Weather == "Extremely Harsh Sunlight"))
+                {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
     private bool ImmuneToLowerStat(TeamModel target, string stat)
     {
         if (target.Ability == "Clear Body" || target.Ability == "Full Metal Body" || target.Ability == "White Smoke" ||
