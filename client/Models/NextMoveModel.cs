@@ -1180,10 +1180,25 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             continue;
                         }
-                        if (targetMon.PossibleAbility == null)
+                        if (targetMon.PossibleAbility == null && targetMon.MegaAbility == null)
                         {
                             if (statName.Contains('A'))
                             {
+                                foreach (string abilityName in _typeChangeAbilities.Keys)
+                                {
+                                    if (abilityName == "Liquid Voice" && moveInfo.isSound == null)
+                                    {
+                                        continue;
+                                    }
+                                    TypeChangeAbility ability = _typeChangeAbilities[abilityName];
+                                    if ((ability.source == null || ability.source == moveInfo.type) && ability.users.Contains(targetMon.Name))
+                                    {
+                                        if (!ImmuneToType(theGame.BotTeam[target.MonNo], ability.result, true, false))
+                                        {
+                                            targetMon.PossibleAbility = abilityName;
+                                        }
+                                    }
+                                }
                                 if (_invisibleAbilities["Adaptability"].Contains(targetMon.Name))
                                 {
                                     if (HasType(targetMon, moveInfo.type ?? "???"))
@@ -1875,7 +1890,7 @@ public class NextMoveModel() // Class to make next move decision
                             }
                             continue;
                         }
-                        if (targetMon.PossibleAbility == null)
+                        if (targetMon.PossibleAbility == null && targetMon.MegaAbility == null)
                         {
                             if (statName.Contains('A'))
                             {
